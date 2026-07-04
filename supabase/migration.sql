@@ -145,3 +145,26 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- ----------------------------------------------------------------------------
+-- Realtime: broadcast changes to games + participants so the map live-updates.
+-- Guarded so this whole file stays safe to re-run.
+-- ----------------------------------------------------------------------------
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public' and tablename = 'games'
+  ) then
+    alter publication supabase_realtime add table public.games;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public' and tablename = 'game_participants'
+  ) then
+    alter publication supabase_realtime add table public.game_participants;
+  end if;
+end $$;

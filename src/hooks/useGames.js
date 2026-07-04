@@ -47,6 +47,33 @@ export function useGames() {
     }
   }, [fetchGames])
 
+  // Live updates: re-fetch whenever any game or participant row changes, so new
+  // games, joins, and leaves appear for everyone without a manual refresh.
+  // Requires Realtime to be enabled for these tables in Supabase (see README).
+  useEffect(() => {
+    // Debounce bursts of changes into a single refetch.
+    let timer = null
+    const scheduleRefetch = () => {
+      clearTimeout(timer)
+      timer = setTimeout(() => fetchGames(), 250)
+    }
+
+    const channel = supabase
+      .channel('playpin-games')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, scheduleRefetch)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_participants' }, scheduleRefetch)
+      .subscribe()
+
+    // Also drop games that have passed their start time, once a minute.
+    const interval = setInterval(() => fetchGames(), 60 * 1000)
+
+    return () => {
+      clearTimeout(timer)
+      clearInterval(interval)
+      supabase.removeChannel(channel)
+    }
+  }, [fetchGames])
+
   const joinGame = useCallback(async (gameId, userId) => {
     const { error: err } = await supabase
       .from('game_participants')
