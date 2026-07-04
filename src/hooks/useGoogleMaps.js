@@ -16,11 +16,14 @@ function loadGoogleMaps() {
       return
     }
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=marker&loading=async&v=weekly`
+    // Classic (synchronous) load: google.maps.Map/Marker are available as soon
+    // as onload fires. Do NOT add &loading=async — that returns a stub that
+    // requires importLibrary() before the constructors exist.
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&v=weekly`
     script.async = true
     script.defer = true
     script.onload = () => {
-      if (window.google?.maps) resolve(window.google.maps)
+      if (window.google?.maps?.Map) resolve(window.google.maps)
       else reject(new Error('Google Maps failed to initialize'))
     }
     script.onerror = () => reject(new Error('Failed to load Google Maps script'))
