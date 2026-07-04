@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useGoogleMaps } from '../hooks/useGoogleMaps'
 import { DEFAULT_CENTER, DEFAULT_ZOOM, sportMeta } from '../lib/constants'
 import Spinner from './Spinner'
+import PlaceSearch from './PlaceSearch'
 
 // Full-screen Google Map. Renders a marker per game, an optional "drop pin"
 // marker in create mode, and reports clicks upward.
@@ -18,7 +19,6 @@ export default function MapView({
   const mapRef = useRef(null)
   const markersRef = useRef(new Map()) // gameId -> google.maps.Marker
   const pinMarkerRef = useRef(null)
-  const searchContainerRef = useRef(null)
   const clickHandlerRef = useRef(onMapClick)
   clickHandlerRef.current = onMapClick
   // Latest create-mode value for use inside the Places listener closure.
@@ -55,61 +55,6 @@ export default function MapView({
         },
         { enableHighAccuracy: true, timeout: 8000 }
       )
-    }
-  }, [maps])
-
-  // Wire the Places search box to the map using the modern PlaceAutocompleteElement
-  // (the legacy Autocomplete widget is not available to new Google projects).
-  // Selecting a place flies the map there; in create mode it also drops the pin.
-  // Requires "Places API (New)" enabled in Google Cloud (see README).
-  useEffect(() => {
-    const container = searchContainerRef.current
-    if (!maps || !container || !mapRef.current) return
-
-    let element
-    let cancelled = false
-
-    const onSelect = async (event) => {
-      try {
-        const place = event.placePrediction ? event.placePrediction.toPlace() : event.place
-        if (!place) return
-        await place.fetchFields({ fields: ['location', 'viewport'] })
-        const loc = place.location
-        if (!loc) return
-        const map = mapRef.current
-        if (place.viewport) map.fitBounds(place.viewport)
-        else {
-          map.setCenter(loc)
-          map.setZoom(15)
-        }
-        if (createModeRef.current) {
-          clickHandlerRef.current?.({ lat: loc.lat(), lng: loc.lng() })
-        }
-      } catch {
-        /* place lookup failed — ignore */
-      }
-    }
-
-    const setup = (placesLib) => {
-      if (cancelled || !placesLib?.PlaceAutocompleteElement) return
-      try {
-        element = new placesLib.PlaceAutocompleteElement()
-      } catch {
-        return
-      }
-      element.style.width = '100%'
-      container.appendChild(element)
-      // Newer builds emit `gmp-select`; some emit `gmp-placeselect`. Handle both.
-      element.addEventListener('gmp-select', onSelect)
-      element.addEventListener('gmp-placeselect', onSelect)
-    }
-
-    if (maps.places?.PlaceAutocompleteElement) setup(maps.places)
-    else if (maps.importLibrary) maps.importLibrary('places').then(setup).catch(() => {})
-
-    return () => {
-      cancelled = true
-      if (element?.parentNode) element.parentNode.removeChild(element)
     }
   }, [maps])
 
@@ -214,7 +159,14 @@ export default function MapView({
   return (
     <div className="map-root">
       <div ref={containerRef} className="map-canvas" />
-      {!loading && <div className="map-search" ref={searchContainerRef} />}
+      {!loading && maps && (
+        <PlaceSearch
+          maps={maps}
+          mapRef={mapRef}
+          createModeRef={createModeRef}
+          onDropPin={(coords) => clickHandlerRef.current?.(coords)}
+        />
+      )}
       {loading && <Spinner label="Loading map…" overlay />}
     </div>
   )
