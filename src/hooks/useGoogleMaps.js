@@ -19,7 +19,7 @@ function loadGoogleMaps() {
     // Classic (synchronous) load: google.maps.Map/Marker are available as soon
     // as onload fires. Do NOT add &loading=async — that returns a stub that
     // requires importLibrary() before the constructors exist.
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&v=weekly`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&v=weekly`
     script.async = true
     script.defer = true
     script.onload = () => {

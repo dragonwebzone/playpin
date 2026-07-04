@@ -183,7 +183,7 @@ button {
 
 .hint-banner {
   position: absolute;
-  top: 14px;
+  top: 66px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -702,4 +702,23 @@ button {
 .mygames-chevron {
   color: var(--muted);
   font-size: 1.3rem;
+}
+
+/* --------------------------------------------------------- map search box -- */
+.map-search {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 13;
+  width: min(440px, calc(100% - 24px));
+}
+/* The modern PlaceAutocompleteElement is a web component; give it a rounded,
+   elevated look that reads as a floating search bar over the map. */
+.map-search gmp-place-autocomplete {
+  width: 100%;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  background: var(--white);
+  --gmp-place-autocomplete-border-radius: 999px;
 }

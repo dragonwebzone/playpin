@@ -61,12 +61,14 @@ Leave it on for production if you want verified emails.
   (safe to expose in the browser; Row-Level Security protects your data)
 
 **Google Maps** — in the [Google Cloud Console](https://console.cloud.google.com/):
-1. Create/select a project → **APIs & Services → Library** → enable
-   **Maps JavaScript API**.
+1. Create/select a project → **APIs & Services → Library** → enable **both**:
+   - **Maps JavaScript API** (the map itself)
+   - **Places API (New)** (the "search a place" box on the map)
 2. **APIs & Services → Credentials → Create credentials → API key**.
-3. `VITE_GOOGLE_MAPS_API_KEY` = that key. Restrict it to the
-   *Maps JavaScript API* and to your site's HTTP referrers for safety.
+3. `VITE_GOOGLE_MAPS_API_KEY` = that key. Restrict it to those two APIs and to
+   your site's HTTP referrers for safety.
    > Google Maps requires a billing account enabled, even for the free tier.
+   > If the search box shows no suggestions, **Places API (New)** isn't enabled.
 
 ## 4. Run locally
 
