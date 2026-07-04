@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white font-sans text-slate-700 antialiased;
+}
+
+/* --- Scroll reveal (opacity + transform only) ----------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Map pins ------------------------------------------------------------- */
+@keyframes pin-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-28px) scale(0.5);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes pin-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+.pin {
+  animation: pin-drop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.pin__float {
+  animation: pin-float 4s ease-in-out infinite;
+}
+.pin__ring {
+  animation: pulse-ring 2.6s ease-out infinite;
+}
+
+/* --- Sports strip gentle bob ---------------------------------------------- */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.bob {
+  animation: bob 3.6s ease-in-out infinite;
+}
+
+/* --- Accessible focus rings ----------------------------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* --- Respect reduced motion ----------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .pin,
+  .pin__float,
+  .pin__ring,
+  .bob {
+    animation: none;
+  }
+}

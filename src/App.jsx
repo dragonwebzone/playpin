@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { TIME_WINDOWS } from './lib/constants'
@@ -24,6 +25,28 @@ export default function App() {
   const [createMode, setCreateMode] = useState(false)
   const [pin, setPin] = useState(null)
   const [showAuth, setShowAuth] = useState(false)
+  const [authMode, setAuthMode] = useState('login')
+
+  // If we arrived from the landing page via /app?auth=signup|login, open the
+  // auth modal in the requested mode (unless already signed in).
+  const [searchParams, setSearchParams] = useSearchParams()
+  useEffect(() => {
+    const intent = searchParams.get('auth')
+    if ((intent === 'signup' || intent === 'login') && !user) {
+      openAuth(intent)
+    }
+    if (intent) {
+      // Clean the URL so a refresh doesn't reopen the modal.
+      searchParams.delete('auth')
+      setSearchParams(searchParams, { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const openAuth = (mode = 'login') => {
+    setAuthMode(mode)
+    setShowAuth(true)
+  }
 
   const selectedGame = useMemo(
     () => games.find((g) => g.id === selectedGameId) || null,
@@ -38,7 +61,7 @@ export default function App() {
 
   const handleStartCreate = () => {
     if (!user) {
-      setShowAuth(true)
+      openAuth('login')
       return
     }
     setSelectedGameId(null)
@@ -63,10 +86,10 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand">
+        <Link to="/" className="brand">
           <span className="brand-mark" aria-hidden="true">📍</span>
           <span className="brand-name">playpin</span>
-        </div>
+        </Link>
         <div className="topbar-actions">
           {authLoading ? null : user ? (
             <>
@@ -83,7 +106,7 @@ export default function App() {
               </button>
             </>
           ) : (
-            <button className="btn btn-primary btn-sm" onClick={() => setShowAuth(true)}>
+            <button className="btn btn-primary btn-sm" onClick={() => openAuth('login')}>
               Log in
             </button>
           )}
@@ -157,12 +180,12 @@ export default function App() {
             onClose={closePanels}
             onJoin={joinGame}
             onLeave={leaveGame}
-            onRequireAuth={() => setShowAuth(true)}
+            onRequireAuth={() => openAuth('login')}
           />
         </div>
       )}
 
-      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      {showAuth && <AuthModal initialMode={authMode} onClose={() => setShowAuth(false)} />}
     </div>
   )
 }

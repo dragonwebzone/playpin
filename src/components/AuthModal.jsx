@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 
 // Combined login / signup modal. Closes itself on success via onClose.
-export default function AuthModal({ onClose }) {
+export default function AuthModal({ onClose, initialMode = 'login' }) {
   const { signIn, signUp } = useAuth()
-  const [mode, setMode] = useState('login') // 'login' | 'signup'
+  const [mode, setMode] = useState(initialMode) // 'login' | 'signup'
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
