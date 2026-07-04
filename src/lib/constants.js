@@ -34,3 +34,13 @@ export const sportMeta = (value) =>
 
 export const skillLabel = (value) =>
   (SKILL_LEVELS.find((s) => s.value === value) || { label: value }).label
+
+// Reliability is 100 by default and (for now) only ever decreases with no-shows.
+// Until a player has an actual track record, showing "⭐ 100" reads as fake
+// precision — so a clean/default 100 is presented as a neutral "New" badge and
+// a real percentage only appears once it has moved.
+export function reliabilityDisplay(score) {
+  const n = typeof score === 'number' ? score : 100
+  if (n >= 100) return { isNew: true, label: 'New', title: 'No track record yet' }
+  return { isNew: false, label: `${n}% reliable`, title: `${n}% of games attended` }
+}

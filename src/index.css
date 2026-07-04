@@ -615,3 +615,91 @@ button {
     max-width: none;
   }
 }
+
+/* ------------------------------------------------ host actions + my games -- */
+.btn-danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #fecaca;
+}
+
+.host-actions {
+  display: grid;
+  gap: 10px;
+}
+.confirm-row {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.host-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: var(--slate);
+  font-size: 0.72rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.mygames-section {
+  margin-bottom: 18px;
+}
+.mygames-section h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 0 0 8px;
+}
+.mygames-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.mygames-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: background 0.12s ease;
+}
+.mygames-row:hover {
+  background: #eef2f7;
+}
+.mygames-emoji {
+  font-size: 1.4rem;
+}
+.mygames-info {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.mygames-title {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+.mygames-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.mygames-chevron {
+  color: var(--muted);
+  font-size: 1.3rem;
+}

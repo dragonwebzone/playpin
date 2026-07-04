@@ -2,17 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
-import { TIME_WINDOWS } from './lib/constants'
+import { TIME_WINDOWS, reliabilityDisplay } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
 import AuthModal from './components/AuthModal'
 import CreateGameForm from './components/CreateGameForm'
+import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
+import MyGamesPanel from './components/MyGamesPanel'
 import Spinner from './components/Spinner'
 
 export default function App() {
   const { user, profile, loading: authLoading, signOut } = useAuth()
-  const { games, loading, error, joinGame, leaveGame, createGame } = useGames()
+  const { games, loading, error, joinGame, leaveGame, createGame, updateGame, deleteGame } =
+    useGames()
 
   const [filters, setFilters] = useState({
     sport: 'all',
@@ -26,6 +29,8 @@ export default function App() {
   const [pin, setPin] = useState(null)
   const [showAuth, setShowAuth] = useState(false)
   const [authMode, setAuthMode] = useState('login')
+  const [showMyGames, setShowMyGames] = useState(false)
+  const [editingGameId, setEditingGameId] = useState(null)
 
   // If we arrived from the landing page via /app?auth=signup|login, open the
   // auth modal in the requested mode (unless already signed in).
@@ -52,11 +57,31 @@ export default function App() {
     () => games.find((g) => g.id === selectedGameId) || null,
     [games, selectedGameId]
   )
+  const editingGame = useMemo(
+    () => games.find((g) => g.id === editingGameId) || null,
+    [games, editingGameId]
+  )
 
   const closePanels = () => {
     setSelectedGameId(null)
     setCreateMode(false)
     setPin(null)
+    setEditingGameId(null)
+  }
+
+  const handleEditGame = (game) => {
+    setSelectedGameId(null)
+    setEditingGameId(game.id)
+  }
+
+  const handleDeleteGame = async (gameId) => {
+    await deleteGame(gameId)
+    closePanels()
+  }
+
+  const handleSelectFromMyGames = (gameId) => {
+    setShowMyGames(false)
+    setSelectedGameId(gameId)
   }
 
   const handleStartCreate = () => {
@@ -95,12 +120,15 @@ export default function App() {
             <>
               <span className="who">
                 Hi, {profile?.name || 'Player'}
-                {profile && (
+                {profile && !reliabilityDisplay(profile.reliability_score).isNew && (
                   <span className="who-score" title="Your reliability score">
-                    {' '}⭐ {profile.reliability_score}
+                    {' '}⭐ {reliabilityDisplay(profile.reliability_score).label}
                   </span>
                 )}
               </span>
+              <button className="btn btn-ghost btn-sm" onClick={() => setShowMyGames(true)}>
+                My games
+              </button>
               <button className="btn btn-ghost btn-sm" onClick={signOut}>
                 Log out
               </button>
@@ -173,7 +201,7 @@ export default function App() {
         </div>
       )}
 
-      {selectedGame && (
+      {selectedGame && !editingGame && (
         <div className="sheet">
           <GameDetailPanel
             game={selectedGame}
@@ -181,6 +209,33 @@ export default function App() {
             onJoin={joinGame}
             onLeave={leaveGame}
             onRequireAuth={() => openAuth('login')}
+            onEdit={handleEditGame}
+            onDelete={handleDeleteGame}
+          />
+        </div>
+      )}
+
+      {editingGame && (
+        <div className="sheet">
+          <EditGameForm
+            game={editingGame}
+            onCancel={closePanels}
+            onSave={async (id, fields) => {
+              await updateGame(id, fields)
+              setEditingGameId(null)
+              setSelectedGameId(id)
+            }}
+          />
+        </div>
+      )}
+
+      {showMyGames && (
+        <div className="sheet">
+          <MyGamesPanel
+            games={games}
+            userId={user?.id}
+            onSelect={handleSelectFromMyGames}
+            onClose={() => setShowMyGames(false)}
           />
         </div>
       )}

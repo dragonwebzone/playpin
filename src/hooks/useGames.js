@@ -103,7 +103,35 @@ export function useGames() {
     return data
   }, [fetchGames])
 
-  return { games, loading, error, refresh: fetchGames, joinGame, leaveGame, createGame }
+  // Host-only edit. RLS ensures only the host can update their own game.
+  const updateGame = useCallback(async (gameId, fields) => {
+    const { error: err } = await supabase
+      .from('games')
+      .update(fields)
+      .eq('id', gameId)
+    if (err) throw err
+    await fetchGames()
+  }, [fetchGames])
+
+  // Host-only cancel. RLS ensures only the host can delete their own game;
+  // participant rows are removed automatically via ON DELETE CASCADE.
+  const deleteGame = useCallback(async (gameId) => {
+    const { error: err } = await supabase.from('games').delete().eq('id', gameId)
+    if (err) throw err
+    await fetchGames()
+  }, [fetchGames])
+
+  return {
+    games,
+    loading,
+    error,
+    refresh: fetchGames,
+    joinGame,
+    leaveGame,
+    createGame,
+    updateGame,
+    deleteGame,
+  }
 }
 
 // Pure helper: filter a games array by sport / skill / time window.
