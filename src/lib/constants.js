@@ -68,6 +68,15 @@ export function relativeWhen(iso) {
 export const skillLabel = (value) =>
   (SKILL_LEVELS.find((s) => s.value === value) || { label: value }).label
 
+// XP → level. XP is earned server-side (host a game +20, join +10). 100 XP/level.
+export function levelFromXp(xp = 0) {
+  const x = Math.max(0, Math.floor(xp || 0))
+  const perLevel = 100
+  const level = Math.floor(x / perLevel) + 1
+  const intoLevel = x % perLevel
+  return { level, xp: x, intoLevel, forNext: perLevel, progress: intoLevel / perLevel }
+}
+
 // Reliability is 100 by default and (for now) only ever decreases with no-shows.
 // Until a player has an actual track record, showing "⭐ 100" reads as fake
 // precision — so a clean/default 100 is presented as a neutral "New" badge and

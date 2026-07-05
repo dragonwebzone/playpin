@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
-import { TIME_WINDOWS, reliabilityDisplay, sportMeta } from './lib/constants'
+import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
 import AuthModal from './components/AuthModal'
@@ -12,6 +12,7 @@ import GameDetailPanel from './components/GameDetailPanel'
 import MyGamesPanel from './components/MyGamesPanel'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
+import Leaderboard from './components/Leaderboard'
 import Spinner from './components/Spinner'
 
 export default function App() {
@@ -62,6 +63,7 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false)
   const [authMode, setAuthMode] = useState('login')
   const [showMyGames, setShowMyGames] = useState(false)
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
   // If we arrived from the landing page via /app?auth=signup|login, open the
@@ -150,16 +152,26 @@ export default function App() {
         <div className="topbar-actions">
           {authLoading ? null : user ? (
             <>
-              <span className="who">
-                Hi, {profile?.name || 'Player'}
-                {profile && !reliabilityDisplay(profile.reliability_score).isNew && (
-                  <span className="who-score" title="Your reliability score">
-                    {' '}⭐ {reliabilityDisplay(profile.reliability_score).label}
-                  </span>
-                )}
-              </span>
-              <button className="btn btn-ghost btn-sm" onClick={() => setShowMyGames(true)}>
-                My games
+              <button
+                className="profile-chip"
+                onClick={() => setShowMyGames(true)}
+                title="My profile & games"
+              >
+                <span className="avatar-sm" aria-hidden="true">
+                  {(profile?.name || 'P').charAt(0).toUpperCase()}
+                </span>
+                <span className="profile-meta">
+                  <span className="profile-name">{profile?.name || 'Player'}</span>
+                  <span className="profile-level">Lv {levelFromXp(profile?.xp).level}</span>
+                </span>
+              </button>
+              <button
+                className="icon-btn topbar-icon"
+                onClick={() => setShowLeaderboard(true)}
+                aria-label="Leaderboard"
+                title="Leaderboard"
+              >
+                🏆
               </button>
               <button className="btn btn-ghost btn-sm" onClick={signOut}>
                 Log out
@@ -222,7 +234,7 @@ export default function App() {
         <ActivityToast items={activity} />
 
         {/* Nearby games discovery sheet (hidden while a full panel is open) */}
-        {!createMode && !selectedGame && !editingGame && !showMyGames && (
+        {!createMode && !selectedGame && !editingGame && !showMyGames && !showLeaderboard && (
           <NearbyGamesSheet
             games={filtered}
             userLocation={userLocation}
@@ -282,9 +294,16 @@ export default function App() {
           <MyGamesPanel
             games={games}
             userId={user?.id}
+            profile={profile}
             onSelect={handleSelectFromMyGames}
             onClose={() => setShowMyGames(false)}
           />
+        </div>
+      )}
+
+      {showLeaderboard && (
+        <div className="sheet">
+          <Leaderboard onClose={() => setShowLeaderboard(false)} />
         </div>
       )}
 

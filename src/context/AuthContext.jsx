@@ -36,9 +36,11 @@ export function AuthProvider({ children }) {
       setProfile(null)
       return
     }
+    // select('*') so the app keeps working whether or not the gamification
+    // columns (xp, games_hosted, games_joined) have been added yet.
     supabase
       .from('profiles')
-      .select('id, name, reliability_score')
+      .select('*')
       .eq('id', userId)
       .single()
       .then(({ data }) => {

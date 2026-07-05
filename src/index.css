@@ -1033,3 +1033,201 @@ button {
     animation: none;
   }
 }
+
+/* ------------------------------------------------ gamification / profile -- */
+.profile-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 999px;
+  padding: 4px 12px 4px 4px;
+}
+.profile-chip:hover {
+  background: var(--bg);
+}
+.avatar-sm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.profile-meta {
+  display: grid;
+  line-height: 1.1;
+  text-align: left;
+}
+.profile-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  max-width: 26vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.profile-level {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--orange);
+}
+.topbar-icon {
+  font-size: 1.15rem;
+}
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
+  border: 1px solid #d1fae5;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.level-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: var(--teal);
+  color: #fff;
+  flex-shrink: 0;
+}
+.level-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.level-word {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+.stats-right {
+  flex: 1;
+  min-width: 0;
+}
+.xp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+.xp-bar {
+  height: 8px;
+  background: #d1fae5;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.xp-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.stat-pills {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.stat-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--slate);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.mygames-heading {
+  font-size: 0.95rem;
+  margin: 0 0 10px;
+}
+
+/* --- leaderboard --- */
+.lb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: rank;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 12px;
+}
+.lb-row.is-me {
+  background: #ecfdf5;
+}
+.lb-rank {
+  width: 24px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.lb-rank.rank-1 { color: #d97706; }
+.lb-rank.rank-2 { color: #64748b; }
+.lb-rank.rank-3 { color: #b45309; }
+.lb-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.lb-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lb-you {
+  margin-left: 6px;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--teal);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 700;
+}
+.lb-level {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--orange);
+}
+.lb-xp {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  min-width: 56px;
+  text-align: right;
+}
