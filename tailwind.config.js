@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
+  // Dark mode is driven by data-theme="dark" on <html> (set by useTheme), so the
+  // same attribute powers both the app's CSS-variable theme and Tailwind dark:.
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {

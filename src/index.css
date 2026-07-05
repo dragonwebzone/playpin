@@ -1368,3 +1368,106 @@ button {
   background: #22c55e;
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
 }
+
+/* ------------------------------------------------------------ theme toggle -- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 999px;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--ink);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.06s ease;
+}
+.theme-toggle:hover {
+  background: var(--bg);
+}
+.theme-toggle:active {
+  transform: scale(0.94);
+}
+
+/* ================================================================= DARK == */
+/* Dark theme: the app is fully CSS-variable driven, so most of it is just a
+   variable remap. A handful of hardcoded light surfaces (glass overlays, tinted
+   chips/badges, gradients) get explicit dark values below. */
+:root[data-theme='dark'] {
+  --teal: #2dd4bf;
+  --teal-dark: #5eead4;
+  --orange: #fb923c;
+  --ink: #e6ebf4;
+  --slate: #b4c0d4;
+  --muted: #8b98ad;
+  --line: #2a3648;
+  --bg: #0b1220;
+  --white: #151e30; /* used semantically as the raised-surface color */
+  --danger: #f87171;
+  --shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
+}
+
+:root[data-theme='dark'] .map-error code,
+:root[data-theme='dark'] .badge,
+:root[data-theme='dark'] .host-badge {
+  background: #223049;
+  color: var(--slate);
+}
+:root[data-theme='dark'] .badge-open,
+:root[data-theme='dark'] .nearby-spots {
+  background: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+}
+:root[data-theme='dark'] .badge-full,
+:root[data-theme='dark'] .nearby-spots.is-full {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fca5a5;
+}
+:root[data-theme='dark'] .host-tag {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fcd34d;
+}
+:root[data-theme='dark'] .empty-state {
+  background: rgba(21, 30, 48, 0.94);
+}
+:root[data-theme='dark'] .nearby,
+:root[data-theme='dark'] .presence-pill {
+  background: rgba(21, 30, 48, 0.82);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+:root[data-theme='dark'] .nearby-row:hover,
+:root[data-theme='dark'] .nearby-row.is-active {
+  background: rgba(255, 255, 255, 0.06);
+}
+:root[data-theme='dark'] .nearby-grip {
+  background: #3a4a63;
+}
+:root[data-theme='dark'] .mygames-row:hover {
+  background: #1c2740;
+}
+:root[data-theme='dark'] .btn-danger {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fca5a5;
+}
+:root[data-theme='dark'] .btn-danger:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.26);
+}
+:root[data-theme='dark'] .confirm-row {
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.3);
+}
+:root[data-theme='dark'] .profile-stats {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(13, 148, 136, 0.14));
+  border-color: rgba(45, 212, 191, 0.24);
+}
+:root[data-theme='dark'] .xp-bar {
+  background: rgba(45, 212, 191, 0.2);
+}
+:root[data-theme='dark'] .lb-row.is-me {
+  background: rgba(45, 212, 191, 0.14);
+}
+:root[data-theme='dark'] .lb-rank.rank-2 {
+  color: #94a3b8;
+}

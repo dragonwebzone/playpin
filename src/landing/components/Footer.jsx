@@ -31,7 +31,7 @@ function Social({ label, path }) {
     <a
       href="#"
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-accent hover:text-accent"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-accent hover:text-accent dark:border-slate-700 dark:text-slate-400"
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
         <path d={path} />
@@ -42,15 +42,15 @@ function Social({ label, path }) {
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-100 bg-white">
+    <footer className="border-t border-slate-100 bg-white dark:border-slate-800 dark:bg-slate-900">
       <div className="mx-auto max-w-content px-5 py-14 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1.5fr_repeat(3,1fr)]">
           <div>
-            <a href="/" className="flex items-center gap-2 text-lg font-extrabold text-ink">
+            <a href="/" className="flex items-center gap-2 text-lg font-extrabold text-ink dark:text-white">
               <PinLogo className="h-6 w-6 text-accent" />
               PlayPin
             </a>
-            <p className="mt-4 max-w-xs text-sm text-slate-500">
+            <p className="mt-4 max-w-xs text-sm text-slate-500 dark:text-slate-400">
               Find pickup games near you — real people, real time, one tap away.
             </p>
             <div className="mt-5 flex gap-3">
@@ -62,21 +62,21 @@ export default function Footer() {
 
           {LINK_GROUPS.map((group) => (
             <div key={group.heading}>
-              <h3 className="text-sm font-bold text-ink">{group.heading}</h3>
+              <h3 className="text-sm font-bold text-ink dark:text-white">{group.heading}</h3>
               <ul className="mt-4 space-y-3">
                 {group.links.map((link) => (
                   <li key={link.label}>
                     {link.to ? (
                       <Link
                         to={link.to}
-                        className="text-sm text-slate-500 transition-colors hover:text-ink"
+                        className="text-sm text-slate-500 transition-colors hover:text-ink dark:text-slate-400 dark:hover:text-white"
                       >
                         {link.label}
                       </Link>
                     ) : (
                       <a
                         href={link.href}
-                        className="text-sm text-slate-500 transition-colors hover:text-ink"
+                        className="text-sm text-slate-500 transition-colors hover:text-ink dark:text-slate-400 dark:hover:text-white"
                       >
                         {link.label}
                       </a>
@@ -88,13 +88,13 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row">
-          <p className="text-xs text-slate-500">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 dark:border-slate-800 sm:flex-row">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             © {new Date().getFullYear()} PlayPin. All rights reserved.
           </p>
-          <div className="flex gap-5 text-xs text-slate-500">
-            <a href="#" className="transition-colors hover:text-ink">Privacy</a>
-            <a href="#" className="transition-colors hover:text-ink">Terms</a>
+          <div className="flex gap-5 text-xs text-slate-500 dark:text-slate-400">
+            <a href="#" className="transition-colors hover:text-ink dark:hover:text-white">Privacy</a>
+            <a href="#" className="transition-colors hover:text-ink dark:hover:text-white">Terms</a>
           </div>
         </div>
       </div>

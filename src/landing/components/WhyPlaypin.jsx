@@ -26,13 +26,13 @@ const FEATURES = [
 
 export default function WhyPlaypin() {
   return (
-    <section className="bg-slate-50/70 py-20 md:py-28">
+    <section className="bg-slate-50/70 py-20 dark:bg-slate-950/40 md:py-28">
       <div className="mx-auto max-w-content px-5 sm:px-8">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+          <h2 className="text-3xl font-extrabold tracking-tight text-ink dark:text-white sm:text-4xl">
             Why PlayPin
           </h2>
-          <p className="mt-4 text-lg text-slate-600">
+          <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
             Everything you need to turn “someday” into a game this weekend.
           </p>
         </Reveal>
@@ -40,12 +40,12 @@ export default function WhyPlaypin() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={i * 100}>
-              <div className="h-full rounded-3xl border border-slate-100 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600">
+              <div className="h-full rounded-3xl border border-slate-100 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 dark:bg-emerald-900/40 dark:text-emerald-300">
                   <f.icon className="h-6 w-6" />
                 </span>
-                <h3 className="mt-5 text-lg font-bold text-ink">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
+                <h3 className="mt-5 text-lg font-bold text-ink dark:text-white">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{f.body}</p>
               </div>
             </Reveal>
           ))}

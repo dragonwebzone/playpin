@@ -15,18 +15,18 @@ export default function Hero() {
       {/* soft background wash */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-emerald-50/70 to-white"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-emerald-50/70 to-white dark:from-emerald-950/30 dark:to-slate-900"
       />
       <div className="mx-auto grid max-w-content items-center gap-12 px-5 pb-16 pt-14 sm:px-8 md:grid-cols-2 md:gap-10 md:pb-24 md:pt-20">
         {/* Copy */}
         <div className="max-w-xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold text-accent-700">
+          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold text-accent-700 dark:border-emerald-800/60 dark:bg-emerald-900/30 dark:text-emerald-300">
             🟢 Pickup sports, organized in one tap
           </span>
-          <h1 className="mt-5 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-6xl">
+          <h1 className="mt-5 text-balance text-5xl font-extrabold leading-[1.05] tracking-tight text-ink dark:text-white sm:text-6xl">
             Never play alone.
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-slate-600">
+          <p className="mt-5 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
             Find pickup games near you — real people, real time, one tap away.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -40,12 +40,12 @@ export default function Hero() {
             <a
               href="#how-it-works"
               onClick={scrollToHow}
-              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-slate-50"
+              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-7 py-3.5 text-base font-semibold text-ink transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
             >
               How it works
             </a>
           </div>
-          <p className="mt-5 text-sm text-slate-500">
+          <p className="mt-5 text-sm text-slate-500 dark:text-slate-400">
             Free to join · Games in your neighborhood · No flakes
           </p>
         </div>

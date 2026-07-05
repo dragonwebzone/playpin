@@ -7,6 +7,7 @@ import { useSaved } from './hooks/useSaved'
 import { usePresence } from './hooks/usePresence'
 import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
+import ThemeToggle from './components/ThemeToggle'
 import FilterBar from './components/FilterBar'
 import AuthModal from './components/AuthModal'
 import CreateGameForm from './components/CreateGameForm'
@@ -163,6 +164,7 @@ export default function App() {
           <span className="brand-name">playpin</span>
         </Link>
         <div className="topbar-actions">
+          <ThemeToggle />
           {authLoading ? null : user ? (
             <>
               <button
