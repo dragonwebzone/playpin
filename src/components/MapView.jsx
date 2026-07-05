@@ -4,6 +4,17 @@ import { DEFAULT_CENTER, DEFAULT_ZOOM, sportMeta } from '../lib/constants'
 import Spinner from './Spinner'
 import PlaceSearch from './PlaceSearch'
 
+// Declutter the base map to focus on places where pickup games happen: hide all
+// POI labels, then re-enable parks and sports complexes. (Applies only without a
+// cloud mapId; this map uses default styling, so JSON styles take effect.)
+const MAP_STYLES = [
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.park', stylers: [{ visibility: 'on' }] },
+  { featureType: 'poi.sports_complex', stylers: [{ visibility: 'on' }] },
+  { featureType: 'poi.attraction', elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+  { featureType: 'transit', elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+]
+
 // Full-screen Google Map. Renders a marker per game, an optional "drop pin"
 // marker in create mode, and reports clicks upward.
 export default function MapView({
@@ -36,6 +47,7 @@ export default function MapView({
       zoomControl: true,
       clickableIcons: false,
       gestureHandling: 'greedy',
+      styles: MAP_STYLES,
     })
     mapRef.current = map
 
