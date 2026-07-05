@@ -19,7 +19,7 @@ export default function SportsStrip() {
   return (
     <section className="mx-auto max-w-content px-5 py-16 sm:px-8">
       <Reveal className="text-center">
-        <p className="text-sm font-bold uppercase tracking-widest text-slate-400">
+        <p className="text-sm font-bold uppercase tracking-widest text-slate-500">
           Play what you love
         </p>
       </Reveal>

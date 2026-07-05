@@ -6,7 +6,8 @@ export default {
       colors: {
         // One confident accent (athletic green) + a supporting deep ink.
         accent: {
-          DEFAULT: '#059669',
+          // Emerald-700: white text on this passes WCAG AA (~5.5:1).
+          DEFAULT: '#047857',
           50: '#ecfdf5',
           100: '#d1fae5',
           400: '#34d399',

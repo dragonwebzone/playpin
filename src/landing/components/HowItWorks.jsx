@@ -39,7 +39,7 @@ export default function HowItWorks() {
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600">
                   <step.icon className="h-6 w-6" />
                 </span>
-                <span className="text-sm font-bold text-slate-400">
+                <span className="text-sm font-bold text-slate-500">
                   Step {i + 1}
                 </span>
               </div>

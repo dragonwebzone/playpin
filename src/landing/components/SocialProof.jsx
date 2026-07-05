@@ -83,7 +83,7 @@ export default function SocialProof() {
           </Reveal>
         ))}
       </div>
-      <p className="mt-6 text-center text-xs text-slate-400">
+      <p className="mt-6 text-center text-xs text-slate-500">
         Illustrative stories and early, growing numbers — shown to give a feel for PlayPin.
       </p>
     </section>

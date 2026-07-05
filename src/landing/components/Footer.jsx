@@ -89,10 +89,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 sm:flex-row">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} PlayPin. All rights reserved.
           </p>
-          <div className="flex gap-5 text-xs text-slate-400">
+          <div className="flex gap-5 text-xs text-slate-500">
             <a href="#" className="transition-colors hover:text-ink">Privacy</a>
             <a href="#" className="transition-colors hover:text-ink">Terms</a>
           </div>
