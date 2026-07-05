@@ -129,9 +129,11 @@ begin
   insert into public.profiles (id, name)
   values (
     new.id,
-    -- Prefer a "name" from signup metadata, fall back to the email local-part.
+    -- Prefer a name from signup metadata (Google sets name/full_name),
+    -- otherwise fall back to the email local-part.
     coalesce(
       nullif(new.raw_user_meta_data ->> 'name', ''),
+      nullif(new.raw_user_meta_data ->> 'full_name', ''),
       split_part(new.email, '@', 1),
       'Player'
     )

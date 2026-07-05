@@ -791,3 +791,37 @@ button {
   color: var(--muted);
   font-size: 0.8rem;
 }
+
+/* --------------------------------------------------------- google sign-in -- */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.btn-google:hover:not(:disabled) {
+  background: var(--bg);
+}
+.google-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}

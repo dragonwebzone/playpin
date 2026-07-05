@@ -63,6 +63,12 @@ export function AuthProvider({ children }) {
         }),
       signIn: (email, password) =>
         supabase.auth.signInWithPassword({ email, password }),
+      // Redirects to Google, then back to /app where the session is detected.
+      signInWithGoogle: () =>
+        supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: `${window.location.origin}/app` },
+        }),
       signOut: () => supabase.auth.signOut(),
     }),
     [session, profile, loading]
