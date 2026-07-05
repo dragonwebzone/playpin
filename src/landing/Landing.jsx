@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import HowItWorks from './components/HowItWorks'
@@ -9,6 +11,7 @@ import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 
 export default function App() {
+  const { user, loading } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const sentinelRef = useRef(null)
 
@@ -24,6 +27,10 @@ export default function App() {
     io.observe(el)
     return () => io.disconnect()
   }, [])
+
+  // Signed-in users skip the marketing page and go straight to the app. This
+  // also handles the return from Google OAuth if the provider lands them on "/".
+  if (!loading && user) return <Navigate to="/app" replace />
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
