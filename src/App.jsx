@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
-import { TIME_WINDOWS, reliabilityDisplay } from './lib/constants'
+import { TIME_WINDOWS, reliabilityDisplay, sportMeta } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
 import AuthModal from './components/AuthModal'
@@ -10,12 +10,32 @@ import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
 import MyGamesPanel from './components/MyGamesPanel'
+import NearbyGamesSheet from './components/NearbyGamesSheet'
+import ActivityToast from './components/ActivityToast'
 import Spinner from './components/Spinner'
 
 export default function App() {
   const { user, profile, loading: authLoading, signOut } = useAuth()
+
+  // Live-activity toasts, driven by real Realtime inserts (see useGames).
+  const [activity, setActivity] = useState([])
+  const pushActivity = (evt) => {
+    let item
+    if (evt.type === 'new_game') {
+      if (user && evt.hostId === user.id) return // skip your own actions
+      const meta = sportMeta(evt.sport)
+      item = { id: crypto.randomUUID(), emoji: meta.emoji, text: `New ${meta.label} game created nearby` }
+    } else if (evt.type === 'join') {
+      if (user && evt.userId === user.id) return
+      item = { id: crypto.randomUUID(), emoji: '🙌', text: 'Someone just joined a game' }
+    }
+    if (!item) return
+    setActivity((cur) => [item, ...cur].slice(0, 3))
+    setTimeout(() => setActivity((cur) => cur.filter((i) => i.id !== item.id)), 5000)
+  }
+
   const { games, loading, error, joinGame, leaveGame, createGame, updateGame, deleteGame } =
-    useGames()
+    useGames({ onActivity: pushActivity })
 
   const [filters, setFilters] = useState({
     sport: 'all',
@@ -23,6 +43,18 @@ export default function App() {
     timeWindow: TIME_WINDOWS[0],
   })
   const filtered = useFilteredGames(games, filters)
+
+  // The user's location (for distance sorting in the nearby sheet). The map
+  // component handles its own centering.
+  const [userLocation, setUserLocation] = useState(null)
+  useEffect(() => {
+    if (!navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {},
+      { enableHighAccuracy: true, timeout: 8000 }
+    )
+  }, [])
 
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [createMode, setCreateMode] = useState(false)
@@ -164,9 +196,12 @@ export default function App() {
         {/* Empty state when there are games loaded but none match / none exist */}
         {!loading && !error && filtered.length === 0 && !createMode && (
           <div className="empty-state">
-            <p className="empty-emoji">🥅</p>
-            <p className="empty-title">No games near you yet</p>
-            <p className="muted">Be the first — drop a pin and start one.</p>
+            <p className="empty-emoji">⚽</p>
+            <p className="empty-title">Nobody's playing nearby yet</p>
+            <p className="muted">Be the first to start a game in your area.</p>
+            <button className="btn btn-primary empty-cta" onClick={handleStartCreate}>
+              ＋ Create a game
+            </button>
           </div>
         )}
 
@@ -183,10 +218,23 @@ export default function App() {
           </div>
         )}
 
+        {/* Live activity toasts */}
+        <ActivityToast items={activity} />
+
+        {/* Nearby games discovery sheet (hidden while a full panel is open) */}
+        {!createMode && !selectedGame && !editingGame && !showMyGames && (
+          <NearbyGamesSheet
+            games={filtered}
+            userLocation={userLocation}
+            selectedGameId={selectedGameId}
+            onSelect={(id) => setSelectedGameId(id)}
+          />
+        )}
+
         {/* Floating create button */}
         {!createMode && !selectedGame && (
           <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
-            <span aria-hidden="true">＋</span> New game
+            <span aria-hidden="true">＋</span> Create game
           </button>
         )}
       </main>

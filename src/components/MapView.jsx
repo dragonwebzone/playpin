@@ -94,6 +94,18 @@ export default function MapView({
       }
     }
 
+    const iconFor = (game, meta) => {
+      const selected = game.id === selectedGameId
+      return {
+        path: maps.SymbolPath.CIRCLE,
+        scale: selected ? 20 : 16,
+        fillColor: meta.color,
+        fillOpacity: 1,
+        strokeColor: selected ? '#f97316' : '#ffffff',
+        strokeWeight: selected ? 4 : 2.5,
+      }
+    }
+
     // Add / update markers.
     for (const game of games) {
       const meta = sportMeta(game.sport)
@@ -105,27 +117,15 @@ export default function MapView({
           map,
           title: `${meta.label} · ${new Date(game.date_time).toLocaleString()}`,
           label: { text: meta.emoji, fontSize: '18px' },
-          icon: {
-            path: maps.SymbolPath.CIRCLE,
-            scale: 16,
-            fillColor: game.id === selectedGameId ? '#f97316' : '#0f766e',
-            fillOpacity: 1,
-            strokeColor: '#ffffff',
-            strokeWeight: 2,
-          },
+          icon: iconFor(game, meta),
+          zIndex: game.id === selectedGameId ? 999 : 1,
         })
         marker.addListener('click', () => onMarkerClick(game))
         existing.set(game.id, marker)
       } else {
         marker.setPosition(position)
-        marker.setIcon({
-          path: maps.SymbolPath.CIRCLE,
-          scale: 16,
-          fillColor: game.id === selectedGameId ? '#f97316' : '#0f766e',
-          fillOpacity: 1,
-          strokeColor: '#ffffff',
-          strokeWeight: 2,
-        })
+        marker.setIcon(iconFor(game, meta))
+        marker.setZIndex(game.id === selectedGameId ? 999 : 1)
       }
     }
   }, [maps, games, selectedGameId, onMarkerClick])

@@ -1,12 +1,12 @@
 // Shared option lists and defaults used across the app.
 
 export const SPORTS = [
-  { value: 'football', label: 'Football', emoji: '⚽' },
-  { value: 'cricket', label: 'Cricket', emoji: '🏏' },
-  { value: 'badminton', label: 'Badminton', emoji: '🏸' },
-  { value: 'basketball', label: 'Basketball', emoji: '🏀' },
-  { value: 'tennis', label: 'Tennis', emoji: '🎾' },
-  { value: 'other', label: 'Other', emoji: '🤾' },
+  { value: 'football', label: 'Football', emoji: '⚽', color: '#16a34a' },
+  { value: 'cricket', label: 'Cricket', emoji: '🏏', color: '#d97706' },
+  { value: 'badminton', label: 'Badminton', emoji: '🏸', color: '#7c3aed' },
+  { value: 'basketball', label: 'Basketball', emoji: '🏀', color: '#ea580c' },
+  { value: 'tennis', label: 'Tennis', emoji: '🎾', color: '#65a30d' },
+  { value: 'other', label: 'Other', emoji: '🤾', color: '#0f766e' },
 ]
 
 export const SKILL_LEVELS = [
@@ -30,7 +30,40 @@ export const DEFAULT_CENTER = { lat: 37.7749, lng: -122.4194 }
 export const DEFAULT_ZOOM = 12
 
 export const sportMeta = (value) =>
-  SPORTS.find((s) => s.value === value) || { value, label: value, emoji: '🏅' }
+  SPORTS.find((s) => s.value === value) || { value, label: value, emoji: '🏅', color: '#0f766e' }
+
+// Haversine distance in km between two {lat, lng} points.
+export function distanceKm(a, b) {
+  if (!a || !b) return null
+  const R = 6371
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180
+  const lat1 = (a.lat * Math.PI) / 180
+  const lat2 = (b.lat * Math.PI) / 180
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+  return 2 * R * Math.asin(Math.sqrt(h))
+}
+
+// Human-friendly distance label.
+export function distanceLabel(km) {
+  if (km == null) return ''
+  if (km < 1) return `${Math.round(km * 1000)} m`
+  return `${km < 10 ? km.toFixed(1) : Math.round(km)} km`
+}
+
+// Short relative time like "in 2h", "in 3d", "started".
+export function relativeWhen(iso) {
+  const diff = new Date(iso).getTime() - Date.now()
+  if (diff <= 0) return 'now'
+  const mins = Math.round(diff / 60000)
+  if (mins < 60) return `in ${mins}m`
+  const hrs = Math.round(mins / 60)
+  if (hrs < 24) return `in ${hrs}h`
+  const days = Math.round(hrs / 24)
+  return `in ${days}d`
+}
 
 export const skillLabel = (value) =>
   (SKILL_LEVELS.find((s) => s.value === value) || { label: value }).label

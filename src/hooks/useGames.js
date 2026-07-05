@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 // Fetches all upcoming games (with host profile + participant rows) and exposes
 // join/leave helpers plus a refresh. Filtering is done client-side in useMemo.
-export function useGames() {
+// `onActivity(event)` (optional) fires on live inserts for the activity feed.
+export function useGames({ onActivity } = {}) {
   const [games, setGames] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const onActivityRef = useRef(onActivity)
+  onActivityRef.current = onActivity
 
   const fetchGames = useCallback(async () => {
     setError(null)
@@ -60,8 +63,18 @@ export function useGames() {
 
     const channel = supabase
       .channel('playpin-games')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, scheduleRefetch)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_participants' }, scheduleRefetch)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'games' }, (payload) => {
+        if (payload.eventType === 'INSERT' && payload.new) {
+          onActivityRef.current?.({ type: 'new_game', sport: payload.new.sport, hostId: payload.new.host_id })
+        }
+        scheduleRefetch()
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'game_participants' }, (payload) => {
+        if (payload.eventType === 'INSERT' && payload.new) {
+          onActivityRef.current?.({ type: 'join', gameId: payload.new.game_id, userId: payload.new.user_id })
+        }
+        scheduleRefetch()
+      })
       .subscribe()
 
     // Also drop games that have passed their start time, once a minute.
