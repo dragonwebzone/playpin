@@ -2,7 +2,7 @@ import { SPORTS, SKILL_LEVELS, TIME_WINDOWS } from '../lib/constants'
 
 // Sport is a scrollable row of one-tap chips; level and time stay as compact
 // selects. Keeps the map's discovery controls fast and thumb-friendly.
-export default function FilterBar({ filters, onChange, resultCount }) {
+export default function FilterBar({ filters, onChange, resultCount, hasFriends }) {
   const set = (key, value) => onChange({ ...filters, [key]: value })
 
   return (
@@ -26,6 +26,14 @@ export default function FilterBar({ filters, onChange, resultCount }) {
       </div>
 
       <div className="filter-selects">
+        {hasFriends && (
+          <button
+            className={`chip ${filters.friendsOnly ? 'chip--on' : ''}`}
+            onClick={() => set('friendsOnly', !filters.friendsOnly)}
+          >
+            <span aria-hidden="true">👥</span> Friends
+          </button>
+        )}
         <select
           value={filters.skill}
           onChange={(e) => set('skill', e.target.value)}

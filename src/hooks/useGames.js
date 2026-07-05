@@ -147,12 +147,19 @@ export function useGames({ onActivity } = {}) {
   }
 }
 
-// Pure helper: filter a games array by sport / skill / time window.
-export function filterGames(games, { sport, skill, timeWindow }) {
+// Pure helper: filter a games array by sport / skill / time window / friends.
+export function filterGames(games, { sport, skill, timeWindow, friendsOnly, friendIds }) {
   const now = Date.now()
   return games.filter((g) => {
     if (sport && sport !== 'all' && g.sport !== sport) return false
     if (skill && skill !== 'all' && g.skill_level !== skill) return false
+
+    if (friendsOnly && friendIds) {
+      const byFriend =
+        friendIds.has(g.host_id) ||
+        (g.participants || []).some((p) => friendIds.has(p.user_id))
+      if (!byFriend) return false
+    }
 
     if (timeWindow && timeWindow.value !== 'all') {
       const t = new Date(g.date_time).getTime()

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
+import { useFriends } from './hooks/useFriends'
 import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
@@ -13,6 +14,7 @@ import MyGamesPanel from './components/MyGamesPanel'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
 import Leaderboard from './components/Leaderboard'
+import FriendsPanel from './components/FriendsPanel'
 import Spinner from './components/Spinner'
 
 export default function App() {
@@ -37,13 +39,19 @@ export default function App() {
 
   const { games, loading, error, joinGame, leaveGame, createGame, updateGame, deleteGame } =
     useGames({ onActivity: pushActivity })
+  const friendsApi = useFriends(user?.id)
 
   const [filters, setFilters] = useState({
     sport: 'all',
     skill: 'all',
     timeWindow: TIME_WINDOWS[0],
+    friendsOnly: false,
   })
-  const filtered = useFilteredGames(games, filters)
+  const effectiveFilters = useMemo(
+    () => ({ ...filters, friendIds: friendsApi.friendIds }),
+    [filters, friendsApi.friendIds]
+  )
+  const filtered = useFilteredGames(games, effectiveFilters)
 
   // The user's location (for distance sorting in the nearby sheet). The map
   // component handles its own centering.
@@ -64,6 +72,7 @@ export default function App() {
   const [authMode, setAuthMode] = useState('login')
   const [showMyGames, setShowMyGames] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
+  const [showFriends, setShowFriends] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
   // If we arrived from the landing page via /app?auth=signup|login, open the
@@ -166,6 +175,17 @@ export default function App() {
                 </span>
               </button>
               <button
+                className="icon-btn topbar-icon friends-btn"
+                onClick={() => setShowFriends(true)}
+                aria-label="Friends"
+                title="Friends"
+              >
+                👥
+                {friendsApi.incoming.length > 0 && (
+                  <span className="notif-badge">{friendsApi.incoming.length}</span>
+                )}
+              </button>
+              <button
                 className="icon-btn topbar-icon"
                 onClick={() => setShowLeaderboard(true)}
                 aria-label="Leaderboard"
@@ -185,7 +205,12 @@ export default function App() {
         </div>
       </header>
 
-      <FilterBar filters={filters} onChange={setFilters} resultCount={filtered.length} />
+      <FilterBar
+        filters={filters}
+        onChange={setFilters}
+        resultCount={filtered.length}
+        hasFriends={friendsApi.friendIds.size > 0}
+      />
 
       <main className="map-area">
         <MapView
@@ -234,7 +259,12 @@ export default function App() {
         <ActivityToast items={activity} />
 
         {/* Nearby games discovery sheet (hidden while a full panel is open) */}
-        {!createMode && !selectedGame && !editingGame && !showMyGames && !showLeaderboard && (
+        {!createMode &&
+          !selectedGame &&
+          !editingGame &&
+          !showMyGames &&
+          !showLeaderboard &&
+          !showFriends && (
           <NearbyGamesSheet
             games={filtered}
             userLocation={userLocation}
@@ -304,6 +334,12 @@ export default function App() {
       {showLeaderboard && (
         <div className="sheet">
           <Leaderboard onClose={() => setShowLeaderboard(false)} />
+        </div>
+      )}
+
+      {showFriends && (
+        <div className="sheet">
+          <FriendsPanel friendsApi={friendsApi} onClose={() => setShowFriends(false)} />
         </div>
       )}
 
