@@ -1325,3 +1325,18 @@ button {
   margin-top: 14px;
   font-size: 0.8rem;
 }
+
+/* ---------------------------------------------------------- saved games -- */
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.save-btn {
+  font-size: 1.3rem;
+  color: var(--muted);
+  line-height: 1;
+}
+.save-btn.is-saved {
+  color: #f59e0b;
+}

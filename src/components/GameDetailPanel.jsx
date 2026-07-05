@@ -23,6 +23,8 @@ export default function GameDetailPanel({
   onRequireAuth,
   onEdit,
   onDelete,
+  isSaved,
+  onToggleSave,
 }) {
   const { user } = useAuth()
   const [busy, setBusy] = useState(false)
@@ -77,7 +79,17 @@ export default function GameDetailPanel({
         <h2>
           <span className="sport-emoji" aria-hidden="true">{meta.emoji}</span> {meta.label}
         </h2>
-        <button className="icon-btn" onClick={onClose} aria-label="Close">✕</button>
+        <div className="panel-header-actions">
+          <button
+            className={`icon-btn save-btn ${isSaved ? 'is-saved' : ''}`}
+            onClick={() => (user ? onToggleSave(game.id) : onRequireAuth())}
+            aria-label={isSaved ? 'Unsave game' : 'Save game'}
+            title={isSaved ? 'Saved' : 'Save'}
+          >
+            {isSaved ? '★' : '☆'}
+          </button>
+          <button className="icon-btn" onClick={onClose} aria-label="Close">✕</button>
+        </div>
       </div>
 
       <div className="badges">

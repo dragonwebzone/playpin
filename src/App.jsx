@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
+import { useSaved } from './hooks/useSaved'
 import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
@@ -40,6 +41,7 @@ export default function App() {
   const { games, loading, error, joinGame, leaveGame, createGame, updateGame, deleteGame } =
     useGames({ onActivity: pushActivity })
   const friendsApi = useFriends(user?.id)
+  const { savedIds, toggleSave } = useSaved(user?.id)
 
   const [filters, setFilters] = useState({
     sport: 'all',
@@ -301,6 +303,8 @@ export default function App() {
             onRequireAuth={() => openAuth('login')}
             onEdit={handleEditGame}
             onDelete={handleDeleteGame}
+            isSaved={savedIds.has(selectedGame.id)}
+            onToggleSave={toggleSave}
           />
         </div>
       )}
@@ -325,6 +329,7 @@ export default function App() {
             games={games}
             userId={user?.id}
             profile={profile}
+            savedIds={savedIds}
             onSelect={handleSelectFromMyGames}
             onClose={() => setShowMyGames(false)}
           />

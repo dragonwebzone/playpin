@@ -33,13 +33,16 @@ function GameRow({ game, onSelect }) {
 
 // Lists the current user's upcoming games — the ones they host and the ones
 // they've joined — plus their level/XP profile stats.
-export default function MyGamesPanel({ games, userId, profile, onSelect, onClose }) {
+export default function MyGamesPanel({ games, userId, profile, savedIds, onSelect, onClose }) {
   const hosting = games.filter((g) => g.host_id === userId)
   const joined = games.filter(
     (g) => g.host_id !== userId && (g.participants || []).some((p) => p.user_id === userId)
   )
+  const saved = games.filter(
+    (g) => savedIds?.has(g.id) && g.host_id !== userId && !joined.some((j) => j.id === g.id)
+  )
 
-  const empty = hosting.length === 0 && joined.length === 0
+  const empty = hosting.length === 0 && joined.length === 0 && saved.length === 0
   const { level, intoLevel, forNext, progress, xp } = levelFromXp(profile?.xp)
 
   return (
@@ -94,6 +97,17 @@ export default function MyGamesPanel({ games, userId, profile, onSelect, onClose
               <h3>Joined ({joined.length})</h3>
               <ul className="mygames-list">
                 {joined.map((g) => (
+                  <GameRow key={g.id} game={g} onSelect={onSelect} />
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {saved.length > 0 && (
+            <section className="mygames-section">
+              <h3>★ Saved ({saved.length})</h3>
+              <ul className="mygames-list">
+                {saved.map((g) => (
                   <GameRow key={g.id} game={g} onSelect={onSelect} />
                 ))}
               </ul>
