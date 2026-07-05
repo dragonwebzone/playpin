@@ -4,6 +4,7 @@ import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
 import { useSaved } from './hooks/useSaved'
+import { usePresence } from './hooks/usePresence'
 import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
@@ -42,6 +43,7 @@ export default function App() {
     useGames({ onActivity: pushActivity })
   const friendsApi = useFriends(user?.id)
   const { savedIds, toggleSave } = useSaved(user?.id)
+  const online = usePresence(user?.id)
 
   const [filters, setFilters] = useState({
     sport: 'all',
@@ -223,6 +225,14 @@ export default function App() {
           onMapClick={handleMapClick}
           onMarkerClick={handleMarkerClick}
         />
+
+        {/* Real-time "players online" (Realtime Presence) */}
+        {online > 0 && (
+          <div className="presence-pill" title="Players online right now">
+            <span className="presence-dot" aria-hidden="true" />
+            {online} online
+          </div>
+        )}
 
         {/* Create-mode hint banner */}
         {createMode && !pin && (
