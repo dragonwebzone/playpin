@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useGoogleMaps } from '../hooks/useGoogleMaps'
+import { useTheme } from '../hooks/useTheme'
 import { DEFAULT_CENTER, DEFAULT_ZOOM, sportMeta } from '../lib/constants'
 import Spinner from './Spinner'
 import PlaceSearch from './PlaceSearch'
@@ -7,12 +8,36 @@ import PlaceSearch from './PlaceSearch'
 // Declutter the base map to focus on places where pickup games happen: hide all
 // POI labels, then re-enable parks and sports complexes. (Applies only without a
 // cloud mapId; this map uses default styling, so JSON styles take effect.)
-const MAP_STYLES = [
+const DECLUTTER = [
   { featureType: 'poi', stylers: [{ visibility: 'off' }] },
   { featureType: 'poi.park', stylers: [{ visibility: 'on' }] },
   { featureType: 'poi.sports_complex', stylers: [{ visibility: 'on' }] },
   { featureType: 'poi.attraction', elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
   { featureType: 'transit', elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+]
+
+// Light map = default base tiles + declutter.
+const LIGHT_MAP_STYLES = DECLUTTER
+
+// Dark map = Google's "night mode" palette + the same declutter rules, so the
+// map matches the app's dark theme.
+const DARK_MAP_STYLES = [
+  { elementType: 'geometry', stylers: [{ color: '#1d2739' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#1d2739' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#8b98ad' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#b4c0d4' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#1f3d33' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#6b9a76' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2a3648' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#161f2e' }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#9ca5b3' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a4a63' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#121a27' }] },
+  { featureType: 'road.highway', elementType: 'labels.text.fill', stylers: [{ color: '#d5deeb' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0e1a2b' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4b5a70' }] },
+  { featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#0e1a2b' }] },
+  ...DECLUTTER,
 ]
 
 // Full-screen Google Map. Renders a marker per game, an optional "drop pin"
@@ -26,6 +51,7 @@ export default function MapView({
   onMarkerClick,
 }) {
   const { maps, loading, error } = useGoogleMaps()
+  const { isDark } = useTheme()
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const markersRef = useRef(new Map()) // gameId -> google.maps.Marker
@@ -47,7 +73,7 @@ export default function MapView({
       zoomControl: true,
       clickableIcons: false,
       gestureHandling: 'greedy',
-      styles: MAP_STYLES,
+      styles: isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES,
     })
     mapRef.current = map
 
@@ -69,6 +95,13 @@ export default function MapView({
       )
     }
   }, [maps])
+
+  // Repaint the map palette when the light/dark theme changes.
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setOptions({ styles: isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES })
+    }
+  }, [isDark])
 
   // Swap the cursor in create mode so it's obvious you should click the map.
   useEffect(() => {
