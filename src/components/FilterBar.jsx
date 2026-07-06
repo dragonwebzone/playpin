@@ -1,8 +1,8 @@
-import { SPORTS, SKILL_LEVELS, TIME_WINDOWS } from '../lib/constants'
+import { SPORTS, SKILL_LEVELS, TIME_WINDOWS, RADIUS_OPTIONS } from '../lib/constants'
 
 // Sport is a scrollable row of one-tap chips; level and time stay as compact
 // selects. Keeps the map's discovery controls fast and thumb-friendly.
-export default function FilterBar({ filters, onChange, resultCount, hasFriends }) {
+export default function FilterBar({ filters, onChange, resultCount, hasFriends, hasLocation }) {
   const set = (key, value) => onChange({ ...filters, [key]: value })
 
   return (
@@ -54,6 +54,18 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends }
             <option key={t.value} value={t.value}>🕒 {t.label}</option>
           ))}
         </select>
+
+        {hasLocation && (
+          <select
+            value={filters.radius.value}
+            onChange={(e) => set('radius', RADIUS_OPTIONS.find((r) => r.value === e.target.value))}
+            aria-label="Filter by distance from you"
+          >
+            {RADIUS_OPTIONS.map((r) => (
+              <option key={r.value} value={r.value}>📍 {r.label}</option>
+            ))}
+          </select>
+        )}
 
         <span className="filter-count">{resultCount} {resultCount === 1 ? 'game' : 'games'}</span>
       </div>

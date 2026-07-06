@@ -47,6 +47,7 @@ export default function MapView({
   selectedGameId,
   createMode,
   pin,
+  userLocation,
   onMapClick,
   onMarkerClick,
 }) {
@@ -56,6 +57,7 @@ export default function MapView({
   const mapRef = useRef(null)
   const markersRef = useRef(new Map()) // gameId -> google.maps.Marker
   const pinMarkerRef = useRef(null)
+  const meMarkerRef = useRef(null)
   const clickHandlerRef = useRef(onMapClick)
   clickHandlerRef.current = onMapClick
   // Latest create-mode value for use inside the Places listener closure.
@@ -189,6 +191,59 @@ export default function MapView({
     }
   }, [maps, pin])
 
+  // Render a "you are here" dot at the user's location so nearby games have a
+  // clear point of reference.
+  useEffect(() => {
+    if (!maps || !mapRef.current) return
+    if (!userLocation) {
+      if (meMarkerRef.current) {
+        meMarkerRef.current.setMap(null)
+        meMarkerRef.current = null
+      }
+      return
+    }
+    const icon = {
+      path: maps.SymbolPath.CIRCLE,
+      scale: 7,
+      fillColor: '#2563eb',
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeWeight: 3,
+    }
+    if (!meMarkerRef.current) {
+      meMarkerRef.current = new maps.Marker({
+        map: mapRef.current,
+        position: userLocation,
+        title: 'You are here',
+        icon,
+        zIndex: 500,
+      })
+    } else {
+      meMarkerRef.current.setPosition(userLocation)
+    }
+  }, [maps, userLocation])
+
+  // Recenter the map on the user (or re-request their position if we don't have
+  // it yet).
+  const recenterOnMe = () => {
+    const map = mapRef.current
+    if (!map) return
+    if (userLocation) {
+      map.panTo(userLocation)
+      map.setZoom(14)
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+          map.panTo(here)
+          map.setZoom(14)
+        },
+        () => {},
+        { enableHighAccuracy: true, timeout: 8000 }
+      )
+    }
+  }
+
   if (error) {
     return (
       <div className="map-error">
@@ -211,6 +266,16 @@ export default function MapView({
           createModeRef={createModeRef}
           onDropPin={(coords) => clickHandlerRef.current?.(coords)}
         />
+      )}
+      {!loading && maps && (
+        <button
+          className="locate-btn"
+          onClick={recenterOnMe}
+          aria-label="Center map on my location"
+          title="Center on my location"
+        >
+          <span aria-hidden="true">◎</span>
+        </button>
       )}
       {loading && <Spinner label="Loading map…" overlay />}
     </div>

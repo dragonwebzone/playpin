@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { distanceKm } from '../lib/constants'
 
 // Fetches all upcoming games (with host profile + participant rows) and exposes
 // join/leave helpers plus a refresh. Filtering is done client-side in useMemo.
@@ -147,12 +148,23 @@ export function useGames({ onActivity } = {}) {
   }
 }
 
-// Pure helper: filter a games array by sport / skill / time window / friends.
-export function filterGames(games, { sport, skill, timeWindow, friendsOnly, friendIds }) {
+// Pure helper: filter a games array by sport / skill / time window / friends /
+// distance from the user ("near me").
+export function filterGames(
+  games,
+  { sport, skill, timeWindow, friendsOnly, friendIds, radiusKm, userLocation }
+) {
   const now = Date.now()
   return games.filter((g) => {
     if (sport && sport !== 'all' && g.sport !== sport) return false
     if (skill && skill !== 'all' && g.skill_level !== skill) return false
+
+    // "Near me": drop games farther than the chosen radius. Skipped when we
+    // don't yet have the user's location or no radius is set.
+    if (radiusKm != null && userLocation) {
+      const d = distanceKm(userLocation, { lat: g.latitude, lng: g.longitude })
+      if (d != null && d > radiusKm) return false
+    }
 
     if (friendsOnly && friendIds) {
       const byFriend =

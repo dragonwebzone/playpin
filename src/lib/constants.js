@@ -24,6 +24,17 @@ export const TIME_WINDOWS = [
   { value: 'week', label: 'This week', hours: 24 * 7 },
 ]
 
+// "Near me" radius options. `km` is the max distance from the user's location;
+// null means no distance cap (show every game). Only usable once we have the
+// user's location, so the picker is hidden until geolocation resolves.
+export const RADIUS_OPTIONS = [
+  { value: 'all', label: 'Any distance', km: null },
+  { value: '2', label: 'Within 2 km', km: 2 },
+  { value: '5', label: 'Within 5 km', km: 5 },
+  { value: '10', label: 'Within 10 km', km: 10 },
+  { value: '25', label: 'Within 25 km', km: 25 },
+]
+
 // Fallback map center when geolocation is unavailable or denied.
 // San Francisco — matches the coordinates used in supabase/seed.sql.
 export const DEFAULT_CENTER = { lat: 37.7749, lng: -122.4194 }

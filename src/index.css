@@ -219,6 +219,34 @@ button {
   margin-top: 14px;
 }
 
+/* "Center on me" control — sits just above the create FAB on the right edge. */
+.locate-btn {
+  position: absolute;
+  right: 16px;
+  bottom: calc(146px + var(--safe-bottom));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: #2563eb;
+  font-size: 1.35rem;
+  line-height: 1;
+  box-shadow: var(--shadow);
+  z-index: 15;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.locate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px rgba(15, 23, 42, 0.3);
+}
+.locate-btn:active {
+  transform: translateY(0);
+}
+
 .hint-banner {
   position: absolute;
   top: 66px;

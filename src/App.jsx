@@ -5,7 +5,7 @@ import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
 import { useSaved } from './hooks/useSaved'
 import { usePresence } from './hooks/usePresence'
-import { TIME_WINDOWS, sportMeta, levelFromXp } from './lib/constants'
+import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import ThemeToggle from './components/ThemeToggle'
 import FilterBar from './components/FilterBar'
@@ -46,20 +46,8 @@ export default function App() {
   const { savedIds, toggleSave } = useSaved(user?.id)
   const online = usePresence(user?.id)
 
-  const [filters, setFilters] = useState({
-    sport: 'all',
-    skill: 'all',
-    timeWindow: TIME_WINDOWS[0],
-    friendsOnly: false,
-  })
-  const effectiveFilters = useMemo(
-    () => ({ ...filters, friendIds: friendsApi.friendIds }),
-    [filters, friendsApi.friendIds]
-  )
-  const filtered = useFilteredGames(games, effectiveFilters)
-
-  // The user's location (for distance sorting in the nearby sheet). The map
-  // component handles its own centering.
+  // The user's location — drives distance sorting in the nearby sheet and the
+  // "near me" radius filter. The map component handles its own centering.
   const [userLocation, setUserLocation] = useState(null)
   useEffect(() => {
     if (!navigator.geolocation) return
@@ -69,6 +57,24 @@ export default function App() {
       { enableHighAccuracy: true, timeout: 8000 }
     )
   }, [])
+
+  const [filters, setFilters] = useState({
+    sport: 'all',
+    skill: 'all',
+    timeWindow: TIME_WINDOWS[0],
+    radius: RADIUS_OPTIONS[0],
+    friendsOnly: false,
+  })
+  const effectiveFilters = useMemo(
+    () => ({
+      ...filters,
+      friendIds: friendsApi.friendIds,
+      radiusKm: filters.radius?.km,
+      userLocation,
+    }),
+    [filters, friendsApi.friendIds, userLocation]
+  )
+  const filtered = useFilteredGames(games, effectiveFilters)
 
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [createMode, setCreateMode] = useState(false)
@@ -216,6 +222,7 @@ export default function App() {
         onChange={setFilters}
         resultCount={filtered.length}
         hasFriends={friendsApi.friendIds.size > 0}
+        hasLocation={!!userLocation}
       />
 
       <main className="map-area">
@@ -224,6 +231,7 @@ export default function App() {
           selectedGameId={selectedGameId}
           createMode={createMode}
           pin={pin}
+          userLocation={userLocation}
           onMapClick={handleMapClick}
           onMarkerClick={handleMarkerClick}
         />
