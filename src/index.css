@@ -1198,6 +1198,173 @@ button {
 }
 
 
+/* ---------------------------------------------------------- profile panel -- */
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.avatar-lg {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.identity-main {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.identity-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.identity-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.identity-email,
+.identity-since {
+  font-size: 0.8rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.name-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.name-input {
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--white);
+}
+.name-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+/* Quick links */
+.profile-quick {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.quick-tile {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.quick-tile:hover {
+  background: var(--bg);
+  border-color: var(--color-primary);
+}
+.quick-emoji {
+  font-size: 1.1rem;
+}
+
+/* Appearance row */
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.profile-row-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg);
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.profile-tab {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--muted);
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.profile-tab.is-active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+}
+
+/* History role tag */
+.role-tag {
+  margin-left: 8px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+.role-hosted {
+  background: rgba(10, 110, 74, 0.12);
+  color: var(--color-primary);
+}
+.role-joined {
+  background: rgba(77, 124, 15, 0.14);
+  color: var(--color-spark);
+}
+
+.profile-footer {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
 /* --- leaderboard --- */
 .lb-list {
   list-style: none;
@@ -1607,6 +1774,31 @@ button {
 }
 :root[data-theme='dark'] .xp-bar {
   background: rgba(51, 201, 138, 0.2);
+}
+:root[data-theme='dark'] .quick-tile,
+:root[data-theme='dark'] .name-input,
+:root[data-theme='dark'] .profile-row {
+  background: var(--white);
+  border-color: var(--line);
+}
+:root[data-theme='dark'] .quick-tile:hover {
+  background: var(--bg);
+}
+:root[data-theme='dark'] .profile-tabs {
+  background: var(--bg);
+}
+:root[data-theme='dark'] .profile-tab.is-active {
+  background: var(--white);
+  box-shadow: none;
+  border: 1px solid var(--line);
+}
+:root[data-theme='dark'] .role-hosted {
+  background: rgba(51, 201, 138, 0.16);
+  color: var(--color-primary-hover);
+}
+:root[data-theme='dark'] .role-joined {
+  background: rgba(163, 230, 53, 0.18);
+  color: var(--color-spark);
 }
 :root[data-theme='dark'] .lb-row.is-me {
   background: rgba(51, 201, 138, 0.14);

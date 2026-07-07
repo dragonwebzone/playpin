@@ -72,6 +72,21 @@ export function AuthProvider({ children }) {
           options: { redirectTo: `${window.location.origin}/app` },
         }),
       signOut: () => supabase.auth.signOut(),
+      // Update the current user's profile row and reflect it locally. RLS
+      // ensures a user can only update their own row.
+      updateProfile: async (fields) => {
+        const userId = session?.user?.id
+        if (!userId) throw new Error('Not signed in')
+        const { data, error } = await supabase
+          .from('profiles')
+          .update(fields)
+          .eq('id', userId)
+          .select('*')
+          .single()
+        if (error) throw error
+        setProfile(data)
+        return data
+      },
     }),
     [session, profile, loading]
   )

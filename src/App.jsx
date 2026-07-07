@@ -7,13 +7,12 @@ import { useSaved } from './hooks/useSaved'
 import { usePresence } from './hooks/usePresence'
 import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
-import ThemeToggle from './components/ThemeToggle'
 import FilterBar from './components/FilterBar'
 import AuthModal from './components/AuthModal'
 import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
-import MyGamesPanel from './components/MyGamesPanel'
+import ProfilePanel from './components/ProfilePanel'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
 import Leaderboard from './components/Leaderboard'
@@ -21,7 +20,7 @@ import FriendsPanel from './components/FriendsPanel'
 import Spinner from './components/Spinner'
 
 export default function App() {
-  const { user, profile, loading: authLoading, signOut } = useAuth()
+  const { user, profile, loading: authLoading } = useAuth()
 
   // Live-activity toasts, driven by real Realtime inserts (see useGames).
   const [activity, setActivity] = useState([])
@@ -81,7 +80,7 @@ export default function App() {
   const [pin, setPin] = useState(null)
   const [showAuth, setShowAuth] = useState(false)
   const [authMode, setAuthMode] = useState('login')
-  const [showMyGames, setShowMyGames] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [showFriends, setShowFriends] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
@@ -133,8 +132,8 @@ export default function App() {
     closePanels()
   }
 
-  const handleSelectFromMyGames = (gameId) => {
-    setShowMyGames(false)
+  const handleSelectFromProfile = (gameId) => {
+    setShowProfile(false)
     setSelectedGameId(gameId)
   }
 
@@ -170,12 +169,11 @@ export default function App() {
           <span className="brand-name">playpin</span>
         </Link>
         <div className="topbar-actions">
-          <ThemeToggle />
           {authLoading ? null : user ? (
             <>
               <button
                 className="profile-chip"
-                onClick={() => setShowMyGames(true)}
+                onClick={() => setShowProfile(true)}
                 title="My profile & games"
               >
                 <span className="avatar-sm" aria-hidden="true">
@@ -204,9 +202,6 @@ export default function App() {
                 title="Leaderboard"
               >
                 🏆
-              </button>
-              <button className="btn btn-ghost btn-sm" onClick={signOut}>
-                Log out
               </button>
             </>
           ) : (
@@ -284,7 +279,7 @@ export default function App() {
         {!createMode &&
           !selectedGame &&
           !editingGame &&
-          !showMyGames &&
+          !showProfile &&
           !showLeaderboard &&
           !showFriends && (
           <NearbyGamesSheet
@@ -343,15 +338,22 @@ export default function App() {
         </div>
       )}
 
-      {showMyGames && (
+      {showProfile && (
         <div className="sheet">
-          <MyGamesPanel
+          <ProfilePanel
             games={games}
-            userId={user?.id}
-            profile={profile}
             savedIds={savedIds}
-            onSelect={handleSelectFromMyGames}
-            onClose={() => setShowMyGames(false)}
+            onSelect={handleSelectFromProfile}
+            onClose={() => setShowProfile(false)}
+            onOpenFriends={() => {
+              setShowProfile(false)
+              setShowFriends(true)
+            }}
+            onOpenLeaderboard={() => {
+              setShowProfile(false)
+              setShowLeaderboard(true)
+            }}
+            incomingCount={friendsApi.incoming.length}
           />
         </div>
       )}
