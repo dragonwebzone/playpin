@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { PinLogo, IconMenu, IconClose } from './icons'
 import ThemeToggle from '../../components/ThemeToggle'
 
 // Sticky top navigation. `scrolled` (from App's IntersectionObserver sentinel)
-// toggles the blur + shadow once the user passes the hero.
-export default function Navbar({ scrolled }) {
+// toggles the blur + shadow once the user passes the hero. `onAuth('login'|
+// 'signup')` opens the auth modal on the landing page.
+export default function Navbar({ scrolled, onAuth }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -27,19 +27,21 @@ export default function Navbar({ scrolled }) {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-7 md:flex">
-          <Link
-            to="/app?auth=login"
+          <button
+            type="button"
+            onClick={() => onAuth('login')}
             className="link-underline text-sm font-semibold text-slate-600 transition-colors hover:text-ink dark:text-slate-300 dark:hover:text-white"
           >
             Log in
-          </Link>
+          </button>
           <ThemeToggle />
-          <Link
-            to="/app?auth=signup"
+          <button
+            type="button"
+            onClick={() => onAuth('signup')}
             className="btn-shine rounded-full bg-brand-grad px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform duration-200 hover:scale-[1.03] active:scale-95"
           >
             Sign up
-          </Link>
+          </button>
         </div>
 
         {/* Mobile: theme toggle + menu button */}
@@ -67,20 +69,20 @@ export default function Navbar({ scrolled }) {
         }`}
       >
         <div className="mx-auto flex max-w-content flex-col gap-2 rounded-2xl border border-slate-100 bg-white p-4 shadow-card dark:border-slate-700 dark:bg-slate-800">
-          <Link
-            to="/app?auth=login"
-            onClick={() => setOpen(false)}
+          <button
+            type="button"
+            onClick={() => { setOpen(false); onAuth('login') }}
             className="rounded-xl px-4 py-3 text-center text-sm font-semibold text-ink transition-colors hover:bg-slate-50 dark:text-white dark:hover:bg-white/10"
           >
             Log in
-          </Link>
-          <Link
-            to="/app?auth=signup"
-            onClick={() => setOpen(false)}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setOpen(false); onAuth('signup') }}
             className="rounded-xl bg-brand-grad px-4 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-95"
           >
             Sign up
-          </Link>
+          </button>
         </div>
       </div>
     </header>

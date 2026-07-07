@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
@@ -8,7 +8,6 @@ import { usePresence } from './hooks/usePresence'
 import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
-import AuthModal from './components/AuthModal'
 import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
@@ -79,34 +78,18 @@ export default function App() {
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [createMode, setCreateMode] = useState(false)
   const [pin, setPin] = useState(null)
-  const [showAuth, setShowAuth] = useState(false)
-  const [authMode, setAuthMode] = useState('login')
   const [showProfile, setShowProfile] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [showFriends, setShowFriends] = useState(false)
   const [showTournaments, setShowTournaments] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
-  // If we arrived from the landing page via /app?auth=signup|login, open the
-  // auth modal in the requested mode (unless already signed in).
-  const [searchParams, setSearchParams] = useSearchParams()
-  useEffect(() => {
-    const intent = searchParams.get('auth')
-    if ((intent === 'signup' || intent === 'login') && !user) {
-      openAuth(intent)
-    }
-    if (intent) {
-      // Clean the URL so a refresh doesn't reopen the modal.
-      searchParams.delete('auth')
-      setSearchParams(searchParams, { replace: true })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const openAuth = (mode = 'login') => {
-    setAuthMode(mode)
-    setShowAuth(true)
-  }
+  // Auth now lives on the landing page. Logged-out visitors are redirected
+  // there by the guard below; requireAuth is a fallback for the brief window
+  // before auth resolves (e.g. tapping a button during initial load).
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const requireAuth = () => navigate('/?auth=login')
 
   const selectedGame = useMemo(
     () => games.find((g) => g.id === selectedGameId) || null,
@@ -141,7 +124,7 @@ export default function App() {
 
   const handleStartCreate = () => {
     if (!user) {
-      openAuth('login')
+      requireAuth()
       return
     }
     setSelectedGameId(null)
@@ -161,6 +144,14 @@ export default function App() {
 
   const handleCreated = () => {
     closePanels()
+  }
+
+  // The app is for signed-in users. Once auth resolves, a missing user (e.g.
+  // right after logging out) is sent to the landing page — carrying any ?auth
+  // intent so a login/signup deep-link opens there.
+  if (!authLoading && !user) {
+    const intent = searchParams.get('auth')
+    return <Navigate to={intent ? `/?auth=${intent}` : '/'} replace />
   }
 
   return (
@@ -215,7 +206,7 @@ export default function App() {
               </button>
             </>
           ) : (
-            <button className="btn btn-primary btn-sm" onClick={() => openAuth('login')}>
+            <button className="btn btn-primary btn-sm" onClick={requireAuth}>
               Log in
             </button>
           )}
@@ -326,7 +317,7 @@ export default function App() {
             onClose={closePanels}
             onJoin={joinGame}
             onLeave={leaveGame}
-            onRequireAuth={() => openAuth('login')}
+            onRequireAuth={requireAuth}
             onEdit={handleEditGame}
             onDelete={handleDeleteGame}
             isSaved={savedIds.has(selectedGame.id)}
@@ -386,8 +377,6 @@ export default function App() {
           <TournamentsPanel onClose={() => setShowTournaments(false)} />
         </div>
       )}
-
-      {showAuth && <AuthModal initialMode={authMode} onClose={() => setShowAuth(false)} />}
     </div>
   )
 }

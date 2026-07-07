@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import AuthModal from '../components/AuthModal'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import HowItWorks from './components/HowItWorks'
@@ -12,8 +13,22 @@ import Footer from './components/Footer'
 
 export default function App() {
   const { user, loading } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [authMode, setAuthMode] = useState(null) // null | 'login' | 'signup'
   const [scrolled, setScrolled] = useState(false)
   const sentinelRef = useRef(null)
+
+  // Open the auth modal when arriving with ?auth=login|signup — e.g. from an
+  // in-app CTA or after being redirected here while signed out.
+  useEffect(() => {
+    const intent = searchParams.get('auth')
+    if (intent === 'login' || intent === 'signup') setAuthMode(intent)
+    if (intent) {
+      searchParams.delete('auth')
+      setSearchParams(searchParams, { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Toggle the navbar's blur/shadow once the hero-bottom sentinel leaves the
   // viewport — done with IntersectionObserver, not a scroll listener.
@@ -34,7 +49,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fafaf9] dark:bg-slate-900">
-      <Navbar scrolled={scrolled} />
+      <Navbar scrolled={scrolled} onAuth={setAuthMode} />
       <main>
         <Hero />
         {/* Sentinel just below the hero controls the sticky-nav appearance. */}
@@ -46,6 +61,10 @@ export default function App() {
         <FinalCTA />
       </main>
       <Footer />
+
+      {authMode && (
+        <AuthModal initialMode={authMode} onClose={() => setAuthMode(null)} />
+      )}
     </div>
   )
 }
