@@ -569,9 +569,14 @@ button {
   transform: translateY(1px);
 }
 /* Glossy sheen that sweeps across filled brand buttons on hover. */
-.btn-primary,
-.fab {
+.btn-primary {
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* .fab already has position: absolute (its bottom-right anchor + positioning
+   context for the sheen) — only clip it; never override its position. */
+.fab {
   overflow: hidden;
   isolation: isolate;
 }
