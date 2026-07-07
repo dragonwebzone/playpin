@@ -47,6 +47,13 @@ Nothing is hardcoded.
    host accounts and 6 sample games around San Francisco. Demo logins:
    - `alex@playpin.demo` / `playpin123`
    - `sam@playpin.demo` / `playpin123`
+4. *(Optional feature add-ons — run each in a new query, in this order)* Each is
+   self-contained and safe to re-run:
+   - [`supabase/gamification.sql`](supabase/gamification.sql) — XP, levels, leaderboard.
+   - [`supabase/friends.sql`](supabase/friends.sql) — friend requests + filtering.
+   - [`supabase/saved.sql`](supabase/saved.sql) — bookmarking games.
+   - [`supabase/tournaments.sql`](supabase/tournaments.sql) — single-elimination
+     brackets (needs `migration.sql` + `gamification.sql` first).
 
 ### Auth note (email confirmation)
 By default Supabase may require email confirmation. For fast local testing you

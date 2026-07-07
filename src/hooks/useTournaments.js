@@ -87,7 +87,7 @@ export function useTournaments(sport) {
     setLoading(true)
     let query = supabase
       .from('tournaments')
-      .select('*, tournament_participants(count)')
+      .select('*, tournament_participants(user_id)')
       .order('created_at', { ascending: false })
     if (sport && sport !== 'all') query = query.eq('sport', sport)
     const { data, error: err } = await query
@@ -146,8 +146,12 @@ export function useTournaments(sport) {
 
     const rows = buildBracketRows(tournamentId, participants)
 
-    // Insert without next_match_id first (we don't have real ids yet).
-    const toInsert = rows.map(({ _nextKey, _nextSlot, ...row }) => row)
+    // Insert WITHOUT next_match_id (no real ids yet) and WITHOUT winner_id.
+    // Byes are applied as a separate update below so the advancement trigger —
+    // which only fires when winner_id actually changes — resolves them into
+    // round 2. (Inserting winner_id directly would leave old == new, so the
+    // AFTER UPDATE trigger would never fire and the bye player would stall.)
+    const toInsert = rows.map(({ _nextKey, _nextSlot, winner_id, ...row }) => row)
     const { data: inserted, error: insertErr } = await supabase
       .from('tournament_matches')
       .insert(toInsert)
@@ -174,14 +178,16 @@ export function useTournaments(sport) {
       if (updErr) throw updErr
     }
 
-    // Byes that already have a winner_id need one more save so the trigger
-    // fires and advances them into round 2 immediately.
-    const byeWinners = inserted.filter((r) => r.winner_id)
-    for (const row of byeWinners) {
-      await supabase
+    // Now apply bye winners (next_match_id is set, so the trigger advances them).
+    const byeWinners = rows
+      .filter((r) => r.winner_id)
+      .map((r) => ({ id: idByKey[`${r.round}-${r.match_number}`], winner_id: r.winner_id }))
+    for (const b of byeWinners) {
+      const { error: byeErr } = await supabase
         .from('tournament_matches')
-        .update({ winner_id: row.winner_id })
-        .eq('id', row.id)
+        .update({ winner_id: b.winner_id })
+        .eq('id', b.id)
+      if (byeErr) throw byeErr
     }
 
     const { error: statusErr } = await supabase

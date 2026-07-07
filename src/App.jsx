@@ -17,6 +17,7 @@ import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
 import Leaderboard from './components/Leaderboard'
 import FriendsPanel from './components/FriendsPanel'
+import TournamentsPanel from './components/TournamentsPanel'
 import Spinner from './components/Spinner'
 
 export default function App() {
@@ -83,6 +84,7 @@ export default function App() {
   const [showProfile, setShowProfile] = useState(false)
   const [showLeaderboard, setShowLeaderboard] = useState(false)
   const [showFriends, setShowFriends] = useState(false)
+  const [showTournaments, setShowTournaments] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
   // If we arrived from the landing page via /app?auth=signup|login, open the
@@ -203,6 +205,14 @@ export default function App() {
               >
                 🏆
               </button>
+              <button
+                className="icon-btn topbar-icon"
+                onClick={() => setShowTournaments(true)}
+                aria-label="Tournaments"
+                title="Tournaments"
+              >
+                ⚔️
+              </button>
             </>
           ) : (
             <button className="btn btn-primary btn-sm" onClick={() => openAuth('login')}>
@@ -281,7 +291,8 @@ export default function App() {
           !editingGame &&
           !showProfile &&
           !showLeaderboard &&
-          !showFriends && (
+          !showFriends &&
+          !showTournaments && (
           <NearbyGamesSheet
             games={filtered}
             userLocation={userLocation}
@@ -367,6 +378,12 @@ export default function App() {
       {showFriends && (
         <div className="sheet">
           <FriendsPanel friendsApi={friendsApi} onClose={() => setShowFriends(false)} />
+        </div>
+      )}
+
+      {showTournaments && (
+        <div className="sheet">
+          <TournamentsPanel onClose={() => setShowTournaments(false)} />
         </div>
       )}
 

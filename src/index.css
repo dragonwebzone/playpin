@@ -1919,3 +1919,214 @@ button {
 :root[data-theme='dark'] .lb-rank.rank-2 {
   color: #94a3b8;
 }
+
+/* ----------------------------------------------------------- tournaments -- */
+.tourn-title {
+  margin: 4px 0 10px;
+  font-size: 1.3rem;
+}
+.tourn-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.tourn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.12s ease;
+}
+.tourn-row:hover {
+  border-color: var(--color-primary);
+}
+.tourn-emoji {
+  font-size: 1.5rem;
+}
+.tourn-info {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.tourn-name {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tourn-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.tourn-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.tourn-empty {
+  margin-top: 16px;
+}
+.tourn-form {
+  margin-top: 14px;
+}
+.tourn-start {
+  margin-top: 10px;
+}
+.tourn-champion {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: center;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Status pills — shared by the list (.tourn-status) and the detail badge. */
+.status-open {
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+}
+.status-in_progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+.status-completed {
+  background: #eef2f7;
+  color: var(--slate);
+}
+
+/* Bracket ------------------------------------------------------------------ */
+.bracket-scroll {
+  overflow-x: auto;
+  margin-top: 14px;
+  padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.bracket {
+  display: flex;
+  gap: 22px;
+  align-items: stretch;
+  min-width: min-content;
+}
+.bracket-round {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 156px;
+}
+.bracket-round-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 0;
+}
+.bracket-round-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: space-around;
+  flex: 1;
+}
+.bracket-match {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+}
+.bracket-match.is-decided {
+  border-color: var(--color-primary);
+}
+.bracket-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+.bracket-slot + .bracket-slot {
+  border-top: 1px solid var(--line);
+}
+.bracket-slot.is-winner {
+  background: var(--color-primary-weak);
+}
+.bracket-player {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+}
+.bracket-ava {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.bracket-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--ink);
+}
+.bracket-slot.is-winner .bracket-name {
+  color: var(--color-primary);
+}
+.bracket-score {
+  font-weight: 800;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.bracket-check {
+  color: var(--color-primary);
+  font-weight: 800;
+}
+.bracket-report {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-top: 1px dashed var(--line);
+}
+.bracket-score-input {
+  width: 44px;
+  text-align: center;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+.bracket-err {
+  padding: 0 10px 8px;
+}
+
+:root[data-theme='dark'] .status-in_progress {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fcd34d;
+}
+:root[data-theme='dark'] .status-completed {
+  background: #223049;
+  color: var(--slate);
+}
