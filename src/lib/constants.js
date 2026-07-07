@@ -6,6 +6,7 @@ export const SPORTS = [
   { value: 'badminton', label: 'Badminton', emoji: '🏸', color: '#7c3aed' },
   { value: 'basketball', label: 'Basketball', emoji: '🏀', color: '#ea580c' },
   { value: 'tennis', label: 'Tennis', emoji: '🎾', color: '#65a30d' },
+  { value: 'pickleball', label: 'Pickleball', emoji: '🏓', color: '#2563eb' },
   { value: 'other', label: 'Other', emoji: '🤾', color: '#0f766e' },
 ]
 

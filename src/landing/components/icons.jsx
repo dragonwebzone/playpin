@@ -144,6 +144,18 @@ export function SportBadminton({ className = '' }) {
   )
 }
 
+export function SportPickleball({ className = '' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <rect {...base} x="3.5" y="3" width="9" height="11" rx="4.2" />
+      <path {...base} d="M8 14v4.5" />
+      <path {...base} d="M6.4 18.6h3.2" />
+      <circle {...base} cx="17.5" cy="10" r="3" />
+      <path {...base} d="M17.5 8.7h0M16.3 10.6h0M18.7 10.6h0" />
+    </svg>
+  )
+}
+
 export function IconMenu({ className = '' }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">

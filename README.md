@@ -1,7 +1,7 @@
 # 📍 playpin
 
 A pickup-sports meetup platform. Drop a pin on a map to organize a game —
-football, cricket, badminton, basketball, tennis, and more — and let others
+football, cricket, badminton, basketball, tennis, pickleball, and more — and let others
 nearby join. Runs entirely in the browser: **React (Vite)** frontend talking
 directly to **Supabase** (Postgres + Auth) via `@supabase/supabase-js`, with
 **Google Maps** for the map. No custom backend server.

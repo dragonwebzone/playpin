@@ -1,5 +1,5 @@
 -- ============================================================================
--- playpin — seed data: 2 demo hosts + 6 sample games around San Francisco
+-- playpin — seed data: 2 demo hosts + 7 sample games around San Francisco
 -- Run this AFTER migration.sql, in the Supabase SQL Editor.
 --
 -- This creates two demo auth users so the sample games have real hosts.
@@ -79,6 +79,7 @@ select * from (values
   ('11111111-1111-1111-1111-111111111111', 'tennis',     'beginner',    now() + interval '1 day',      37.8021, -122.4370, 3, 'Doubles, all levels welcome. I have spare rackets.'),
   ('22222222-2222-2222-2222-222222222222', 'badminton',  'casual',      now() + interval '2 days',     37.7847, -122.4079, 4, 'Indoor courts booked for an hour. Shuttles provided.'),
   ('11111111-1111-1111-1111-111111111111', 'cricket',    'competitive', now() + interval '3 days',     37.7204, -122.4750, 12, 'Tape-ball match. Golden Gate Park meadow.'),
+  ('11111111-1111-1111-1111-111111111111', 'pickleball', 'casual',      now() + interval '6 hours',    37.7835, -122.4089, 4, 'Open play at the rec center. Spare paddles for first-timers.'),
   ('22222222-2222-2222-2222-222222222222', 'other',      'beginner',    now() + interval '5 hours',    37.7749, -122.4194, 6, 'Casual frisbee / pickup ultimate. Newbies encouraged!')
 ) as v(host_id, sport, skill_level, date_time, latitude, longitude, players_needed, note)
 where not exists (select 1 from public.games);
