@@ -560,6 +560,46 @@ button {
   font-size: 0.85rem;
 }
 
+/* ------------------------------------------- hover reflect + highlight -- */
+/* Gentle lift on any button. */
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+/* Glossy sheen that sweeps across filled brand buttons on hover. */
+.btn-primary,
+.fab {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-primary::after,
+.fab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    100deg,
+    transparent 22%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 78%
+  );
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
+}
+.btn-primary:hover:not(:disabled)::after,
+.fab:hover::after {
+  animation: sheen-sweep 0.7s ease;
+}
+@keyframes sheen-sweep {
+  to {
+    transform: translateX(130%) skewX(-18deg);
+  }
+}
+
 .icon-btn {
   border: none;
   background: transparent;
@@ -1690,6 +1730,79 @@ button {
 }
 .theme-toggle:active .theme-toggle-knob {
   transform: translateY(-50%) scale(0.92);
+}
+
+/* ------------------------------------ hover highlight: chips / rows / tiles */
+/* Filter chips (unselected): brand outline + lift on hover. */
+.chip:not(.chip--on):hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+/* List rows nudge and pick up a brand edge on hover. */
+.mygames-row {
+  transition: background 0.14s ease, transform 0.14s ease, border-color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+.mygames-row:hover {
+  border-color: var(--color-primary);
+  transform: translateX(3px);
+  box-shadow: 0 6px 16px -12px var(--color-focus-ring);
+}
+.nearby-row {
+  transition: background 0.14s ease, transform 0.14s ease;
+}
+.nearby-row:hover {
+  transform: translateX(3px);
+}
+.lb-row {
+  transition: background 0.14s ease, transform 0.14s ease;
+}
+.lb-row:not(.is-me):hover {
+  background: var(--bg);
+}
+.lb-row:hover {
+  transform: translateX(2px);
+}
+.fr-row {
+  border-radius: 10px;
+  transition: background 0.14s ease;
+}
+.fr-row:hover {
+  background: var(--bg);
+}
+/* Quick tiles float on hover. */
+.quick-tile {
+  transition: background 0.14s ease, border-color 0.14s ease, transform 0.14s ease,
+    box-shadow 0.14s ease;
+}
+.quick-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -12px var(--color-focus-ring);
+}
+/* Links underline on hover. */
+.detail-list a {
+  transition: color 0.12s ease;
+}
+.detail-list a:hover {
+  text-decoration: underline;
+}
+
+/* Respect reduced motion for all the hover micro-interactions above. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover:not(:disabled),
+  .btn:active:not(:disabled),
+  .chip:not(.chip--on):hover,
+  .mygames-row:hover,
+  .nearby-row:hover,
+  .lb-row:hover,
+  .quick-tile:hover {
+    transform: none;
+  }
+  .btn-primary::after,
+  .fab::after {
+    display: none;
+  }
 }
 
 /* ================================================================= DARK == */

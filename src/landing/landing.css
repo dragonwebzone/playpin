@@ -275,6 +275,55 @@ body {
   transform: scaleX(1);
 }
 
+/* Cards/tiles: a light sheen sweeps across and a brand edge glows on hover. */
+.reflect {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.reflect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-130%) skewX(-18deg);
+  pointer-events: none;
+}
+.reflect:hover::after {
+  animation: reflect-sweep 0.9s ease;
+}
+@keyframes reflect-sweep {
+  to {
+    transform: translateX(130%) skewX(-18deg);
+  }
+}
+.reflect:hover {
+  border-color: rgba(10, 110, 74, 0.45);
+  box-shadow: 0 18px 40px -20px rgba(10, 110, 74, 0.35);
+}
+:root[data-theme='dark'] .reflect:hover {
+  border-color: rgba(51, 201, 138, 0.5);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+}
+
+/* Hide the scrollbar on the testimonials scroll-snap strip (SocialProof).
+   Scroll affordance is provided by the edge fade, the hint text, and cards
+   that bleed past the viewport edge — so the bar itself can be hidden. */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge/IE */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* WebKit */
+}
+
 /* --- Accessible focus rings ----------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
@@ -302,6 +351,7 @@ input:focus-visible {
   .blob-b,
   .float-card,
   .btn-shine::after,
+  .reflect::after,
   .animate-ping {
     animation: none;
   }
