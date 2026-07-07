@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { PinLogo } from './icons'
+import Brand from '../../components/Brand'
 
 const LINK_GROUPS = [
   {
@@ -46,9 +46,8 @@ export default function Footer() {
       <div className="mx-auto max-w-content px-5 py-14 sm:px-8">
         <div className="grid gap-10 md:grid-cols-[1.5fr_repeat(3,1fr)]">
           <div>
-            <a href="/" className="flex items-center gap-2 text-lg font-extrabold text-ink dark:text-white">
-              <PinLogo className="h-6 w-6 text-accent" />
-              PlayPin
+            <a href="/" className="brand-link" aria-label="playpin home">
+              <Brand />
             </a>
             <p className="mt-4 max-w-xs text-sm text-slate-500 dark:text-slate-400">
               Find pickup games near you — real people, real time, one tap away.
@@ -90,7 +89,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-100 pt-6 dark:border-slate-800 sm:flex-row">
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            © {new Date().getFullYear()} PlayPin. All rights reserved.
+            © {new Date().getFullYear()} playpin. All rights reserved.
           </p>
           <div className="flex gap-5 text-xs text-slate-500 dark:text-slate-400">
             <a href="#" className="transition-colors hover:text-ink dark:hover:text-white">Privacy</a>

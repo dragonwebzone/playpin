@@ -11,6 +11,7 @@
   --color-on-spark: #0a1512;        /* dark ink for text/glyphs on a volt fill */
   --color-focus-ring: rgba(10, 110, 74, 0.18);
   --color-border: var(--line);
+  --font-brand: 'Archivo Black', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --ink: #0f172a;
   --slate: #475569;
@@ -66,19 +67,49 @@ button {
   z-index: 20;
 }
 
-.brand {
-  display: flex;
+/* Brand lockup — shared by the app topbar and the landing navbar via the
+   <Brand> component, so the logo + wordmark are identical everywhere. */
+.brand-link {
+  display: inline-flex;
+  text-decoration: none;
+}
+.brand-lockup {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 800;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
+  gap: 9px;
 }
-.brand-mark {
-  font-size: 1.2rem;
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--color-primary);
+  box-shadow: 0 2px 8px -3px rgba(10, 110, 74, 0.55);
+  flex-shrink: 0;
 }
-.brand-name {
-  color: var(--color-primary);
+.brand-badge-pin {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.brand-badge-hole {
+  fill: var(--color-primary);
+}
+/* Minimal but bold: heavy uppercase, single flat color. White on dark; dark
+   ink on light so it never disappears on the white topbar. */
+.brand-word {
+  font-family: var(--font-brand);
+  font-weight: 400; /* Archivo Black is inherently heavy */
+  font-size: 1.35rem;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+:root[data-theme='dark'] .brand-word {
+  color: #fff;
 }
 
 .topbar-actions {

@@ -12,6 +12,7 @@ import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
 import ProfilePanel from './components/ProfilePanel'
+import Brand from './components/Brand'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
 import Leaderboard from './components/Leaderboard'
@@ -157,9 +158,8 @@ export default function App() {
   return (
     <div className="app">
       <header className="topbar">
-        <Link to="/" className="brand">
-          <span className="brand-mark" aria-hidden="true">📍</span>
-          <span className="brand-name">playpin</span>
+        <Link to="/" className="brand-link" aria-label="playpin home">
+          <Brand />
         </Link>
         <div className="topbar-actions">
           {authLoading ? null : user ? (

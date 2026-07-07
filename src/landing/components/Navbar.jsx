@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { PinLogo, IconMenu, IconClose } from './icons'
+import { IconMenu, IconClose } from './icons'
 import ThemeToggle from '../../components/ThemeToggle'
+import Brand from '../../components/Brand'
 
 // Sticky top navigation. `scrolled` (from App's IntersectionObserver sentinel)
 // toggles the blur + shadow once the user passes the hero. `onAuth('login'|
@@ -17,12 +18,8 @@ export default function Navbar({ scrolled, onAuth }) {
       }`}
     >
       <nav className="animate-drop mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8">
-        <a
-          href="/"
-          className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-ink dark:text-white"
-        >
-          <PinLogo className="h-6 w-6 text-accent" />
-          <span>PlayPin</span>
+        <a href="/" className="brand-link" aria-label="playpin home">
+          <Brand />
         </a>
 
         {/* Desktop actions */}
