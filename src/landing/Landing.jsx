@@ -33,7 +33,7 @@ export default function App() {
   if (!loading && user) return <Navigate to="/app" replace />
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
+    <div className="min-h-screen bg-[#fafaf9] dark:bg-slate-900">
       <Navbar scrolled={scrolled} />
       <main>
         <Hero />

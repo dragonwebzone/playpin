@@ -26,22 +26,26 @@ const FEATURES = [
 
 export default function WhyPlaypin() {
   return (
-    <section className="bg-slate-50/70 py-20 dark:bg-slate-950/40 md:py-28">
-      <div className="mx-auto max-w-content px-5 sm:px-8">
+    <section className="relative overflow-hidden bg-accent-50/50 py-20 dark:bg-accent-950/25 md:py-28">
+      <div
+        aria-hidden="true"
+        className="bg-grid pointer-events-none absolute inset-0 opacity-50 [mask-image:radial-gradient(80%_60%_at_50%_50%,#000,transparent)]"
+      />
+      <div className="relative mx-auto max-w-content px-5 sm:px-8">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-extrabold tracking-tight text-ink dark:text-white sm:text-4xl">
+          <p className="text-sm font-bold uppercase tracking-widest text-accent-600 dark:text-accent-400">
             Why PlayPin
-          </h2>
-          <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
-            Everything you need to turn “someday” into a game this weekend.
           </p>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink dark:text-white sm:text-4xl">
+            Everything you need to turn “someday” into a game this weekend.
+          </h2>
         </Reveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={i * 100}>
-              <div className="h-full rounded-3xl border border-slate-100 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 dark:bg-emerald-900/40 dark:text-emerald-300">
+              <div className="group h-full rounded-3xl border border-slate-100 bg-white p-7 shadow-card transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 transition-colors group-hover:bg-accent group-hover:text-white dark:bg-accent-900/40 dark:text-accent-300">
                   <f.icon className="h-6 w-6" />
                 </span>
                 <h3 className="mt-5 text-lg font-bold text-ink dark:text-white">{f.title}</h3>

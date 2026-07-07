@@ -20,10 +20,10 @@ export default function FinalCTA() {
           {/* decorative wash */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-0 opacity-40"
+            className="pointer-events-none absolute inset-0 -z-0 opacity-50"
             style={{
               background:
-                'radial-gradient(600px circle at 20% 0%, rgba(16,185,129,0.35), transparent 40%), radial-gradient(600px circle at 90% 100%, rgba(16,185,129,0.25), transparent 45%)',
+                'radial-gradient(600px circle at 18% 0%, rgba(18,168,112,0.42), transparent 42%), radial-gradient(600px circle at 92% 105%, rgba(163,230,53,0.26), transparent 46%)',
             }}
           />
           <div className="relative">
@@ -37,7 +37,7 @@ export default function FinalCTA() {
             <div className="mt-9 flex flex-col items-center gap-4">
               <Link
                 to="/app?auth=signup"
-                className="group inline-flex items-center justify-center gap-2 rounded-full bg-accent px-8 py-4 text-base font-semibold text-white shadow-soft transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+                className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-brand-grad px-8 py-4 text-base font-semibold text-white shadow-soft transition-transform duration-200 hover:scale-[1.03] active:scale-95"
               >
                 Sign up — it’s free
                 <IconArrow className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" />

@@ -39,7 +39,7 @@ function Stat({ value, suffix, label }) {
     <div ref={ref} className="text-center">
       <div className="text-4xl font-extrabold tracking-tight text-ink dark:text-white sm:text-5xl">
         {current}
-        <span className="text-accent-600 dark:text-emerald-400">{suffix}</span>
+        <span className="text-accent-600 dark:text-energy-400">{suffix}</span>
       </div>
       <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{label}</p>
     </div>
@@ -71,7 +71,7 @@ export default function SocialProof() {
             <figure className="flex h-full flex-col rounded-3xl border border-slate-100 bg-white p-7 shadow-card dark:border-slate-700 dark:bg-slate-800">
               <blockquote className="flex-1 text-slate-700 dark:text-slate-200">“{t.quote}”</blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-50 font-bold text-accent-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent-50 font-bold text-accent-700 dark:bg-accent-900/40 dark:text-accent-300">
                   {t.initial}
                 </span>
                 <span>

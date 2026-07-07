@@ -16,7 +16,7 @@ export default function Navbar({ scrolled }) {
           : 'bg-transparent'
       }`}
     >
-      <nav className="mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8">
+      <nav className="animate-drop mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8">
         <a
           href="/"
           className="flex items-center gap-2 text-lg font-extrabold tracking-tight text-ink dark:text-white"
@@ -29,14 +29,14 @@ export default function Navbar({ scrolled }) {
         <div className="hidden items-center gap-7 md:flex">
           <Link
             to="/app?auth=login"
-            className="text-sm font-semibold text-slate-600 transition-colors hover:text-ink dark:text-slate-300 dark:hover:text-white"
+            className="link-underline text-sm font-semibold text-slate-600 transition-colors hover:text-ink dark:text-slate-300 dark:hover:text-white"
           >
             Log in
           </Link>
           <ThemeToggle />
           <Link
             to="/app?auth=signup"
-            className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform duration-200 hover:scale-[1.03] active:scale-95"
+            className="btn-shine rounded-full bg-brand-grad px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform duration-200 hover:scale-[1.03] active:scale-95"
           >
             Sign up
           </Link>
@@ -77,7 +77,7 @@ export default function Navbar({ scrolled }) {
           <Link
             to="/app?auth=signup"
             onClick={() => setOpen(false)}
-            className="rounded-xl bg-accent px-4 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-95"
+            className="rounded-xl bg-brand-grad px-4 py-3 text-center text-sm font-semibold text-white transition-transform active:scale-95"
           >
             Sign up
           </Link>

@@ -23,24 +23,29 @@ export default function HowItWorks() {
   return (
     <section id="how-it-works" className="mx-auto max-w-content px-5 py-20 sm:px-8 md:py-28">
       <Reveal className="mx-auto max-w-2xl text-center">
-        <h2 className="text-3xl font-extrabold tracking-tight text-ink dark:text-white sm:text-4xl">
+        <p className="text-sm font-bold uppercase tracking-widest text-accent-600 dark:text-accent-400">
           How it works
-        </h2>
-        <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
-          Three steps from “I want to play” to actually playing.
         </p>
+        <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-ink dark:text-white sm:text-4xl">
+          Three steps from “I want to play” to playing.
+        </h2>
       </Reveal>
 
-      <ol className="mt-14 grid gap-6 md:grid-cols-3">
+      <ol className="relative mt-14 grid gap-6 md:grid-cols-3">
+        {/* connector line behind the cards (desktop) */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 right-0 top-16 hidden h-px bg-gradient-to-r from-transparent via-accent-200 to-transparent dark:via-accent-800 md:block"
+        />
         {STEPS.map((step, i) => (
           <Reveal as="li" key={step.title} delay={i * 120}>
-            <div className="group h-full rounded-3xl border border-slate-100 bg-white p-8 shadow-card transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
-              <div className="flex items-center gap-3">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 dark:bg-emerald-900/40 dark:text-emerald-300">
+            <div className="group relative h-full rounded-3xl border border-slate-100 bg-white p-8 shadow-card transition-transform duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-800">
+              <div className="flex items-center justify-between">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent-50 text-accent-600 transition-colors group-hover:bg-accent group-hover:text-white dark:bg-accent-900/40 dark:text-accent-300">
                   <step.icon className="h-6 w-6" />
                 </span>
-                <span className="text-sm font-bold text-slate-500 dark:text-slate-400">
-                  Step {i + 1}
+                <span className="text-3xl font-extrabold text-accent-600 dark:text-energy-400">
+                  {i + 1}
                 </span>
               </div>
               <h3 className="mt-5 text-xl font-bold text-ink dark:text-white">{step.title}</h3>
