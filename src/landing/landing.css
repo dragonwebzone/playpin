@@ -132,6 +132,149 @@ body {
   animation: bob 3.6s ease-in-out infinite;
 }
 
+/* --- Entrance animations (run once, on page open) ------------------------- */
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes enter-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes enter-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(26px) scale(0.94);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* Elements start hidden and animate in; `both` keeps the from-state during the
+   stagger delay so nothing flashes before its turn. */
+.animate-enter {
+  opacity: 0;
+  animation: enter-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-drop {
+  opacity: 0;
+  animation: enter-drop 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-pop {
+  opacity: 0;
+  animation: enter-pop 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* --- Ambient motion ------------------------------------------------------- */
+/* Slow-drifting brand blobs behind the hero. */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(12px, -20px) scale(1.08);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-16px, 14px) scale(1.12);
+  }
+}
+.blob-a {
+  animation: drift-a 16s ease-in-out infinite;
+}
+.blob-b {
+  animation: drift-b 20s ease-in-out infinite;
+}
+
+/* Hero visual gently floats after it has entered. */
+@keyframes float-card {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(-0.35deg);
+  }
+}
+.float-card {
+  animation: float-card 7s ease-in-out infinite;
+}
+
+/* Sheen sweep across a button on hover. */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+.btn-shine:hover::after {
+  animation: shine 0.85s ease;
+}
+@keyframes shine {
+  from {
+    left: -75%;
+  }
+  to {
+    left: 130%;
+  }
+}
+
+/* Growing underline for text nav links. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: currentColor;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+}
+
 /* --- Accessible focus rings ----------------------------------------------- */
 a:focus-visible,
 button:focus-visible,
@@ -154,7 +297,23 @@ input:focus-visible {
   .pin,
   .pin__float,
   .pin__ring,
-  .bob {
+  .bob,
+  .blob-a,
+  .blob-b,
+  .float-card,
+  .btn-shine::after,
+  .animate-ping {
     animation: none;
+  }
+  /* Entrance animations resolve instantly to their final visible state. */
+  .animate-enter,
+  .animate-drop,
+  .animate-pop {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .link-underline::after {
+    transition: none;
   }
 }
