@@ -36,10 +36,21 @@ export function useFriends(userId) {
     const friendIds = new Set()
     const relationByUser = new Map() // otherUserId -> { status, direction, row }
 
+    // Collapse to a single relationship per other user. If reciprocal rows ever
+    // exist (A→B and B→A), prefer an accepted row so a mutual request shows up
+    // once, as friends — never twice.
+    const byOther = new Map() // otherId -> { row, other, iAmRequester }
     for (const r of rows) {
       const iAmRequester = r.requester_id === userId
       const other = iAmRequester ? r.addressee : r.requester
       if (!other) continue
+      const existing = byOther.get(other.id)
+      if (!existing || (r.status === 'accepted' && existing.row.status !== 'accepted')) {
+        byOther.set(other.id, { row: r, other, iAmRequester })
+      }
+    }
+
+    for (const { row: r, other, iAmRequester } of byOther.values()) {
       if (r.status === 'accepted') {
         friends.push({ ...other, row: r })
         friendIds.add(other.id)
