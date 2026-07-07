@@ -24,6 +24,7 @@ export default function Navbar({ scrolled, onAuth }) {
 
         {/* Desktop actions */}
         <div className="hidden items-center gap-7 md:flex">
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => onAuth('login')}
@@ -31,7 +32,6 @@ export default function Navbar({ scrolled, onAuth }) {
           >
             Log in
           </button>
-          <ThemeToggle />
           <button
             type="button"
             onClick={() => onAuth('signup')}
