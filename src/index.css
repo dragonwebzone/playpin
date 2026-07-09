@@ -1127,15 +1127,18 @@ button {
   background: rgba(255, 255, 255, 0.9);
 }
 .nearby-emoji {
-  font-size: 1.5rem;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg);
+  background: color-mix(in srgb, currentColor 12%, transparent);
   border-radius: 12px;
   flex-shrink: 0;
+}
+.nearby-emoji svg {
+  width: 22px;
+  height: 22px;
 }
 .nearby-info {
   display: grid;

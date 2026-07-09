@@ -51,6 +51,33 @@ export function IconPlus({ className = 'ic' }) {
   )
 }
 
+// Sport glyphs — reuse the landing's stroke sport icons so a game reads the same
+// on the map as it does in marketing. Falls back to a generic target for
+// unknown / "other" sports.
+import {
+  SportFootball,
+  SportBasketball,
+  SportTennis,
+  SportCricket,
+  SportBadminton,
+  SportPickleball,
+  IconTarget,
+} from '../landing/components/icons'
+
+const SPORT_ICONS = {
+  football: SportFootball,
+  basketball: SportBasketball,
+  tennis: SportTennis,
+  cricket: SportCricket,
+  badminton: SportBadminton,
+  pickleball: SportPickleball,
+}
+
+export function SportIcon({ sport, className = '' }) {
+  const Glyph = SPORT_ICONS[sport] || IconTarget
+  return <Glyph className={className} />
+}
+
 // Friendly, on-brand empty state — a location pin with a spark, not a soccer ball.
 export function IconPinSpark({ className = '' }) {
   return (

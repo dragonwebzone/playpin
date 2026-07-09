@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { sportMeta, skillLabel, distanceKm, distanceLabel, relativeWhen } from '../lib/constants'
+import { SportIcon } from './icons'
 
 // Collapsible bottom "home feed" of nearby games, sorted by distance then time.
 // Turns the map from a bare canvas into a living list you can scan and tap.
@@ -46,7 +47,13 @@ export default function NearbyGamesSheet({ games, userLocation, selectedGameId, 
                 className={`nearby-row ${game.id === selectedGameId ? 'is-active' : ''}`}
                 onClick={() => onSelect(game.id)}
               >
-                <span className="nearby-emoji" aria-hidden="true">{meta.emoji}</span>
+                <span
+                  className="nearby-emoji"
+                  aria-hidden="true"
+                  style={{ color: meta.color }}
+                >
+                  <SportIcon sport={game.sport} />
+                </span>
                 <span className="nearby-info">
                   <span className="nearby-row-title">
                     {meta.label} <span className="nearby-skill">· {skillLabel(game.skill_level)}</span>
