@@ -205,7 +205,23 @@ export default function TournamentDetail({
             : 'Completed'}
         </span>
         <span className="badge">{count}/{tournament.max_players} players</span>
+        {tournament.prize && <span className="badge badge-open">🏆 {tournament.prize}</span>}
       </div>
+
+      {tournament.latitude != null && tournament.longitude != null && (
+        <p className="panel-sub">
+          📍{' '}
+          <a
+            href={`https://www.google.com/maps/dir/?api=1&destination=${tournament.latitude},${tournament.longitude}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Directions ↗
+          </a>
+        </p>
+      )}
+
+      {tournament.note && <p className="game-note">“{tournament.note}”</p>}
 
       {error && <p className="form-error">{error}</p>}
 

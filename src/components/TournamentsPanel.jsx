@@ -1,10 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTournaments } from '../hooks/useTournaments'
-import { SPORTS, sportMeta } from '../lib/constants'
+import { sportMeta } from '../lib/constants'
 import TournamentDetail from './TournamentDetail'
-
-const MAX_PLAYER_OPTIONS = [4, 8, 16, 32]
 
 const STATUS_LABEL = {
   open: 'Sign-ups open',
@@ -12,90 +11,27 @@ const STATUS_LABEL = {
   completed: 'Completed',
 }
 
-function CreateTournamentForm({ onCancel, onCreate }) {
-  const [name, setName] = useState('')
-  const [sport, setSport] = useState(SPORTS[0].value)
-  const [maxPlayers, setMaxPlayers] = useState(8)
-  const [startsAt, setStartsAt] = useState('')
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState(null)
-
-  const submit = async (e) => {
-    e.preventDefault()
-    if (!name.trim()) {
-      setError('Give your tournament a name.')
-      return
-    }
-    setError(null)
-    setBusy(true)
-    try {
-      await onCreate({
-        name: name.trim(),
-        sport,
-        maxPlayers: Number(maxPlayers),
-        startsAt: startsAt ? new Date(startsAt).toISOString() : null,
-      })
-    } catch (err) {
-      setError(err.message || 'Could not create the tournament.')
-      setBusy(false)
-    }
-  }
-
-  return (
-    <form className="form tourn-form" onSubmit={submit}>
-      <label className="field">
-        <span>Name</span>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Saturday 5-a-side cup"
-          autoFocus
-        />
-      </label>
-      <label className="field">
-        <span>Sport</span>
-        <select value={sport} onChange={(e) => setSport(e.target.value)}>
-          {SPORTS.map((s) => (
-            <option key={s.value} value={s.value}>{s.emoji} {s.label}</option>
-          ))}
-        </select>
-      </label>
-      <label className="field">
-        <span>Max players</span>
-        <select value={maxPlayers} onChange={(e) => setMaxPlayers(e.target.value)}>
-          {MAX_PLAYER_OPTIONS.map((n) => (
-            <option key={n} value={n}>{n} players</option>
-          ))}
-        </select>
-      </label>
-      <label className="field">
-        <span>Starts <em>(optional)</em></span>
-        <input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} />
-      </label>
-
-      {error && <p className="form-error">{error}</p>}
-
-      <div className="panel-actions">
-        <button type="button" className="btn btn-ghost" onClick={onCancel} disabled={busy}>
-          Cancel
-        </button>
-        <button type="submit" className="btn btn-primary" disabled={busy}>
-          {busy ? 'Creating…' : 'Create'}
-        </button>
-      </div>
-    </form>
-  )
-}
-
-// Tournaments hub: browse/create tournaments, then drill into one for its
-// bracket. Everything is real — backed by supabase/tournaments.sql.
+// Tournaments hub: browse tournaments and drill into one for sign-ups / its
+// bracket. Creating a tournament happens on the map (drop a pin), so the "New
+// tournament" button routes there. Everything is real — backed by
+// supabase/tournaments.sql.
 export default function TournamentsPanel({ onClose }) {
   const { user } = useAuth()
-  const { tournaments, loading, error, createTournament, joinTournament, leaveTournament, startTournament } =
+  const { tournaments, loading, error, joinTournament, leaveTournament, startTournament } =
     useTournaments()
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [selectedId, setSelectedId] = useState(null)
-  const [creating, setCreating] = useState(false)
+
+  // Auto-open a tournament when arriving via ?t=<id> (e.g. right after creating
+  // one on the map), then strip the param.
+  useEffect(() => {
+    const t = searchParams.get('t')
+    if (t) {
+      setSelectedId(t)
+      setSearchParams({}, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   if (selectedId) {
     return (
@@ -107,13 +43,6 @@ export default function TournamentsPanel({ onClose }) {
         startTournament={startTournament}
       />
     )
-  }
-
-  const handleCreate = async (fields) => {
-    if (!user) return
-    const created = await createTournament({ ...fields, hostId: user.id })
-    setCreating(false)
-    if (created?.id) setSelectedId(created.id)
   }
 
   return (
@@ -128,12 +57,13 @@ export default function TournamentsPanel({ onClose }) {
           Tournaments aren’t enabled yet. Run <code>supabase/tournaments.sql</code> in the
           Supabase SQL editor to turn them on.
         </p>
-      ) : creating ? (
-        <CreateTournamentForm onCancel={() => setCreating(false)} onCreate={handleCreate} />
       ) : (
         <>
           {user ? (
-            <button className="btn btn-primary btn-block" onClick={() => setCreating(true)}>
+            <button
+              className="btn btn-primary btn-block"
+              onClick={() => navigate('/app?create=tournament')}
+            >
               ＋ New tournament
             </button>
           ) : (

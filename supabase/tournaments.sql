@@ -23,6 +23,14 @@ create table if not exists public.tournaments (
 create index if not exists tournaments_status_idx on public.tournaments (status);
 create index if not exists tournaments_host_id_idx on public.tournaments (host_id);
 
+-- Tournaments now carry a map location and game-style details (added after the
+-- original release; nullable so pre-existing rows stay valid).
+alter table public.tournaments add column if not exists latitude    double precision;
+alter table public.tournaments add column if not exists longitude   double precision;
+alter table public.tournaments add column if not exists prize       text;
+alter table public.tournaments add column if not exists skill_level text;
+alter table public.tournaments add column if not exists note        text;
+
 -- Who has joined which tournament. Composite primary key prevents double-joining.
 create table if not exists public.tournament_participants (
   tournament_id uuid not null references public.tournaments (id) on delete cascade,

@@ -78,6 +78,40 @@ function buildBracketRows(tournamentId, participants) {
   return rows
 }
 
+// Standalone insert so the create flow (which lives on the map page) doesn't
+// need to spin up the whole list hook + its realtime subscriptions.
+export async function insertTournament({
+  name,
+  sport,
+  maxPlayers,
+  startsAt,
+  hostId,
+  latitude,
+  longitude,
+  prize,
+  skillLevel,
+  note,
+}) {
+  const { data, error: err } = await supabase
+    .from('tournaments')
+    .insert({
+      name,
+      sport,
+      max_players: maxPlayers,
+      starts_at: startsAt,
+      host_id: hostId,
+      latitude,
+      longitude,
+      prize,
+      skill_level: skillLevel,
+      note,
+    })
+    .select()
+    .single()
+  if (err) throw err
+  return data
+}
+
 export function useTournaments(sport) {
   const [tournaments, setTournaments] = useState([])
   const [loading, setLoading] = useState(true)
@@ -105,16 +139,6 @@ export function useTournaments(sport) {
       .subscribe()
     return () => supabase.removeChannel(channel)
   }, [load])
-
-  const createTournament = async ({ name, sport: sportName, maxPlayers, startsAt, hostId }) => {
-    const { data, error: err } = await supabase
-      .from('tournaments')
-      .insert({ name, sport: sportName, max_players: maxPlayers, starts_at: startsAt, host_id: hostId })
-      .select()
-      .single()
-    if (err) throw err
-    return data
-  }
 
   const joinTournament = async (tournamentId, userId) => {
     const { error: err } = await supabase
@@ -197,7 +221,7 @@ export function useTournaments(sport) {
     if (statusErr) throw statusErr
   }
 
-  return { tournaments, loading, error, createTournament, joinTournament, leaveTournament, startTournament }
+  return { tournaments, loading, error, joinTournament, leaveTournament, startTournament }
 }
 
 // Single tournament with its live bracket — used inside the detail view.

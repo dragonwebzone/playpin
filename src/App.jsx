@@ -10,7 +10,9 @@ import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
 import PlaceSearch from './components/PlaceSearch'
 import CreateGameForm from './components/CreateGameForm'
+import CreateTournamentForm from './components/CreateTournamentForm'
 import EditGameForm from './components/EditGameForm'
+import { insertTournament } from './hooks/useTournaments'
 import GameDetailPanel from './components/GameDetailPanel'
 import ProfilePanel from './components/ProfilePanel'
 import AuthModal from './components/AuthModal'
@@ -78,6 +80,7 @@ export default function App() {
 
   const [selectedGameId, setSelectedGameId] = useState(null)
   const [createMode, setCreateMode] = useState(false)
+  const [createType, setCreateType] = useState(null) // 'game' | 'tournament'
   const [pin, setPin] = useState(null)
   const [showProfile, setShowProfile] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
@@ -117,6 +120,18 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, setSearchParams])
 
+  // Enter tournament create-mode when arriving via ?create=tournament (the
+  // "New tournament" button on the tournaments tab routes here to drop a pin).
+  useEffect(() => {
+    if (searchParams.get('create') !== 'tournament') return
+    setSearchParams({}, { replace: true })
+    setSelectedGameId(null)
+    setPin(null)
+    setCreateType('tournament')
+    setCreateMode(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
   const firstName = (profile?.name || '').trim().split(/\s+/)[0] || 'there'
 
   const selectedGame = useMemo(
@@ -135,6 +150,7 @@ export default function App() {
   const closePanels = () => {
     setSelectedGameId(null)
     setCreateMode(false)
+    setCreateType(null)
     setPin(null)
     setEditingGameId(null)
   }
@@ -161,7 +177,26 @@ export default function App() {
     }
     setSelectedGameId(null)
     setPin(null)
+    setCreateType('game')
     setCreateMode(true)
+  }
+
+  const handleStartTournament = () => {
+    if (!user) {
+      requireAuth()
+      return
+    }
+    setSelectedGameId(null)
+    setPin(null)
+    setCreateType('tournament')
+    setCreateMode(true)
+  }
+
+  const handleCreateTournament = async (fields) => {
+    const created = await insertTournament(fields)
+    closePanels()
+    // Hand off to the tournaments tab to gather sign-ups / run the bracket.
+    navigate(`/app/tournaments?t=${created.id}`)
   }
 
   const handleMapClick = (coords) => {
@@ -241,7 +276,11 @@ export default function App() {
         {/* Create-mode hint banner */}
         {createMode && !pin && (
           <div className="hint-banner">
-            <span>Tap the map to drop your pin</span>
+            <span>
+              {createType === 'tournament'
+                ? 'Tap the map to place your tournament'
+                : 'Tap the map to drop your pin'}
+            </span>
             <button className="link-btn" onClick={closePanels}>Cancel</button>
           </div>
         )}
@@ -306,12 +345,22 @@ export default function App() {
       </main>
 
       {/* Sliding bottom sheet / side panel */}
-      {createMode && pin && (
+      {createMode && pin && createType === 'game' && (
         <div className="sheet">
           <CreateGameForm pin={pin} onCancel={closePanels} onCreate={async (g) => {
             await createGame(g)
             handleCreated()
           }} />
+        </div>
+      )}
+
+      {createMode && pin && createType === 'tournament' && (
+        <div className="sheet">
+          <CreateTournamentForm
+            pin={pin}
+            onCancel={closePanels}
+            onCreate={handleCreateTournament}
+          />
         </div>
       )}
 
