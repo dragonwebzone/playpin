@@ -410,7 +410,7 @@ button {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: var(--ink);
+  background: #0f172a;
   color: #fff;
   padding: 10px 16px;
   border-radius: 999px;

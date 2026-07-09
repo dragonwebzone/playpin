@@ -75,7 +75,7 @@ export default function MapView({
       center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
       disableDefaultUI: true,
-      zoomControl: true,
+      zoomControl: false,
       clickableIcons: false,
       gestureHandling: 'greedy',
       styles: isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES,
