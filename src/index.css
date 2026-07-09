@@ -80,6 +80,7 @@ button {
 }
 
 .topbar {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,6 +90,111 @@ button {
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid var(--line);
   z-index: 20;
+}
+
+/* Burger + brand cluster on the left. */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  padding: 0 7px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--white);
+  transition: border-color 0.15s ease;
+}
+.burger:hover {
+  border-color: var(--color-primary);
+}
+.burger span {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+}
+
+/* Profile avatar pinned to the corner (replaces the old profile chip + icons). */
+.avatar-corner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-corner:hover {
+  background: var(--color-primary-hover);
+}
+
+/* Slide-out nav drawer opened by the burger. */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+}
+.drawer {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 12px;
+  z-index: 30;
+  width: min(240px, calc(100vw - 24px));
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.drawer-item:hover {
+  background: var(--bg);
+}
+.drawer-item .ic,
+.drawer-item svg {
+  width: 18px;
+  height: 18px;
+}
+/* Count sits inline at the row's right edge, not corner-anchored. */
+.drawer-item .notif-badge {
+  position: static;
+  margin-left: auto;
+}
+
+/* Section-page body: scrolls, hosts a centered panel. */
+.page-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  padding-bottom: calc(16px + var(--safe-bottom));
+}
+.page-body .panel {
+  max-width: 560px;
+  margin: 0 auto;
 }
 
 /* Brand lockup — shared by the app topbar and the landing navbar via the
@@ -134,24 +240,6 @@ button {
 }
 :root[data-theme='dark'] .brand-word {
   color: #fff;
-}
-
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.who {
-  font-size: 0.85rem;
-  color: var(--slate);
-  max-width: 42vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.who-score {
-  color: var(--color-spark);
-  font-weight: 600;
 }
 
 /* --------------------------------------------------------------- filters -- */
@@ -768,34 +856,6 @@ button {
 
 /* Topbar action buttons: uniform square controls with a hairline border so the
    friends / leaderboard / tournament icons read as one premium button group. */
-.topbar-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  background: var(--white);
-  color: var(--slate);
-  transition: color 0.15s ease, border-color 0.15s ease, transform 0.12s ease,
-    box-shadow 0.15s ease;
-}
-.topbar-icon .ic {
-  width: 20px;
-  height: 20px;
-  vertical-align: middle;
-}
-.topbar-icon:hover {
-  color: var(--color-primary);
-  border-color: color-mix(in srgb, var(--color-primary) 45%, var(--line));
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px -10px var(--color-focus-ring);
-}
-.topbar-icon:active {
-  transform: translateY(0);
-}
 .link-btn {
   border: none;
   background: none;
@@ -908,9 +968,6 @@ button {
   }
   .modal {
     border-radius: var(--radius);
-  }
-  .who {
-    max-width: none;
   }
 }
 
@@ -1312,50 +1369,6 @@ button {
 }
 
 /* ------------------------------------------------ gamification / profile -- */
-.profile-chip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--line);
-  background: var(--white);
-  border-radius: 999px;
-  padding: 4px 12px 4px 4px;
-}
-.profile-chip:hover {
-  background: var(--bg);
-}
-.avatar-sm {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  flex-shrink: 0;
-}
-.profile-meta {
-  display: grid;
-  line-height: 1.1;
-  text-align: left;
-}
-.profile-name {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--ink);
-  max-width: 26vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.profile-level {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--color-spark);
-}
 /* XP — single line + slim bar, no surrounding box */
 .xp-block {
   margin-bottom: 22px;
@@ -1690,9 +1703,6 @@ button {
 }
 
 /* -------------------------------------------------------------- friends -- */
-.friends-btn {
-  position: relative;
-}
 .notif-badge {
   position: absolute;
   top: -2px;

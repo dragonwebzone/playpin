@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
 import { useSaved } from './hooks/useSaved'
 import { usePresence } from './hooks/usePresence'
-import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta, levelFromXp } from './lib/constants'
+import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
 import PlaceSearch from './components/PlaceSearch'
@@ -13,14 +13,11 @@ import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
 import ProfilePanel from './components/ProfilePanel'
-import Brand from './components/Brand'
+import Topbar from './components/Topbar'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
-import Leaderboard from './components/Leaderboard'
-import FriendsPanel from './components/FriendsPanel'
-import TournamentsPanel from './components/TournamentsPanel'
 import Spinner from './components/Spinner'
-import { IconUsers, IconTrophy, IconBracket, IconPlus, IconPinSpark } from './components/icons'
+import { IconPlus, IconPinSpark } from './components/icons'
 
 export default function App() {
   const { user, profile, loading: authLoading } = useAuth()
@@ -82,9 +79,6 @@ export default function App() {
   const [createMode, setCreateMode] = useState(false)
   const [pin, setPin] = useState(null)
   const [showProfile, setShowProfile] = useState(false)
-  const [showLeaderboard, setShowLeaderboard] = useState(false)
-  const [showFriends, setShowFriends] = useState(false)
-  const [showTournaments, setShowTournaments] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
   // The map instance and loaded Maps API live here now so the place-search and
@@ -97,9 +91,18 @@ export default function App() {
   // Auth now lives on the landing page. Logged-out visitors are redirected
   // there by the guard below; requireAuth is a fallback for the brief window
   // before auth resolves (e.g. tapping a button during initial load).
-  const [searchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const requireAuth = () => navigate('/?auth=login')
+
+  // Open the profile sheet when arriving via ?profile=1 (the corner avatar on
+  // the section pages deep-links here), then strip the param.
+  useEffect(() => {
+    if (searchParams.get('profile') === '1') {
+      setShowProfile(true)
+      setSearchParams({}, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   const firstName = (profile?.name || '').trim().split(/\s+/)[0] || 'there'
 
@@ -172,61 +175,10 @@ export default function App() {
 
   return (
     <div className="app">
-      <header className="topbar">
-        <Link to="/" className="brand-link" aria-label="playpin home">
-          <Brand />
-        </Link>
-        <div className="topbar-actions">
-          {authLoading ? null : user ? (
-            <>
-              <button
-                className="profile-chip"
-                onClick={() => setShowProfile(true)}
-                title="My profile & games"
-              >
-                <span className="avatar-sm" aria-hidden="true">
-                  {(profile?.name || 'P').charAt(0).toUpperCase()}
-                </span>
-                <span className="profile-meta">
-                  <span className="profile-name">{profile?.name || 'Player'}</span>
-                  <span className="profile-level">Lv {levelFromXp(profile?.xp).level}</span>
-                </span>
-              </button>
-              <button
-                className="icon-btn topbar-icon friends-btn"
-                onClick={() => setShowFriends(true)}
-                aria-label="Friends"
-                title="Friends"
-              >
-                <IconUsers />
-                {friendsApi.incoming.length > 0 && (
-                  <span className="notif-badge">{friendsApi.incoming.length}</span>
-                )}
-              </button>
-              <button
-                className="icon-btn topbar-icon"
-                onClick={() => setShowLeaderboard(true)}
-                aria-label="Leaderboard"
-                title="Leaderboard"
-              >
-                <IconTrophy />
-              </button>
-              <button
-                className="icon-btn topbar-icon"
-                onClick={() => setShowTournaments(true)}
-                aria-label="Tournaments"
-                title="Tournaments"
-              >
-                <IconBracket />
-              </button>
-            </>
-          ) : (
-            <button className="btn btn-primary btn-sm" onClick={requireAuth}>
-              Log in
-            </button>
-          )}
-        </div>
-      </header>
+      <Topbar
+        incomingCount={friendsApi.incoming.length}
+        onOpenProfile={() => setShowProfile(true)}
+      />
 
       {/* Single control-bar row: place search + presence, with the Filters
           button on the right. The only chrome between the navbar and the map. */}
@@ -323,10 +275,7 @@ export default function App() {
         {!createMode &&
           !selectedGame &&
           !editingGame &&
-          !showProfile &&
-          !showLeaderboard &&
-          !showFriends &&
-          !showTournaments && (
+          !showProfile && (
           <NearbyGamesSheet
             games={filtered}
             userLocation={userLocation}
@@ -397,34 +346,10 @@ export default function App() {
             savedIds={savedIds}
             onSelect={handleSelectFromProfile}
             onClose={() => setShowProfile(false)}
-            onOpenFriends={() => {
-              setShowProfile(false)
-              setShowFriends(true)
-            }}
-            onOpenLeaderboard={() => {
-              setShowProfile(false)
-              setShowLeaderboard(true)
-            }}
+            onOpenFriends={() => navigate('/app/friends')}
+            onOpenLeaderboard={() => navigate('/app/leaderboard')}
             incomingCount={friendsApi.incoming.length}
           />
-        </div>
-      )}
-
-      {showLeaderboard && (
-        <div className="sheet">
-          <Leaderboard onClose={() => setShowLeaderboard(false)} />
-        </div>
-      )}
-
-      {showFriends && (
-        <div className="sheet">
-          <FriendsPanel friendsApi={friendsApi} onClose={() => setShowFriends(false)} />
-        </div>
-      )}
-
-      {showTournaments && (
-        <div className="sheet">
-          <TournamentsPanel onClose={() => setShowTournaments(false)} />
         </div>
       )}
     </div>
