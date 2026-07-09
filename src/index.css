@@ -261,10 +261,6 @@ button {
 .fab:active {
   transform: translateY(0);
 }
-.empty-cta {
-  margin-top: 14px;
-}
-
 /* "Center on me" control — sits just above the create FAB on the right edge. */
 .locate-btn {
   position: absolute;
@@ -331,32 +327,45 @@ button {
   top: 46%;
   transform: translate(-50%, -50%);
   text-align: center;
-  background: rgba(255, 255, 255, 0.94);
-  padding: 22px 26px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  max-width: 82vw;
+  background: var(--white);
+  padding: 30px 30px 26px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.35), 0 4px 12px rgba(15, 23, 42, 0.15);
+  max-width: min(340px, 84vw);
   z-index: 11;
 }
 .empty-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 12px;
-  border-radius: 16px;
-  background: var(--color-primary-weak);
-  color: var(--color-primary);
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 20px;
+  background: linear-gradient(140deg, var(--color-primary-hover), var(--color-primary-strong));
+  color: #fff;
+  box-shadow: 0 8px 20px -6px rgba(10, 110, 74, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .empty-icon svg {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
 }
 .empty-title {
-  font-weight: 700;
-  font-size: 1.05rem;
-  margin: 0 0 4px;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 5px;
+}
+.empty-state .muted {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  max-width: 26ch;
+  margin: 0 auto;
+}
+.empty-cta {
+  margin-top: 18px;
+  width: 100%;
 }
 .btn-ic {
   width: 18px;
@@ -1946,7 +1955,9 @@ button {
   color: #fcd34d;
 }
 :root[data-theme='dark'] .empty-state {
-  background: rgba(21, 30, 48, 0.94);
+  background: #18233a;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 :root[data-theme='dark'] .nearby,
 :root[data-theme='dark'] .presence-pill {
