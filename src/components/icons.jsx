@@ -51,6 +51,33 @@ export function IconPlus({ className = 'ic' }) {
   )
 }
 
+export function IconPencil({ className = 'ic' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path {...base} d="M13.5 6.5l4 4" />
+      <path {...base} d="M4 20l1-4L16 5a2.1 2.1 0 0 1 3 3L8 19l-4 1Z" />
+    </svg>
+  )
+}
+
+export function IconChevronRight({ className = 'ic' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path {...base} d="M9 6l6 6-6 6" />
+    </svg>
+  )
+}
+
+// Appearance / theme row label.
+export function IconSun({ className = 'ic' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <circle {...base} cx="12" cy="12" r="4" />
+      <path {...base} d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19" />
+    </svg>
+  )
+}
+
 // Sport glyphs — reuse the landing's stroke sport icons so a game reads the same
 // on the map as it does in marketing. Falls back to a generic target for
 // unknown / "other" sports.

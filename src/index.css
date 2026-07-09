@@ -20,6 +20,18 @@
   --bg: #f8fafc;
   --white: #ffffff;
   --danger: #dc2626;
+
+  /* Semantic aliases used by the profile redesign — one name, per-theme value.
+     Light mode: deeper/more saturated green so accent text/fills clear AA on
+     white. See the dark block for the brighter counterparts. */
+  --surface: var(--white);
+  --text-primary: var(--ink);
+  --text-muted: var(--muted);
+  --border: var(--line);
+  --accent: #0a6e4a;            /* deep green — 5.9:1 on white */
+  --accent-hover: #0b8a5c;
+  --accent-soft: rgba(10, 110, 74, 0.10); /* low-opacity hover wash */
+
   --radius: 14px;
   --shadow: 0 8px 30px rgba(15, 23, 42, 0.18);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -884,7 +896,7 @@ button {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 8px;
+  gap: 0;
 }
 .mygames-row {
   display: flex;
@@ -892,14 +904,15 @@ button {
   gap: 12px;
   width: 100%;
   text-align: left;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 12px 14px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 8px;
   transition: background 0.12s ease;
 }
 .mygames-row:hover {
-  background: #eef2f7;
+  background: var(--accent-soft);
 }
 .mygames-emoji {
   font-size: 1.4rem;
@@ -911,16 +924,18 @@ button {
 }
 .mygames-title {
   font-weight: 700;
-  color: var(--ink);
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 .mygames-meta {
   font-size: 0.8rem;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 .mygames-chevron {
-  color: var(--muted);
-  font-size: 1.3rem;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 /* --------------------------------------------------------- map search box -- */
@@ -1263,80 +1278,65 @@ button {
   font-weight: 700;
   color: var(--color-spark);
 }
-.profile-stats {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: linear-gradient(135deg, #edfcf4, #f0fdf7);
-  border: 1px solid #d2f7e3;
-  border-radius: 16px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
+/* XP — single line + slim bar, no surrounding box */
+.xp-block {
+  margin-bottom: 22px;
 }
-.level-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
-  background: var(--color-primary);
-  color: #fff;
-  flex-shrink: 0;
-}
-.level-num {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-}
-.level-word {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  opacity: 0.85;
-}
-.stats-right {
-  flex: 1;
-  min-width: 0;
-}
-.xp-row {
+.xp-line {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+}
+.xp-level {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+.xp-progress {
+  font-size: 0.82rem;
+  color: var(--text-muted);
 }
 .xp-bar {
-  height: 8px;
-  background: #d2f7e3;
+  height: 6px;
+  background: var(--border);
   border-radius: 999px;
   overflow: hidden;
 }
 .xp-bar span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #12a870, #0b8a5c);
+  background: var(--accent);
   border-radius: 999px;
   transition: width 0.4s ease;
 }
-.stat-pills {
+
+/* Stats — one flat row, thin dividers, no pill backgrounds */
+.stat-row {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  margin-bottom: 26px;
 }
-.stat-pill {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--slate);
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 4px 10px;
+.stat-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
 }
-.mygames-heading {
-  font-size: 0.95rem;
-  margin: 0 0 10px;
+.stat-cell + .stat-cell {
+  border-left: 1px solid var(--border);
+}
+.stat-num {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.stat-key {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
 
@@ -1344,44 +1344,64 @@ button {
 .profile-identity {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 .avatar-lg {
-  width: 56px;
-  height: 56px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-primary); /* keeps white text AA in both themes */
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   flex-shrink: 0;
 }
 .identity-main {
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: 3px;
 }
 .identity-name-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 .identity-name {
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: var(--ink);
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
 }
-.identity-email,
-.identity-since {
-  font-size: 0.8rem;
-  color: var(--muted);
+.icon-edit {
+  display: inline-flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 8px;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+.icon-edit:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.icon-edit .ic {
+  width: 16px;
+  height: 16px;
+}
+.identity-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.identity-sub .dot {
+  margin: 0 6px;
 }
 .name-edit {
   display: flex;
@@ -1406,79 +1426,79 @@ button {
   box-shadow: 0 0 0 3px var(--color-focus-ring);
 }
 
-/* Quick links */
-.profile-quick {
+/* Navigation rows — icon + label + chevron, flat, hover wash */
+.profile-list {
   display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
+  flex-direction: column;
+  margin-bottom: 26px;
+  border-top: 1px solid var(--border);
 }
-.quick-tile {
+.list-row {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 8px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  text-align: left;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.12s ease;
+}
+.list-row:not(.list-row--static):hover {
+  background: var(--accent-soft);
+}
+.list-row--static {
+  cursor: default;
+}
+.list-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.list-label {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid var(--line);
-  background: var(--white);
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--ink);
-  transition: background 0.12s ease, border-color 0.12s ease;
 }
-.quick-tile:hover {
-  background: var(--bg);
-  border-color: var(--color-primary);
+.list-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  flex-shrink: 0;
 }
-.quick-emoji {
-  font-size: 1.1rem;
+.list-badge {
+  position: static;
 }
 
-/* Appearance row */
-.profile-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  margin-bottom: 16px;
-}
-.profile-row-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--ink);
-}
-
-/* Tabs */
+/* Tabs — underline style, no boxes */
 .profile-tabs {
   display: flex;
-  gap: 4px;
-  padding: 4px;
-  background: var(--bg);
-  border-radius: 12px;
-  margin-bottom: 14px;
+  gap: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
 }
 .profile-tab {
-  flex: 1;
-  padding: 8px;
+  padding: 0 2px 12px;
   border: none;
   background: transparent;
-  border-radius: 9px;
   font-weight: 700;
-  font-size: 0.88rem;
-  color: var(--muted);
-  transition: background 0.12s ease, color 0.12s ease;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+.profile-tab:hover {
+  color: var(--text-primary);
 }
 .profile-tab.is-active {
-  background: var(--white);
-  color: var(--ink);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
 }
 
 /* History role tag */
@@ -1492,19 +1512,30 @@ button {
   border-radius: 999px;
   vertical-align: middle;
 }
-.role-hosted {
-  background: rgba(10, 110, 74, 0.12);
-  color: var(--color-primary);
-}
+.role-hosted,
 .role-joined {
-  background: rgba(77, 124, 15, 0.14);
-  color: var(--color-spark);
+  background: var(--accent-soft);
+  color: var(--text-muted);
 }
 
 .profile-footer {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+}
+.logout-link {
+  border: none;
+  background: none;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color 0.12s ease;
+}
+.logout-link:hover {
+  color: var(--danger);
 }
 
 /* --- leaderboard --- */
@@ -1592,8 +1623,8 @@ button {
   height: 16px;
   padding: 0 4px;
   border-radius: 999px;
-  background: var(--color-spark-strong);
-  color: var(--color-on-spark);
+  background: var(--text-primary);
+  color: var(--surface);
   font-size: 0.62rem;
   font-weight: 800;
   display: flex;
@@ -1873,15 +1904,6 @@ button {
 .fr-row:hover {
   background: var(--bg);
 }
-/* Quick tiles float on hover. */
-.quick-tile {
-  transition: background 0.14s ease, border-color 0.14s ease, transform 0.14s ease,
-    box-shadow 0.14s ease;
-}
-.quick-tile:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px -12px var(--color-focus-ring);
-}
 /* Links underline on hover. */
 .detail-list a {
   transition: color 0.12s ease;
@@ -1897,8 +1919,7 @@ button {
   .chip:not(.chip--on):hover,
   .mygames-row:hover,
   .nearby-row:hover,
-  .lb-row:hover,
-  .quick-tile:hover {
+  .lb-row:hover {
     transform: none;
   }
   .btn-primary::after,
@@ -1932,6 +1953,13 @@ button {
   --white: #151e30; /* used semantically as the raised-surface color */
   --danger: #f87171;
   --shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
+
+  /* Brighter green so accent fills/text stay legible on the dark surface. */
+  --accent: #34d399;            /* emerald-400 — high contrast on #151e30 */
+  --accent-hover: #6ee7b7;
+  --accent-soft: rgba(52, 211, 153, 0.14);
+  /* --surface / --text-primary / --text-muted / --border resolve through the
+     redefined --white/--ink/--muted/--line above, so no re-declaration needed. */
 }
 
 :root[data-theme='dark'] .map-error code,
@@ -1971,9 +1999,6 @@ button {
 :root[data-theme='dark'] .nearby-grip {
   background: #3a4a63;
 }
-:root[data-theme='dark'] .mygames-row:hover {
-  background: #1c2740;
-}
 :root[data-theme='dark'] .btn-danger {
   background: rgba(248, 113, 113, 0.16);
   color: #fca5a5;
@@ -1985,38 +2010,12 @@ button {
   background: rgba(248, 113, 113, 0.1);
   border-color: rgba(248, 113, 113, 0.3);
 }
-:root[data-theme='dark'] .profile-stats {
-  background: linear-gradient(135deg, rgba(18, 168, 112, 0.14), rgba(11, 138, 92, 0.14));
-  border-color: rgba(51, 201, 138, 0.24);
-}
-:root[data-theme='dark'] .xp-bar {
-  background: rgba(51, 201, 138, 0.2);
-}
-:root[data-theme='dark'] .quick-tile,
-:root[data-theme='dark'] .name-input,
-:root[data-theme='dark'] .profile-row {
+:root[data-theme='dark'] .name-input {
   background: var(--white);
   border-color: var(--line);
 }
-:root[data-theme='dark'] .quick-tile:hover {
-  background: var(--bg);
-}
-:root[data-theme='dark'] .profile-tabs {
-  background: var(--bg);
-}
-:root[data-theme='dark'] .profile-tab.is-active {
-  background: var(--white);
-  box-shadow: none;
-  border: 1px solid var(--line);
-}
-:root[data-theme='dark'] .role-hosted {
-  background: rgba(51, 201, 138, 0.16);
-  color: var(--color-primary-hover);
-}
-:root[data-theme='dark'] .role-joined {
-  background: rgba(163, 230, 53, 0.18);
-  color: var(--color-spark);
-}
+/* Profile panel is fully token-driven; light/dark stay in sync through
+   --surface / --text-* / --border / --accent. No per-class dark overrides. */
 :root[data-theme='dark'] .lb-row.is-me {
   background: rgba(51, 201, 138, 0.14);
 }

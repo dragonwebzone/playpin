@@ -9,6 +9,13 @@ import {
 } from '../lib/constants'
 import ThemeToggle from './ThemeToggle'
 import Spinner from './Spinner'
+import {
+  IconUsers,
+  IconTrophy,
+  IconPencil,
+  IconChevronRight,
+  IconSun,
+} from './icons'
 
 function formatWhen(iso) {
   return new Date(iso).toLocaleString(undefined, {
@@ -46,7 +53,7 @@ function GameRow({ game, onSelect, past }) {
             {formatWhen(game.date_time)} · {joined}/{game.players_needed} in
           </span>
         </span>
-        <span className="mygames-chevron" aria-hidden="true">›</span>
+        <IconChevronRight className="ic mygames-chevron" />
       </button>
     </li>
   )
@@ -140,65 +147,75 @@ export default function ProfilePanel({
               </button>
             </form>
           ) : (
-            <div className="identity-name-row">
-              <span className="identity-name">{profile?.name || 'Player'}</span>
-              <button
-                className="link-btn"
-                onClick={() => setEditing(true)}
-                aria-label="Edit name"
-              >
-                ✏️ Edit
-              </button>
-            </div>
+            <>
+              <div className="identity-name-row">
+                <span className="identity-name">{profile?.name || 'Player'}</span>
+                <button
+                  className="icon-edit"
+                  onClick={() => setEditing(true)}
+                  aria-label="Edit name"
+                >
+                  <IconPencil className="ic" />
+                </button>
+              </div>
+              <span className="identity-sub">
+                {user?.email}
+                {user?.email && since && <span className="dot" aria-hidden="true">·</span>}
+                {since && `Member since ${since}`}
+              </span>
+            </>
           )}
-          {user?.email && <span className="identity-email">{user.email}</span>}
-          {since && <span className="identity-since">Member since {since}</span>}
           {saveError && <span className="form-error">{saveError}</span>}
         </div>
       </div>
 
-      {/* Level / XP + reliability */}
-      <div className="profile-stats">
-        <div className="level-badge">
-          <span className="level-num">{level}</span>
-          <span className="level-word">Level</span>
+      {/* Level / XP — single line + slim bar */}
+      <div className="xp-block">
+        <div className="xp-line">
+          <span className="xp-level">Level {level}</span>
+          <span className="xp-progress">
+            {intoLevel}/{forNext} XP to Level {level + 1}
+          </span>
         </div>
-        <div className="stats-right">
-          <div className="xp-row">
-            <strong>{xp} XP</strong>
-            <span className="muted">{intoLevel}/{forNext} to Lv {level + 1}</span>
-          </div>
-          <div className="xp-bar">
-            <span style={{ width: `${Math.round(progress * 100)}%` }} />
-          </div>
-          <div className="stat-pills">
-            <span className="stat-pill">🎯 {profile?.games_hosted ?? 0} hosted</span>
-            <span className="stat-pill">🤝 {profile?.games_joined ?? 0} joined</span>
-            <span className="stat-pill" title={rel.title}>⭐ {rel.label}</span>
-          </div>
+        <div className="xp-bar">
+          <span style={{ width: `${Math.round(progress * 100)}%` }} />
         </div>
       </div>
 
-      {/* Quick links */}
-      <div className="profile-quick">
-        <button className="quick-tile" onClick={onOpenFriends}>
-          <span className="quick-emoji" aria-hidden="true">👥</span>
-          Friends
-          {incomingCount > 0 && <span className="notif-badge">{incomingCount}</span>}
-        </button>
-        <button className="quick-tile" onClick={onOpenLeaderboard}>
-          <span className="quick-emoji" aria-hidden="true">🏆</span>
-          Leaderboard
-        </button>
+      {/* Stats — one row, divided, no pill backgrounds */}
+      <div className="stat-row">
+        <div className="stat-cell">
+          <span className="stat-num">{profile?.games_hosted ?? 0}</span>
+          <span className="stat-key">Hosted</span>
+        </div>
+        <div className="stat-cell">
+          <span className="stat-num">{profile?.games_joined ?? 0}</span>
+          <span className="stat-key">Joined</span>
+        </div>
+        <div className="stat-cell" title={rel.title}>
+          <span className="stat-num">{rel.label}</span>
+          <span className="stat-key">Reliability</span>
+        </div>
       </div>
 
-      {/* Appearance */}
-      <div className="profile-row">
-        <div className="profile-row-label">
-          <span className="quick-emoji" aria-hidden="true">🎨</span>
-          Appearance
+      {/* Navigation rows */}
+      <div className="profile-list">
+        <button className="list-row" onClick={onOpenFriends}>
+          <IconUsers className="ic list-icon" />
+          <span className="list-label">Friends</span>
+          {incomingCount > 0 && <span className="notif-badge list-badge">{incomingCount}</span>}
+          <IconChevronRight className="ic list-chevron" />
+        </button>
+        <button className="list-row" onClick={onOpenLeaderboard}>
+          <IconTrophy className="ic list-icon" />
+          <span className="list-label">Leaderboard</span>
+          <IconChevronRight className="ic list-chevron" />
+        </button>
+        <div className="list-row list-row--static">
+          <IconSun className="ic list-icon" />
+          <span className="list-label">Appearance</span>
+          <ThemeToggle />
         </div>
-        <ThemeToggle />
       </div>
 
       {/* Games */}
@@ -279,9 +296,9 @@ export default function ProfilePanel({
           </section>
         ))}
 
-      {/* Log out */}
+      {/* Log out — neutral text link, red only on hover */}
       <div className="profile-footer">
-        <button className="btn btn-danger btn-block" onClick={signOut}>
+        <button className="logout-link" onClick={signOut}>
           Log out
         </button>
       </div>
