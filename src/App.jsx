@@ -93,6 +93,15 @@ export default function App() {
   const navigate = useNavigate()
   const requireAuth = () => navigate('/?auth=login')
 
+  // Warm, time-aware greeting for the welcome card. Purely presentational.
+  const greeting = useMemo(() => {
+    const h = new Date().getHours()
+    if (h < 12) return 'Good morning'
+    if (h < 18) return 'Good afternoon'
+    return 'Good evening'
+  }, [])
+  const firstName = (profile?.name || '').trim().split(/\s+/)[0] || 'there'
+
   const selectedGame = useMemo(
     () => games.find((g) => g.id === selectedGameId) || null,
     [games, selectedGameId]
@@ -233,6 +242,26 @@ export default function App() {
           onMarkerClick={handleMarkerClick}
         />
 
+        {/* Warm welcome card — greets the player and surfaces how much is
+            happening nearby, so the map never feels empty or impersonal. */}
+        {!loading && !error && !createMode && (
+          <div className="welcome-card" role="status">
+            <p className="welcome-hi">
+              {greeting}, <strong>{firstName}</strong> <span aria-hidden="true">👋</span>
+            </p>
+            <p className="welcome-sub">
+              {filtered.length > 0 ? (
+                <>
+                  <span className="welcome-count">{filtered.length}</span>{' '}
+                  {filtered.length === 1 ? 'game' : 'games'} to jump into nearby
+                </>
+              ) : (
+                'The court’s quiet — be the one to start a game'
+              )}
+            </p>
+          </div>
+        )}
+
         {/* Real-time "players online" (Realtime Presence) */}
         {online > 0 && (
           <div className="presence-pill" title="Players online right now">
@@ -255,8 +284,8 @@ export default function App() {
             <span className="empty-icon" aria-hidden="true">
               <IconPinSpark />
             </span>
-            <p className="empty-title">Nobody's playing nearby yet</p>
-            <p className="muted">Be the first to start a game in your area.</p>
+            <p className="empty-title">Your move, {firstName}</p>
+            <p className="muted">No games nearby yet — start one and players will find you.</p>
             <button className="btn btn-primary empty-cta" onClick={handleStartCreate}>
               <IconPlus className="ic btn-ic" /> Create a game
             </button>
