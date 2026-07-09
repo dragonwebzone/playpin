@@ -94,27 +94,6 @@ export default function App() {
   const [mapsApi, setMapsApi] = useState(null)
   const handleMapsReady = useCallback((maps) => setMapsApi(maps), [])
 
-  // Recenter the map on the user (or re-request their position if we don't have
-  // it yet).
-  const recenterOnMe = () => {
-    const map = mapRef.current
-    if (!map) return
-    if (userLocation) {
-      map.panTo(userLocation)
-      map.setZoom(14)
-    } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
-          map.panTo(here)
-          map.setZoom(14)
-        },
-        () => {},
-        { enableHighAccuracy: true, timeout: 8000 }
-      )
-    }
-  }
-
   // Auth now lives on the landing page. Logged-out visitors are redirected
   // there by the guard below; requireAuth is a fallback for the brief window
   // before auth resolves (e.g. tapping a button during initial load).
@@ -356,26 +335,14 @@ export default function App() {
           />
         )}
 
-        {/* Grouped bottom-right map controls: recenter + create, aligned as a
-            pair. The empty-state card already offers a create CTA, so the FAB is
-            hidden while it shows — leaving recenter as the lone control there. */}
-        <div className="map-controls">
-          {mapsApi && (
-            <button
-              className="locate-btn"
-              onClick={recenterOnMe}
-              aria-label="Center map on my location"
-              title="Center on my location"
-            >
-              <span aria-hidden="true">◎</span>
-            </button>
-          )}
-          {!createMode && !selectedGame && !showEmptyState && (
-            <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
-              <IconPlus className="ic fab-ic" /> Create game
-            </button>
-          )}
-        </div>
+        {/* Floating create button, bottom-right. Hidden while the empty-state
+            card (which has its own CTA) is showing, so only one create
+            affordance is ever on screen. */}
+        {!createMode && !selectedGame && !showEmptyState && (
+          <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
+            <IconPlus className="ic fab-ic" /> Create game
+          </button>
+        )}
       </main>
 
       {/* Sliding bottom sheet / side panel */}

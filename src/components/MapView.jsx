@@ -62,7 +62,7 @@ export default function MapView({
   clickHandlerRef.current = onMapClick
 
   // Hand the loaded Maps API up to the parent, which hosts the place-search
-  // and recenter controls in the control bar / map-control group.
+  // control in the control bar.
   useEffect(() => {
     if (maps) onMapsReady?.(maps)
   }, [maps, onMapsReady])
