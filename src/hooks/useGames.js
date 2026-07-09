@@ -154,7 +154,7 @@ export const MAX_RADIUS_KM = 50
 
 // Pure helper: filter a games array by sport / skill / time window / friends /
 // distance from the user ("near me").
-export function filterGames(
+function filterGames(
   games,
   { sport, skill, timeWindow, friendsOnly, friendIds, radiusKm, userLocation }
 ) {

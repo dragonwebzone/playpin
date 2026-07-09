@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SPORTS, SKILL_LEVELS, TIME_WINDOWS, RADIUS_OPTIONS } from '../lib/constants'
-import { IconSliders, IconUsers } from './icons'
+import { IconSliders, IconUsers, SportIcon } from './icons'
 
 // A single "Filters" button that opens a popover with the sport / skill / time
 // (and optional friends & distance) chip groups. A badge shows how many
@@ -66,7 +66,7 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends, 
                     className={`chip ${filters.sport === s.value ? 'chip--on' : ''}`}
                     onClick={() => set('sport', filters.sport === s.value ? 'all' : s.value)}
                   >
-                    <span aria-hidden="true">{s.emoji}</span> {s.label}
+                    <SportIcon sport={s.value} className="ic" /> {s.label}
                   </button>
                 ))}
               </div>
