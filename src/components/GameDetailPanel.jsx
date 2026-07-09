@@ -72,6 +72,7 @@ export default function GameDetailPanel({
 
   const reliability = reliabilityDisplay(game.host?.reliability_score)
   const mapsLink = `https://www.google.com/maps/search/?api=1&query=${game.latitude},${game.longitude}`
+  const directionsLink = `https://www.google.com/maps/dir/?api=1&destination=${game.latitude},${game.longitude}`
 
   return (
     <div className="panel">
@@ -109,6 +110,10 @@ export default function GameDetailPanel({
           <dd>
             <a href={mapsLink} target="_blank" rel="noreferrer">
               {game.latitude.toFixed(4)}, {game.longitude.toFixed(4)} ↗
+            </a>
+            {' · '}
+            <a href={directionsLink} target="_blank" rel="noreferrer">
+              Directions ↗
             </a>
           </dd>
         </div>
