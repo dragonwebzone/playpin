@@ -22,7 +22,7 @@ export function FriendsPage() {
   const navigate = useNavigate()
   const friendsApi = useFriends(user?.id)
   if (loading) return null
-  if (!user) return <Navigate to="/" replace />
+  if (!user) return <Navigate to="/app?auth=signup" replace />
   return (
     <Page incomingCount={friendsApi.incoming.length}>
       <FriendsPanel friendsApi={friendsApi} onClose={() => navigate('/app')} />
@@ -34,7 +34,7 @@ export function LeaderboardPage() {
   const { user, loading } = useAuth()
   const navigate = useNavigate()
   if (loading) return null
-  if (!user) return <Navigate to="/" replace />
+  if (!user) return <Navigate to="/app?auth=signup" replace />
   return (
     <Page>
       <Leaderboard onClose={() => navigate('/app')} />
@@ -46,7 +46,7 @@ export function TournamentsPage() {
   const { user, loading } = useAuth()
   const navigate = useNavigate()
   if (loading) return null
-  if (!user) return <Navigate to="/" replace />
+  if (!user) return <Navigate to="/app?auth=signup" replace />
   return (
     <Page>
       <TournamentsPanel onClose={() => navigate('/app')} />

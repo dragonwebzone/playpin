@@ -72,7 +72,7 @@ export default function Hero() {
             style={{ animationDelay: '0.33s' }}
           >
             <Link
-              to="/app?auth=signup"
+              to="/app"
               className="btn-shine group inline-flex items-center justify-center gap-2 rounded-full bg-brand-grad px-7 py-3.5 text-base font-semibold text-white shadow-soft transition-transform duration-200 hover:scale-[1.03] active:scale-95"
             >
               Find a game

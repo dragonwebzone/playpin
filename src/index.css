@@ -139,6 +139,13 @@ button {
   background: var(--color-primary-hover);
 }
 
+/* Guest topbar: Log in / Sign up in place of the profile avatar. */
+.topbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* Slide-out nav drawer opened by the burger. */
 .drawer-backdrop {
   position: fixed;

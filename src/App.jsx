@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
 import { useFriends } from './hooks/useFriends'
@@ -13,6 +13,7 @@ import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
 import ProfilePanel from './components/ProfilePanel'
+import AuthModal from './components/AuthModal'
 import Topbar from './components/Topbar'
 import NearbyGamesSheet from './components/NearbyGamesSheet'
 import ActivityToast from './components/ActivityToast'
@@ -80,6 +81,9 @@ export default function App() {
   const [pin, setPin] = useState(null)
   const [showProfile, setShowProfile] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
+  // Guests can browse /app freely; auth is only prompted at write/personal
+  // actions. null | 'login' | 'signup' controls the shared AuthModal.
+  const [authMode, setAuthMode] = useState(null)
 
   // The map instance and loaded Maps API live here now so the place-search and
   // recenter controls can sit in the control bar / map-control group (outside
@@ -88,20 +92,29 @@ export default function App() {
   const [mapsApi, setMapsApi] = useState(null)
   const handleMapsReady = useCallback((maps) => setMapsApi(maps), [])
 
-  // Auth now lives on the landing page. Logged-out visitors are redirected
-  // there by the guard below; requireAuth is a fallback for the brief window
-  // before auth resolves (e.g. tapping a button during initial load).
+  // Guests browse the map freely; write/personal actions open the auth modal
+  // instead. requireAuth is the gate used at those trigger points.
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
-  const requireAuth = () => navigate('/?auth=login')
+  const requireAuth = () => setAuthMode('signup')
 
-  // Open the profile sheet when arriving via ?profile=1 (the corner avatar on
-  // the section pages deep-links here), then strip the param.
+  // Handle deep-link params, then strip them so they don't re-fire on refresh:
+  //  - ?auth=login|signup opens the auth modal (landing footer / shared links)
+  //  - ?profile=1 opens the profile sheet (corner avatar on the section pages)
   useEffect(() => {
-    if (searchParams.get('profile') === '1') {
-      setShowProfile(true)
-      setSearchParams({}, { replace: true })
+    const intent = searchParams.get('auth')
+    const wantsProfile = searchParams.get('profile') === '1'
+    if (intent === 'login' || intent === 'signup') setAuthMode(intent)
+    if (wantsProfile) {
+      if (user) setShowProfile(true)
+      else setAuthMode('signup')
     }
+    if (intent || wantsProfile) {
+      searchParams.delete('auth')
+      searchParams.delete('profile')
+      setSearchParams(searchParams, { replace: true })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, setSearchParams])
 
   const firstName = (profile?.name || '').trim().split(/\s+/)[0] || 'there'
@@ -165,19 +178,12 @@ export default function App() {
     closePanels()
   }
 
-  // The app is for signed-in users. Once auth resolves, a missing user (e.g.
-  // right after logging out) is sent to the landing page — carrying any ?auth
-  // intent so a login/signup deep-link opens there.
-  if (!authLoading && !user) {
-    const intent = searchParams.get('auth')
-    return <Navigate to={intent ? `/?auth=${intent}` : '/'} replace />
-  }
-
   return (
     <div className="app">
       <Topbar
         incomingCount={friendsApi.incoming.length}
         onOpenProfile={() => setShowProfile(true)}
+        onRequireAuth={(mode) => setAuthMode(mode)}
       />
 
       {/* Single control-bar row: place search + presence, with the Filters
@@ -351,6 +357,13 @@ export default function App() {
             incomingCount={friendsApi.incoming.length}
           />
         </div>
+      )}
+
+      {/* Shared auth modal for guest prompts (create/join/sections) and the
+          navbar Log in / Sign up. On success it closes; the auth state change
+          re-renders /app signed in, right where the guest was. */}
+      {authMode && (
+        <AuthModal initialMode={authMode} onClose={() => setAuthMode(null)} />
       )}
     </div>
   )
