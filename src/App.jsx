@@ -93,13 +93,6 @@ export default function App() {
   const navigate = useNavigate()
   const requireAuth = () => navigate('/?auth=login')
 
-  // Warm, time-aware greeting for the welcome card. Purely presentational.
-  const greeting = useMemo(() => {
-    const h = new Date().getHours()
-    if (h < 12) return 'Good morning'
-    if (h < 18) return 'Good afternoon'
-    return 'Good evening'
-  }, [])
   const firstName = (profile?.name || '').trim().split(/\s+/)[0] || 'there'
 
   const selectedGame = useMemo(
@@ -226,7 +219,6 @@ export default function App() {
       <FilterBar
         filters={filters}
         onChange={setFilters}
-        resultCount={filtered.length}
         hasFriends={friendsApi.friendIds.size > 0}
         hasLocation={!!userLocation}
       />
@@ -241,26 +233,6 @@ export default function App() {
           onMapClick={handleMapClick}
           onMarkerClick={handleMarkerClick}
         />
-
-        {/* Warm welcome card — greets the player and surfaces how much is
-            happening nearby, so the map never feels empty or impersonal. */}
-        {!loading && !error && !createMode && (
-          <div className="welcome-card" role="status">
-            <p className="welcome-hi">
-              {greeting}, <strong>{firstName}</strong> <span aria-hidden="true">👋</span>
-            </p>
-            <p className="welcome-sub">
-              {filtered.length > 0 ? (
-                <>
-                  <span className="welcome-count">{filtered.length}</span>{' '}
-                  {filtered.length === 1 ? 'game' : 'games'} to jump into nearby
-                </>
-              ) : (
-                'The court’s quiet — be the one to start a game'
-              )}
-            </p>
-          </div>
-        )}
 
         {/* Real-time "players online" (Realtime Presence) */}
         {online > 0 && (
@@ -321,6 +293,7 @@ export default function App() {
             userLocation={userLocation}
             selectedGameId={selectedGameId}
             onSelect={(id) => setSelectedGameId(id)}
+            firstName={firstName}
           />
         )}
 

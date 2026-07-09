@@ -4,7 +4,7 @@ import { SportIcon } from './icons'
 
 // Collapsible bottom "home feed" of nearby games, sorted by distance then time.
 // Turns the map from a bare canvas into a living list you can scan and tap.
-export default function NearbyGamesSheet({ games, userLocation, selectedGameId, onSelect }) {
+export default function NearbyGamesSheet({ games, userLocation, selectedGameId, onSelect, firstName }) {
   const [expanded, setExpanded] = useState(false)
 
   const ranked = useMemo(() => {
@@ -31,7 +31,7 @@ export default function NearbyGamesSheet({ games, userLocation, selectedGameId, 
         <span className="nearby-grip" aria-hidden="true" />
         <span className="nearby-title">
           <span className="nearby-dot" aria-hidden="true" />
-          {ranked.length} game{ranked.length === 1 ? '' : 's'} nearby
+          {firstName ? `Hi ${firstName} · ` : ''}{ranked.length} game{ranked.length === 1 ? '' : 's'} nearby
         </span>
         <span className="nearby-chevron" aria-hidden="true">{expanded ? '▾' : '▴'}</span>
       </button>
