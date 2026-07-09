@@ -155,24 +155,108 @@ button {
 }
 
 /* --------------------------------------------------------------- filters -- */
-.filterbar {
+/* Single control-bar row below the navbar: Filters button + place search +
+   presence chip. The only chrome between the navbar and the map. */
+.controlbar {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
   padding: 10px 12px;
   background: var(--white);
   border-bottom: 1px solid var(--line);
   z-index: 15;
 }
-.sport-chips {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 2px;
+
+/* Filters button + popover — collapses the old stacked pill rows. */
+.filters-menu {
+  position: relative;
+  flex-shrink: 0;
 }
-.sport-chips::-webkit-scrollbar {
-  display: none;
+.filters-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.filters-btn .ic {
+  width: 16px;
+  height: 16px;
+}
+.filters-btn--active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.filters-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+/* Transparent click-catcher so tapping outside the popover closes it. */
+.filters-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+}
+.filters-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  width: min(320px, calc(100vw - 24px));
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+}
+.filters-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.filters-group-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.filters-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.filters-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.filters-foot .filter-count {
+  margin-left: 0;
 }
 .chip {
   display: inline-flex;
@@ -196,19 +280,28 @@ button {
   border-color: var(--color-primary);
   color: #fff;
 }
-.filter-selects {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.filter-count {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 700;
 }
-.filter-selects select {
-  appearance: none;
+
+/* Presence chip in the control bar (was the map-floating "N online" pill). */
+.online-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
   border: 1px solid var(--line);
   background: var(--bg);
   border-radius: 999px;
   padding: 7px 12px;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: var(--ink);
+  white-space: nowrap;
 }
 
 /* ------------------------------------------------------------------- map -- */
@@ -244,10 +337,20 @@ button {
 }
 
 /* --------------------------------------------------------- floating bits -- */
-.fab {
+/* Grouped bottom-right map controls: recenter sits directly above the create
+   FAB, right-aligned, so the two read as one pair. */
+.map-controls {
   position: absolute;
   right: 16px;
   bottom: calc(80px + var(--safe-bottom));
+  z-index: 16;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.fab {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -273,25 +376,23 @@ button {
 .fab:active {
   transform: translateY(0);
 }
-/* "Center on me" control — sits just above the create FAB on the right edge. */
+
+/* "Center on me" — a normal small icon button, grouped with the FAB inside
+   .map-controls (no free-floating circle). */
 .locate-btn {
-  position: absolute;
-  right: 16px;
-  bottom: calc(146px + var(--safe-bottom));
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 12px;
   background: var(--white);
   color: #2563eb;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   line-height: 1;
   box-shadow: var(--shadow);
-  z-index: 15;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .locate-btn:hover {
   transform: translateY(-2px);
@@ -839,11 +940,15 @@ button {
   .modal {
     border-radius: var(--radius);
   }
-  .filterbar select {
-    max-width: 180px;
-  }
   .who {
     max-width: none;
+  }
+}
+
+/* On narrow phones, drop the "online" word so the control bar stays on one row. */
+@media (max-width: 420px) {
+  .online-word {
+    display: none;
   }
 }
 
@@ -939,22 +1044,20 @@ button {
 }
 
 /* --------------------------------------------------------- map search box -- */
+/* Lives inline in the control bar now (was floating on the map). */
 .map-search {
-  position: absolute;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 13;
-  width: min(440px, calc(100% - 24px));
+  position: relative;
+  flex: 1;
+  min-width: 0;
 }
 .map-search-box {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: var(--white);
+  background: var(--bg);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  box-shadow: var(--shadow);
-  padding: 0 12px 0 14px;
+  padding: 0 10px 0 12px;
 }
 /* Show focus as a pill-shaped ring around the whole box, matching its
    rounded shape, instead of a rectangle around the inner input. */
@@ -972,8 +1075,8 @@ button {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 0.95rem;
-  padding: 12px 4px;
+  font-size: 0.9rem;
+  padding: 8px 4px;
   color: var(--ink); /* black text */
 }
 .map-search-input::placeholder {
@@ -992,10 +1095,16 @@ button {
   line-height: 1;
 }
 .map-search-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
   list-style: none;
-  margin: 6px 0 0;
+  margin: 0;
   padding: 6px;
   background: var(--white);
+  border: 1px solid var(--line);
   border-radius: 14px;
   box-shadow: var(--shadow);
   max-height: 320px;

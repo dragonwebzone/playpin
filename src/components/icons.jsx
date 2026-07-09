@@ -78,6 +78,18 @@ export function IconSun({ className = 'ic' }) {
   )
 }
 
+// Slider knobs — the standard "filters" affordance.
+export function IconSliders({ className = 'ic' }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path {...base} d="M5 6h14M5 12h14M5 18h14" />
+      <circle {...base} cx="9" cy="6" r="2" fill="var(--bg)" />
+      <circle {...base} cx="15" cy="12" r="2" fill="var(--bg)" />
+      <circle {...base} cx="8" cy="18" r="2" fill="var(--bg)" />
+    </svg>
+  )
+}
+
 // Sport glyphs — reuse the landing's stroke sport icons so a game reads the same
 // on the map as it does in marketing. Falls back to a generic target for
 // unknown / "other" sports.

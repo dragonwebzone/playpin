@@ -1,72 +1,157 @@
+import { useEffect, useState } from 'react'
 import { SPORTS, SKILL_LEVELS, TIME_WINDOWS, RADIUS_OPTIONS } from '../lib/constants'
+import { IconSliders } from './icons'
 
-// Sport is a scrollable row of one-tap chips; level and time stay as compact
-// selects. Keeps the map's discovery controls fast and thumb-friendly.
-export default function FilterBar({ filters, onChange, hasFriends, hasLocation }) {
+// A single "Filters" button that opens a popover with the sport / skill / time
+// (and optional friends & distance) chip groups. A badge shows how many
+// non-default filters are active. Collapses what used to be several stacked
+// pill rows into one control-bar affordance.
+export default function FilterBar({ filters, onChange, resultCount, hasFriends, hasLocation }) {
+  const [open, setOpen] = useState(false)
   const set = (key, value) => onChange({ ...filters, [key]: value })
 
+  const activeCount =
+    (filters.sport !== 'all' ? 1 : 0) +
+    (filters.skill !== 'all' ? 1 : 0) +
+    (filters.timeWindow.value !== TIME_WINDOWS[0].value ? 1 : 0) +
+    (hasLocation && filters.radius.value !== RADIUS_OPTIONS[0].value ? 1 : 0) +
+    (filters.friendsOnly ? 1 : 0)
+
+  // Close the popover on Escape.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
+  const reset = () =>
+    onChange({
+      ...filters,
+      sport: 'all',
+      skill: 'all',
+      timeWindow: TIME_WINDOWS[0],
+      radius: RADIUS_OPTIONS[0],
+      friendsOnly: false,
+    })
+
   return (
-    <div className="filterbar">
-      <div className="sport-chips">
-        <button
-          className={`chip ${filters.sport === 'all' ? 'chip--on' : ''}`}
-          onClick={() => set('sport', 'all')}
-        >
-          All
-        </button>
-        {SPORTS.map((s) => (
-          <button
-            key={s.value}
-            className={`chip ${filters.sport === s.value ? 'chip--on' : ''}`}
-            onClick={() => set('sport', filters.sport === s.value ? 'all' : s.value)}
-          >
-            <span aria-hidden="true">{s.emoji}</span> {s.label}
-          </button>
-        ))}
-      </div>
+    <div className="filters-menu">
+      <button
+        className={`filters-btn ${activeCount > 0 ? 'filters-btn--active' : ''}`}
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        aria-label="Filters"
+      >
+        <IconSliders className="ic" /> Filters
+        {activeCount > 0 && <span className="filters-badge">{activeCount}</span>}
+      </button>
 
-      <div className="filter-selects">
-        {hasFriends && (
-          <button
-            className={`chip ${filters.friendsOnly ? 'chip--on' : ''}`}
-            onClick={() => set('friendsOnly', !filters.friendsOnly)}
-          >
-            <span aria-hidden="true">👥</span> Friends
-          </button>
-        )}
-        <select
-          value={filters.skill}
-          onChange={(e) => set('skill', e.target.value)}
-          aria-label="Filter by skill level"
-        >
-          <option value="all">⭐ All levels</option>
-          {SKILL_LEVELS.map((s) => (
-            <option key={s.value} value={s.value}>{s.label}</option>
-          ))}
-        </select>
+      {open && (
+        <>
+          <div className="filters-backdrop" onClick={() => setOpen(false)} />
+          <div className="filters-pop" role="dialog" aria-label="Filters">
+            <div className="filters-group">
+              <span className="filters-group-label">Sport</span>
+              <div className="filters-chips">
+                <button
+                  className={`chip ${filters.sport === 'all' ? 'chip--on' : ''}`}
+                  onClick={() => set('sport', 'all')}
+                >
+                  All
+                </button>
+                {SPORTS.map((s) => (
+                  <button
+                    key={s.value}
+                    className={`chip ${filters.sport === s.value ? 'chip--on' : ''}`}
+                    onClick={() => set('sport', filters.sport === s.value ? 'all' : s.value)}
+                  >
+                    <span aria-hidden="true">{s.emoji}</span> {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        <select
-          value={filters.timeWindow.value}
-          onChange={(e) => set('timeWindow', TIME_WINDOWS.find((t) => t.value === e.target.value))}
-          aria-label="Filter by time"
-        >
-          {TIME_WINDOWS.map((t) => (
-            <option key={t.value} value={t.value}>🕒 {t.label}</option>
-          ))}
-        </select>
+            <div className="filters-group">
+              <span className="filters-group-label">Skill level</span>
+              <div className="filters-chips">
+                <button
+                  className={`chip ${filters.skill === 'all' ? 'chip--on' : ''}`}
+                  onClick={() => set('skill', 'all')}
+                >
+                  ⭐ All levels
+                </button>
+                {SKILL_LEVELS.map((s) => (
+                  <button
+                    key={s.value}
+                    className={`chip ${filters.skill === s.value ? 'chip--on' : ''}`}
+                    onClick={() => set('skill', filters.skill === s.value ? 'all' : s.value)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        {hasLocation && (
-          <select
-            value={filters.radius.value}
-            onChange={(e) => set('radius', RADIUS_OPTIONS.find((r) => r.value === e.target.value))}
-            aria-label="Filter by distance from you"
-          >
-            {RADIUS_OPTIONS.map((r) => (
-              <option key={r.value} value={r.value}>📍 {r.label}</option>
-            ))}
-          </select>
-        )}
-      </div>
+            <div className="filters-group">
+              <span className="filters-group-label">When</span>
+              <div className="filters-chips">
+                {TIME_WINDOWS.map((t) => (
+                  <button
+                    key={t.value}
+                    className={`chip ${filters.timeWindow.value === t.value ? 'chip--on' : ''}`}
+                    onClick={() => set('timeWindow', t)}
+                  >
+                    🕒 {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {hasLocation && (
+              <div className="filters-group">
+                <span className="filters-group-label">Distance</span>
+                <div className="filters-chips">
+                  {RADIUS_OPTIONS.map((r) => (
+                    <button
+                      key={r.value}
+                      className={`chip ${filters.radius.value === r.value ? 'chip--on' : ''}`}
+                      onClick={() => set('radius', r)}
+                    >
+                      📍 {r.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {hasFriends && (
+              <div className="filters-group">
+                <span className="filters-group-label">People</span>
+                <div className="filters-chips">
+                  <button
+                    className={`chip ${filters.friendsOnly ? 'chip--on' : ''}`}
+                    onClick={() => set('friendsOnly', !filters.friendsOnly)}
+                  >
+                    <span aria-hidden="true">👥</span> Friends only
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="filters-foot">
+              <span className="filter-count">
+                {resultCount} {resultCount === 1 ? 'game' : 'games'}
+              </span>
+              {activeCount > 0 && (
+                <button className="link-btn" onClick={reset}>
+                  Clear all
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

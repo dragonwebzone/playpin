@@ -3,7 +3,6 @@ import { useGoogleMaps } from '../hooks/useGoogleMaps'
 import { useTheme } from '../hooks/useTheme'
 import { DEFAULT_CENTER, DEFAULT_ZOOM, sportMeta } from '../lib/constants'
 import Spinner from './Spinner'
-import PlaceSearch from './PlaceSearch'
 
 // Declutter the base map to focus on places where pickup games happen: hide all
 // POI labels, then re-enable parks and sports complexes. (Applies only without a
@@ -50,19 +49,23 @@ export default function MapView({
   userLocation,
   onMapClick,
   onMarkerClick,
+  mapRef,
+  onMapsReady,
 }) {
   const { maps, loading, error } = useGoogleMaps()
   const { isDark } = useTheme()
   const containerRef = useRef(null)
-  const mapRef = useRef(null)
   const markersRef = useRef(new Map()) // gameId -> google.maps.Marker
   const pinMarkerRef = useRef(null)
   const meMarkerRef = useRef(null)
   const clickHandlerRef = useRef(onMapClick)
   clickHandlerRef.current = onMapClick
-  // Latest create-mode value for use inside the Places listener closure.
-  const createModeRef = useRef(createMode)
-  createModeRef.current = createMode
+
+  // Hand the loaded Maps API up to the parent, which hosts the place-search
+  // and recenter controls in the control bar / map-control group.
+  useEffect(() => {
+    if (maps) onMapsReady?.(maps)
+  }, [maps, onMapsReady])
 
   // Initialize the map once Google Maps is ready.
   useEffect(() => {
@@ -223,27 +226,6 @@ export default function MapView({
     }
   }, [maps, userLocation])
 
-  // Recenter the map on the user (or re-request their position if we don't have
-  // it yet).
-  const recenterOnMe = () => {
-    const map = mapRef.current
-    if (!map) return
-    if (userLocation) {
-      map.panTo(userLocation)
-      map.setZoom(14)
-    } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
-          map.panTo(here)
-          map.setZoom(14)
-        },
-        () => {},
-        { enableHighAccuracy: true, timeout: 8000 }
-      )
-    }
-  }
-
   if (error) {
     return (
       <div className="map-error">
@@ -259,24 +241,6 @@ export default function MapView({
   return (
     <div className="map-root">
       <div ref={containerRef} className="map-canvas" />
-      {!loading && maps && (
-        <PlaceSearch
-          maps={maps}
-          mapRef={mapRef}
-          createModeRef={createModeRef}
-          onDropPin={(coords) => clickHandlerRef.current?.(coords)}
-        />
-      )}
-      {!loading && maps && (
-        <button
-          className="locate-btn"
-          onClick={recenterOnMe}
-          aria-label="Center map on my location"
-          title="Center on my location"
-        >
-          <span aria-hidden="true">◎</span>
-        </button>
-      )}
       {loading && <Spinner label="Loading map…" overlay />}
     </div>
   )

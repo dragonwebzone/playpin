@@ -3,13 +3,16 @@ import { useEffect, useRef, useState } from 'react'
 // Custom place search: a plain <input> we fully control (so the text is black
 // and the dropdown matches the app), powered by the new Places Autocomplete
 // Data API. Requires "Places API (New)" enabled in Google Cloud.
-export default function PlaceSearch({ maps, mapRef, createModeRef, onDropPin }) {
+export default function PlaceSearch({ maps, mapRef, createMode, onDropPin }) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState([])
   const [open, setOpen] = useState(false)
   const libRef = useRef(null)
   const tokenRef = useRef(null)
   const debounceRef = useRef(null)
+  // Latest create-mode value for use inside the async `choose` closure.
+  const createModeRef = useRef(createMode)
+  createModeRef.current = createMode
 
   // Resolve the places library and start a session token.
   useEffect(() => {

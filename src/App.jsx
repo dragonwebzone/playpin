@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import { useGames, useFilteredGames } from './hooks/useGames'
@@ -8,6 +8,7 @@ import { usePresence } from './hooks/usePresence'
 import { TIME_WINDOWS, RADIUS_OPTIONS, sportMeta, levelFromXp } from './lib/constants'
 import MapView from './components/MapView'
 import FilterBar from './components/FilterBar'
+import PlaceSearch from './components/PlaceSearch'
 import CreateGameForm from './components/CreateGameForm'
 import EditGameForm from './components/EditGameForm'
 import GameDetailPanel from './components/GameDetailPanel'
@@ -86,6 +87,34 @@ export default function App() {
   const [showTournaments, setShowTournaments] = useState(false)
   const [editingGameId, setEditingGameId] = useState(null)
 
+  // The map instance and loaded Maps API live here now so the place-search and
+  // recenter controls can sit in the control bar / map-control group (outside
+  // the map canvas) rather than floating on the map.
+  const mapRef = useRef(null)
+  const [mapsApi, setMapsApi] = useState(null)
+  const handleMapsReady = useCallback((maps) => setMapsApi(maps), [])
+
+  // Recenter the map on the user (or re-request their position if we don't have
+  // it yet).
+  const recenterOnMe = () => {
+    const map = mapRef.current
+    if (!map) return
+    if (userLocation) {
+      map.panTo(userLocation)
+      map.setZoom(14)
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+          map.panTo(here)
+          map.setZoom(14)
+        },
+        () => {},
+        { enableHighAccuracy: true, timeout: 8000 }
+      )
+    }
+  }
+
   // Auth now lives on the landing page. Logged-out visitors are redirected
   // there by the guard below; requireAuth is a fallback for the brief window
   // before auth resolves (e.g. tapping a button during initial load).
@@ -103,6 +132,10 @@ export default function App() {
     () => games.find((g) => g.id === editingGameId) || null,
     [games, editingGameId]
   )
+
+  // The empty-state card carries its own "Create a game" CTA, so we suppress the
+  // floating FAB while it's showing — only ever one create affordance on screen.
+  const showEmptyState = !loading && !error && filtered.length === 0 && !createMode
 
   const closePanels = () => {
     setSelectedGameId(null)
@@ -216,12 +249,44 @@ export default function App() {
         </div>
       </header>
 
-      <FilterBar
-        filters={filters}
-        onChange={setFilters}
-        hasFriends={friendsApi.friendIds.size > 0}
-        hasLocation={!!userLocation}
-      />
+      {/* Single control-bar row: place search + presence, with the Filters
+          button on the right. The only chrome between the navbar and the map. */}
+      <div className="controlbar">
+        {mapsApi ? (
+          <PlaceSearch
+            maps={mapsApi}
+            mapRef={mapRef}
+            createMode={createMode}
+            onDropPin={(coords) => handleMapClick(coords)}
+          />
+        ) : (
+          <div className="map-search">
+            <div className="map-search-box">
+              <span className="map-search-icon" aria-hidden="true">🔍</span>
+              <input
+                className="map-search-input"
+                type="text"
+                disabled
+                placeholder="Search a place or address…"
+                aria-label="Search for a place"
+              />
+            </div>
+          </div>
+        )}
+        {online > 0 && (
+          <div className="online-chip" title="Players online right now">
+            <span className="presence-dot" aria-hidden="true" />
+            {online} <span className="online-word">online</span>
+          </div>
+        )}
+        <FilterBar
+          filters={filters}
+          onChange={setFilters}
+          resultCount={filtered.length}
+          hasFriends={friendsApi.friendIds.size > 0}
+          hasLocation={!!userLocation}
+        />
+      </div>
 
       <main className="map-area">
         <MapView
@@ -232,15 +297,9 @@ export default function App() {
           userLocation={userLocation}
           onMapClick={handleMapClick}
           onMarkerClick={handleMarkerClick}
+          mapRef={mapRef}
+          onMapsReady={handleMapsReady}
         />
-
-        {/* Real-time "players online" (Realtime Presence) */}
-        {online > 0 && (
-          <div className="presence-pill" title="Players online right now">
-            <span className="presence-dot" aria-hidden="true" />
-            {online} online
-          </div>
-        )}
 
         {/* Create-mode hint banner */}
         {createMode && !pin && (
@@ -251,7 +310,7 @@ export default function App() {
         )}
 
         {/* Empty state when there are games loaded but none match / none exist */}
-        {!loading && !error && filtered.length === 0 && !createMode && (
+        {showEmptyState && (
           <div className="empty-state">
             <span className="empty-icon" aria-hidden="true">
               <IconPinSpark />
@@ -297,12 +356,26 @@ export default function App() {
           />
         )}
 
-        {/* Floating create button */}
-        {!createMode && !selectedGame && (
-          <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
-            <IconPlus className="ic fab-ic" /> Create game
-          </button>
-        )}
+        {/* Grouped bottom-right map controls: recenter + create, aligned as a
+            pair. The empty-state card already offers a create CTA, so the FAB is
+            hidden while it shows — leaving recenter as the lone control there. */}
+        <div className="map-controls">
+          {mapsApi && (
+            <button
+              className="locate-btn"
+              onClick={recenterOnMe}
+              aria-label="Center map on my location"
+              title="Center on my location"
+            >
+              <span aria-hidden="true">◎</span>
+            </button>
+          )}
+          {!createMode && !selectedGame && !showEmptyState && (
+            <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
+              <IconPlus className="ic fab-ic" /> Create game
+            </button>
+          )}
+        </div>
       </main>
 
       {/* Sliding bottom sheet / side panel */}
