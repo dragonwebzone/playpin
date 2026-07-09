@@ -288,17 +288,18 @@ export default function App() {
           </div>
         )}
 
-        {/* Empty state when there are games loaded but none match / none exist */}
+        {/* Empty state when there are games loaded but none match / none exist.
+            The create affordance is the corner FAB below, so this card stays
+            informational and points to it. */}
         {showEmptyState && (
           <div className="empty-state">
             <span className="empty-icon" aria-hidden="true">
               <IconPinSpark />
             </span>
             <p className="empty-title">Your move, {firstName}</p>
-            <p className="muted">No games nearby yet — start one and players will find you.</p>
-            <button className="btn btn-primary empty-cta" onClick={handleStartCreate}>
-              <IconPlus className="ic btn-ic" /> Create a game
-            </button>
+            <p className="muted">
+              No games nearby yet — tap <strong>Create game</strong> and players will find you.
+            </p>
           </div>
         )}
 
@@ -335,11 +336,15 @@ export default function App() {
           />
         )}
 
-        {/* Floating create button, bottom-right. Hidden while the empty-state
-            card (which has its own CTA) is showing, so only one create
-            affordance is ever on screen. */}
-        {!createMode && !selectedGame && !showEmptyState && (
-          <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
+        {/* The single create affordance: a FAB anchored in the bottom-right
+            corner. It drops lower when there's no bottom sheet (no nearby
+            games) so it sits snug in the corner. */}
+        {!createMode && !selectedGame && (
+          <button
+            className={`fab ${filtered.length === 0 ? 'fab--corner' : ''}`}
+            onClick={handleStartCreate}
+            aria-label="Create a game"
+          >
             <IconPlus className="ic fab-ic" /> Create game
           </button>
         )}

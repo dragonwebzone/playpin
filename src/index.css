@@ -355,6 +355,10 @@ button {
   z-index: 16;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+/* When no bottom sheet is present, drop the FAB into the true corner. */
+.fab--corner {
+  bottom: calc(20px + var(--safe-bottom));
+}
 .fab-ic {
   width: 20px;
   height: 20px;

@@ -76,6 +76,10 @@ export default function MapView({
       zoom: DEFAULT_ZOOM,
       disableDefaultUI: true,
       zoomControl: false,
+      // Hide the grey "Keyboard shortcuts" control in the bottom-right. (The
+      // small "Map data / Terms" attribution beside it is required by Google's
+      // terms and can't be removed.)
+      keyboardShortcuts: false,
       clickableIcons: false,
       gestureHandling: 'greedy',
       styles: isDark ? DARK_MAP_STYLES : LIGHT_MAP_STYLES,
