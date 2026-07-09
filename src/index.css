@@ -49,6 +49,16 @@ button {
   cursor: pointer;
 }
 
+/* Inline stroke icons scale with the surrounding font-size and sit on the text
+   baseline, so they drop into buttons/labels wherever an emoji used to live. */
+.ic {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.125em;
+  flex-shrink: 0;
+}
+
 /* ---------------------------------------------------------------- layout -- */
 .app {
   display: flex;
@@ -61,8 +71,10 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: var(--white);
+  padding: 11px 16px;
+  background: color-mix(in srgb, var(--white) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px);
+  -webkit-backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid var(--line);
   z-index: 20;
 }
@@ -245,9 +257,9 @@ button {
   z-index: 16;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.fab span {
-  font-size: 1.2rem;
-  line-height: 1;
+.fab-ic {
+  width: 20px;
+  height: 20px;
 }
 .fab:hover {
   transform: translateY(-2px);
@@ -333,13 +345,35 @@ button {
   max-width: 82vw;
   z-index: 11;
 }
-.empty-emoji {
-  font-size: 2.4rem;
-  margin: 0 0 4px;
+.empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  border-radius: 16px;
+  background: var(--color-primary-weak);
+  color: var(--color-primary);
+}
+.empty-icon svg {
+  width: 30px;
+  height: 30px;
 }
 .empty-title {
   font-weight: 700;
+  font-size: 1.05rem;
   margin: 0 0 4px;
+}
+.btn-ic {
+  width: 18px;
+  height: 18px;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
 
 /* ----------------------------------------------------------- sheet/panel -- */
@@ -646,6 +680,37 @@ button {
 }
 .icon-btn:hover {
   background: var(--bg);
+}
+
+/* Topbar action buttons: uniform square controls with a hairline border so the
+   friends / leaderboard / tournament icons read as one premium button group. */
+.topbar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--white);
+  color: var(--slate);
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+.topbar-icon .ic {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+.topbar-icon:hover {
+  color: var(--color-primary);
+  border-color: color-mix(in srgb, var(--color-primary) 45%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -10px var(--color-focus-ring);
+}
+.topbar-icon:active {
+  transform: translateY(0);
 }
 .link-btn {
   border: none;
@@ -1193,10 +1258,6 @@ button {
   font-weight: 700;
   color: var(--color-spark);
 }
-.topbar-icon {
-  font-size: 1.15rem;
-}
-
 .profile-stats {
   display: flex;
   align-items: center;

@@ -19,6 +19,7 @@ import Leaderboard from './components/Leaderboard'
 import FriendsPanel from './components/FriendsPanel'
 import TournamentsPanel from './components/TournamentsPanel'
 import Spinner from './components/Spinner'
+import { IconUsers, IconTrophy, IconBracket, IconPlus, IconPinSpark } from './components/icons'
 
 export default function App() {
   const { user, profile, loading: authLoading } = useAuth()
@@ -183,7 +184,7 @@ export default function App() {
                 aria-label="Friends"
                 title="Friends"
               >
-                👥
+                <IconUsers />
                 {friendsApi.incoming.length > 0 && (
                   <span className="notif-badge">{friendsApi.incoming.length}</span>
                 )}
@@ -194,7 +195,7 @@ export default function App() {
                 aria-label="Leaderboard"
                 title="Leaderboard"
               >
-                🏆
+                <IconTrophy />
               </button>
               <button
                 className="icon-btn topbar-icon"
@@ -202,7 +203,7 @@ export default function App() {
                 aria-label="Tournaments"
                 title="Tournaments"
               >
-                ⚔️
+                <IconBracket />
               </button>
             </>
           ) : (
@@ -251,11 +252,13 @@ export default function App() {
         {/* Empty state when there are games loaded but none match / none exist */}
         {!loading && !error && filtered.length === 0 && !createMode && (
           <div className="empty-state">
-            <p className="empty-emoji">⚽</p>
+            <span className="empty-icon" aria-hidden="true">
+              <IconPinSpark />
+            </span>
             <p className="empty-title">Nobody's playing nearby yet</p>
             <p className="muted">Be the first to start a game in your area.</p>
             <button className="btn btn-primary empty-cta" onClick={handleStartCreate}>
-              ＋ Create a game
+              <IconPlus className="ic btn-ic" /> Create a game
             </button>
           </div>
         )}
@@ -295,7 +298,7 @@ export default function App() {
         {/* Floating create button */}
         {!createMode && !selectedGame && (
           <button className="fab" onClick={handleStartCreate} aria-label="Create a game">
-            <span aria-hidden="true">＋</span> Create game
+            <IconPlus className="ic fab-ic" /> Create game
           </button>
         )}
       </main>
