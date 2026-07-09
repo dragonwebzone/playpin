@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { SPORTS, SKILL_LEVELS, TIME_WINDOWS, RADIUS_OPTIONS } from '../lib/constants'
-import { IconSliders } from './icons'
+import { IconSliders, IconUsers } from './icons'
 
 // A single "Filters" button that opens a popover with the sport / skill / time
 // (and optional friends & distance) chip groups. A badge shows how many
@@ -79,7 +79,7 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends, 
                   className={`chip ${filters.skill === 'all' ? 'chip--on' : ''}`}
                   onClick={() => set('skill', 'all')}
                 >
-                  ⭐ All levels
+                  All levels
                 </button>
                 {SKILL_LEVELS.map((s) => (
                   <button
@@ -102,7 +102,7 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends, 
                     className={`chip ${filters.timeWindow.value === t.value ? 'chip--on' : ''}`}
                     onClick={() => set('timeWindow', t)}
                   >
-                    🕒 {t.label}
+                    {t.label}
                   </button>
                 ))}
               </div>
@@ -118,7 +118,7 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends, 
                       className={`chip ${filters.radius.value === r.value ? 'chip--on' : ''}`}
                       onClick={() => set('radius', r)}
                     >
-                      📍 {r.label}
+                      {r.label.replace('Within ', '')}
                     </button>
                   ))}
                 </div>
@@ -133,7 +133,7 @@ export default function FilterBar({ filters, onChange, resultCount, hasFriends, 
                     className={`chip ${filters.friendsOnly ? 'chip--on' : ''}`}
                     onClick={() => set('friendsOnly', !filters.friendsOnly)}
                   >
-                    <span aria-hidden="true">👥</span> Friends only
+                    <IconUsers className="ic" /> Friends only
                   </button>
                 </div>
               </div>
