@@ -1836,9 +1836,18 @@ button {
   pointer-events: none;
 }
 .theme-toggle-icon {
-  font-size: 0.78rem;
-  line-height: 1;
-  opacity: 0.45;
+  display: flex;
+  color: var(--text);
+  opacity: 0.4;
+}
+.theme-toggle-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.theme-toggle-knob svg {
+  width: 15px;
+  height: 15px;
+  color: #1a1a1a;
 }
 /* The knob carries the active icon and slides to the selected side. */
 .theme-toggle-knob {
