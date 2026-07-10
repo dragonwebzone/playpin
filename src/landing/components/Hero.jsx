@@ -2,13 +2,6 @@ import { Link } from 'react-router-dom'
 import MapVisual from './MapVisual'
 import { IconArrow } from './icons'
 
-const AVATARS = [
-  { initial: 'J', tint: 'bg-accent-500' },
-  { initial: 'P', tint: 'bg-energy-500' },
-  { initial: 'M', tint: 'bg-accent-700' },
-  { initial: 'A', tint: 'bg-energy-600' },
-]
-
 export default function Hero() {
   const scrollToHow = (e) => {
     e.preventDefault()
@@ -87,24 +80,14 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Trust bar */}
+          {/* Value bar — honest props only; no fabricated user counts while the
+              product is still in its prototype stage. */}
           <div
             className="animate-enter mt-8 flex flex-wrap items-center gap-4"
             style={{ animationDelay: '0.43s' }}
           >
-            <div className="flex -space-x-2">
-              {AVATARS.map((a) => (
-                <span
-                  key={a.initial}
-                  className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white ring-2 ring-white dark:ring-slate-900 ${a.tint}`}
-                >
-                  {a.initial}
-                </span>
-              ))}
-            </div>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              <span className="font-bold text-ink dark:text-white">10k+ players</span> · free to
-              join · no flakes
+              Free to join · drop a pin · no flakes
             </p>
           </div>
         </div>
