@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Navigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import AuthModal from '../components/AuthModal'
+import AmbientBackground from './components/AmbientBackground'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import HowItWorks from './components/HowItWorks'
@@ -49,6 +50,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#fafaf9] dark:bg-slate-900">
+      {/* Ambient floodlight-dust layer, fixed behind the whole page. */}
+      <AmbientBackground />
       <Navbar scrolled={scrolled} onAuth={setAuthMode} />
       <main>
         <Hero />

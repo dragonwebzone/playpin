@@ -1,0 +1,49 @@
+/* Floodlight Dust — ambient particles drifting up the whole landing page, like
+   dust in stadium floodlights. Fixed, click-through overlay behind the content.
+   Colors are the existing brand tokens (energy-400 = --volt, accent-400 =
+   --pitch-light); no new color values are introduced. */
+.floodlight-dust {
+  --volt: #a3e635; /* energy-400 */
+  --pitch-light: #33c98a; /* accent-400 */
+
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fd-dot {
+  position: absolute;
+  bottom: -6px; /* start just below the viewport */
+  border-radius: 50%;
+  opacity: 0;
+  animation-name: fd-rise;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes fd-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.3;
+  }
+  92% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* Pure ambient decoration — nothing to preserve statically, so hide it. */
+@media (prefers-reduced-motion: reduce) {
+  .floodlight-dust {
+    display: none;
+  }
+}
