@@ -1,0 +1,48 @@
+/* "Play what you love" sport strip — flat icons (no card, border, or glow),
+   muted by default, active (hover) in the brand's light pitch green with a 2px
+   underline under the label. Scoped to this section only.
+   --pitch-light comes from the existing accent scale (no new colors). */
+.sports-strip {
+  --pitch-light: #12a870; /* accent-500 — light pitch green on the light page */
+}
+:root[data-theme='dark'] .sports-strip {
+  --pitch-light: #6fe0a9; /* accent-300 — lighter pitch green on dark */
+}
+
+.ss-item {
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+.ss-item svg {
+  width: 32px;
+  height: 32px;
+}
+.ss-label {
+  position: relative;
+  padding-bottom: 6px;
+}
+.ss-label::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--pitch-light);
+  transform: translateX(-50%);
+  transition: width 0.2s ease;
+}
+.ss-item:hover {
+  color: var(--pitch-light);
+}
+.ss-item:hover .ss-label::after {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-item,
+  .ss-label::after {
+    transition: none;
+  }
+}
