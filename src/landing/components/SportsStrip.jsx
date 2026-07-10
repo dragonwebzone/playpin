@@ -102,7 +102,7 @@ export default function SportsStrip() {
   return (
     <section className="sports-strip mx-auto max-w-content px-5 py-16 sm:px-8">
       <Reveal className="text-center">
-        <p className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        <p className="text-sm font-bold uppercase tracking-widest text-accent-600 dark:text-accent-400">
           Play what you love
         </p>
       </Reveal>
@@ -110,7 +110,9 @@ export default function SportsStrip() {
         <ul className="mt-8 flex flex-wrap items-center justify-center gap-8 sm:gap-12">
           {SPORTS.map(({ label, Icon }) => (
             <li key={label} className="ss-item group flex flex-col items-center gap-2.5">
-              <Icon />
+              <span className="ss-box">
+                <Icon />
+              </span>
               <span className="ss-label text-sm font-semibold">{label}</span>
             </li>
           ))}

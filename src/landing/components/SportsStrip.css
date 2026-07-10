@@ -13,6 +13,21 @@
   color: var(--muted);
   transition: color 0.2s ease;
 }
+.ss-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.ss-item:hover .ss-box {
+  border-color: var(--pitch-light);
+  background: rgba(22, 196, 122, 0.07);
+}
 .ss-item svg {
   width: 32px;
   height: 32px;
@@ -42,6 +57,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ss-item,
+  .ss-box,
   .ss-label::after {
     transition: none;
   }
