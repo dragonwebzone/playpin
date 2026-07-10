@@ -34,23 +34,6 @@ body {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(120deg, #12a870 0%, #0a6e4a 58%, #063f2c 100%);
   }
-  /* Brand-green highlighter behind a spotlighted word. Drawn as a pseudo-element
-     pinned to the word so it can't drift with line-height, and never wraps. */
-  .mark-energy {
-    position: relative;
-    display: inline-block;
-    isolation: isolate;
-    white-space: nowrap;
-  }
-  .mark-energy::before {
-    content: '';
-    position: absolute;
-    inset: auto -0.08em 0.06em -0.08em;
-    z-index: -1;
-    height: 0.36em;
-    border-radius: 0.14em;
-    background: linear-gradient(120deg, rgba(51, 201, 138, 0.55), rgba(18, 168, 112, 0.5));
-  }
 }
 
 /* Faint dotted map-grid texture for section backgrounds. */

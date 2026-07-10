@@ -49,7 +49,7 @@ export default function Hero() {
             className="animate-enter mt-5 text-balance text-5xl font-extrabold leading-[1.03] tracking-tight text-ink dark:text-white sm:text-6xl"
             style={{ animationDelay: '0.13s' }}
           >
-            Never play <span className="mark-energy">alone</span> again.
+            Never play <span className="text-accent-700 dark:text-accent-300">alone</span> again.
           </h1>
 
           <p
