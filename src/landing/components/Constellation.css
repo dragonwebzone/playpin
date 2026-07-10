@@ -1,0 +1,222 @@
+/* Constellation — ambient hero visual for the landing page.
+   Scoped to MapVisual; imported by that component only. Colors reference the
+   "Pitch & Volt" brand tokens (accent-700 = --pitch, accent-400 = --pitch-light,
+   energy-400 = --volt); the translucent glows use those same values as rgba. */
+.constellation {
+  --pitch: #0a6e4a; /* accent-700 */
+  --pitch-light: #33c98a; /* accent-400 */
+  --volt: #a3e635; /* energy-400 */
+
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #0b1420;
+  border: 1px solid #1b2a3f;
+}
+
+/* --- Aurora glow blobs, breathing behind everything --------------------- */
+.cst-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+.cst-blob--1 {
+  width: 340px;
+  height: 340px;
+  top: -90px;
+  left: -90px;
+  background: radial-gradient(circle, rgba(10, 110, 74, 0.35), transparent 70%);
+  animation: cst-breathe 9s ease-in-out infinite;
+}
+.cst-blob--2 {
+  width: 280px;
+  height: 280px;
+  right: -80px;
+  bottom: -80px;
+  background: radial-gradient(circle, rgba(163, 230, 53, 0.16), transparent 70%);
+  animation: cst-breathe 11s ease-in-out infinite reverse;
+}
+@keyframes cst-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+/* --- Connecting lines between nearby pips ------------------------------- */
+.cst-line {
+  position: absolute;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, transparent, rgba(163, 230, 53, 0.55), transparent);
+  opacity: 0;
+  animation: cst-line 5.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes cst-line {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  62%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --- Pips + their chip labels ------------------------------------------ */
+.cst-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+.cst-pip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #3a4a5c;
+  transform: scale(0.75);
+  animation: cst-pip 5.5s ease-in-out infinite;
+}
+@keyframes cst-pip {
+  0%,
+  38% {
+    transform: scale(0.75);
+    opacity: 0.35;
+    background: #3a4a5c;
+    box-shadow: none;
+  }
+  48% {
+    transform: scale(1.35);
+    opacity: 1;
+    background: var(--volt);
+    box-shadow: 0 0 14px 2px rgba(163, 230, 53, 0.6);
+  }
+  58% {
+    transform: scale(1);
+    opacity: 1;
+    background: var(--pitch-light);
+    box-shadow: 0 0 12px 2px rgba(51, 201, 138, 0.5);
+  }
+  90% {
+    transform: scale(1);
+    opacity: 1;
+    background: var(--pitch-light);
+    box-shadow: 0 0 10px 1px rgba(51, 201, 138, 0.4);
+  }
+  100% {
+    transform: scale(0.75);
+    opacity: 0.35;
+    background: #3a4a5c;
+    box-shadow: none;
+  }
+}
+
+.cst-chip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #101c2f;
+  border: 1px solid #26334a;
+  color: #cdd8e6;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  opacity: 0;
+  animation: cst-chip 5.5s ease-in-out infinite;
+}
+.cst-chip--right {
+  left: calc(100% + 8px);
+}
+.cst-chip--left {
+  right: calc(100% + 8px);
+}
+@keyframes cst-chip {
+  0%,
+  48% {
+    opacity: 0;
+  }
+  56%,
+  66% {
+    opacity: 1;
+  }
+  74%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --- Persistent "live" pill (honest static number, no fake ticker) ------ */
+.cst-live {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 28, 47, 0.72);
+  border: 1px solid #26334a;
+  color: #cdd8e6;
+  font-size: 11px;
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.cst-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pitch-light);
+  animation: cst-live 1.6s ease-out infinite;
+}
+@keyframes cst-live {
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 201, 138, 0.5);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgba(51, 201, 138, 0);
+  }
+}
+
+/* --- Reduced motion: freeze everything in its lit/mid state ------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cst-blob {
+    animation: none;
+    opacity: 0.7;
+  }
+  .cst-pip {
+    animation: none;
+    transform: scale(1);
+    opacity: 1;
+    background: var(--pitch-light);
+    box-shadow: 0 0 12px 2px rgba(51, 201, 138, 0.5);
+  }
+  .cst-chip {
+    animation: none;
+    opacity: 1;
+  }
+  .cst-line {
+    animation: none;
+    opacity: 0.25;
+  }
+  .cst-live-dot {
+    animation: none;
+  }
+}
