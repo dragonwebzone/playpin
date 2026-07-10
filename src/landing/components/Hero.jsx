@@ -28,7 +28,7 @@ export default function Hero() {
       />
       <div
         aria-hidden="true"
-        className="blob-b pointer-events-none absolute -right-16 top-24 -z-10 h-72 w-72 rounded-full bg-energy-300/25 blur-3xl dark:bg-energy-500/10"
+        className="blob-b pointer-events-none absolute -right-16 top-24 -z-10 h-72 w-72 rounded-full bg-accent-300/25 blur-3xl dark:bg-accent-500/10"
       />
 
       <div className="mx-auto grid max-w-content items-center gap-12 px-5 pb-16 pt-12 sm:px-8 md:grid-cols-2 md:gap-10 md:pb-24 md:pt-20">
@@ -39,8 +39,8 @@ export default function Hero() {
             style={{ animationDelay: '0.05s' }}
           >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-energy-500/70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-energy-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-500/70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-500" />
             </span>
             Pickup sports, organized in one tap
           </span>

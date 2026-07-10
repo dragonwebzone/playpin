@@ -22,9 +22,9 @@ body {
   background: #0f172a;
 }
 
-/* Volt-tinted text selection. */
+/* Brand-green text selection. */
 ::selection {
-  background: rgba(132, 204, 22, 0.30);
+  background: rgba(51, 201, 138, 0.30);
 }
 
 /* --- Brand helpers -------------------------------------------------------- */
@@ -34,7 +34,7 @@ body {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(120deg, #12a870 0%, #0a6e4a 58%, #063f2c 100%);
   }
-  /* Volt highlighter behind a spotlighted word. Drawn as a pseudo-element
+  /* Brand-green highlighter behind a spotlighted word. Drawn as a pseudo-element
      pinned to the word so it can't drift with line-height, and never wraps. */
   .mark-energy {
     position: relative;
@@ -49,7 +49,7 @@ body {
     z-index: -1;
     height: 0.36em;
     border-radius: 0.14em;
-    background: linear-gradient(120deg, rgba(163, 230, 53, 0.6), rgba(132, 204, 22, 0.55));
+    background: linear-gradient(120deg, rgba(51, 201, 138, 0.55), rgba(18, 168, 112, 0.5));
   }
 }
 

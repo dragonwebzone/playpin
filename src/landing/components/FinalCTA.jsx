@@ -16,14 +16,14 @@ export default function FinalCTA() {
   return (
     <section className="px-5 pb-24 sm:px-8">
       <Reveal className="mx-auto max-w-content">
-        <div className="relative overflow-hidden rounded-[2rem] bg-ink px-6 py-16 text-center shadow-soft sm:px-16">
+        <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-16 text-center shadow-soft sm:px-16">
           {/* decorative wash */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-0 opacity-50"
             style={{
               background:
-                'radial-gradient(600px circle at 18% 0%, rgba(18,168,112,0.42), transparent 42%), radial-gradient(600px circle at 92% 105%, rgba(163,230,53,0.26), transparent 46%)',
+                'radial-gradient(600px circle at 18% 0%, rgba(11,138,92,0.20), transparent 45%), radial-gradient(600px circle at 92% 105%, rgba(11,138,92,0.12), transparent 48%)',
             }}
           />
           <div className="relative">

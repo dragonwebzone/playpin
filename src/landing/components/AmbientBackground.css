@@ -1,16 +1,18 @@
 /* Floodlight Dust — ambient particles drifting up the whole landing page, like
    dust in stadium floodlights. Fixed, click-through overlay behind the content.
-   Colors are the existing brand tokens (energy-400 = --volt, accent-400 =
-   --pitch-light); no new color values are introduced. */
+   One brand green (the emerald accent), using the site's light/dark tonal pair:
+   accent-700 on the light page, accent-300 on dark. No second hue. */
 .floodlight-dust {
-  --volt: #a3e635; /* energy-400 */
-  --pitch-light: #33c98a; /* accent-400 */
+  --dust: #0a6e4a; /* accent-700 — brand green on the light page */
 
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+}
+:root[data-theme='dark'] .floodlight-dust {
+  --dust: #6fe0a9; /* accent-300 — brand green on dark */
 }
 
 .fd-dot {

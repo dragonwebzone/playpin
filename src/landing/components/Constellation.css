@@ -1,11 +1,10 @@
 /* Constellation — ambient hero visual for the landing page.
-   Scoped to MapVisual; imported by that component only. Colors reference the
-   "Pitch & Volt" brand tokens (accent-700 = --pitch, accent-400 = --pitch-light,
-   energy-400 = --volt); the translucent glows use those same values as rgba. */
+   Scoped to MapVisual; imported by that component only. Monochrome brand green:
+   a deep pitch-emerald aurora (accent-700) and a single bright brand green
+   (accent-300) for the pips/lines/dot — one hue, no second color. */
 .constellation {
-  --pitch: #0a6e4a; /* accent-700 */
-  --pitch-light: #33c98a; /* accent-400 */
-  --volt: #a3e635; /* energy-400 */
+  --pitch: #0a6e4a; /* accent-700 — deep aurora glow */
+  --green: #6fe0a9; /* accent-300 — the bright brand green on dark */
 
   position: relative;
   width: 100%;
@@ -36,7 +35,7 @@
   height: 280px;
   right: -80px;
   bottom: -80px;
-  background: radial-gradient(circle, rgba(163, 230, 53, 0.16), transparent 70%);
+  background: radial-gradient(circle, rgba(111, 224, 169, 0.16), transparent 70%);
   animation: cst-breathe 11s ease-in-out infinite reverse;
 }
 @keyframes cst-breathe {
@@ -56,7 +55,7 @@
   position: absolute;
   height: 1px;
   transform-origin: left center;
-  background: linear-gradient(90deg, transparent, rgba(163, 230, 53, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(111, 224, 169, 0.5), transparent);
   opacity: 0;
   animation: cst-line 5.5s ease-in-out infinite;
   pointer-events: none;
@@ -100,20 +99,20 @@
   48% {
     transform: scale(1.35);
     opacity: 1;
-    background: var(--volt);
-    box-shadow: 0 0 14px 2px rgba(163, 230, 53, 0.6);
+    background: var(--green);
+    box-shadow: 0 0 14px 2px rgba(111, 224, 169, 0.55);
   }
   58% {
     transform: scale(1);
     opacity: 1;
-    background: var(--pitch-light);
-    box-shadow: 0 0 12px 2px rgba(51, 201, 138, 0.5);
+    background: var(--green);
+    box-shadow: 0 0 12px 2px rgba(111, 224, 169, 0.5);
   }
   90% {
     transform: scale(1);
     opacity: 1;
-    background: var(--pitch-light);
-    box-shadow: 0 0 10px 1px rgba(51, 201, 138, 0.4);
+    background: var(--green);
+    box-shadow: 0 0 10px 1px rgba(111, 224, 169, 0.4);
   }
   100% {
     transform: scale(0.75);
@@ -182,16 +181,16 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--pitch-light);
+  background: var(--green);
   animation: cst-live 1.6s ease-out infinite;
 }
 @keyframes cst-live {
   0% {
-    box-shadow: 0 0 0 0 rgba(51, 201, 138, 0.5);
+    box-shadow: 0 0 0 0 rgba(111, 224, 169, 0.5);
   }
   70%,
   100% {
-    box-shadow: 0 0 0 7px rgba(51, 201, 138, 0);
+    box-shadow: 0 0 0 7px rgba(111, 224, 169, 0);
   }
 }
 
@@ -205,8 +204,8 @@
     animation: none;
     transform: scale(1);
     opacity: 1;
-    background: var(--pitch-light);
-    box-shadow: 0 0 12px 2px rgba(51, 201, 138, 0.5);
+    background: var(--green);
+    box-shadow: 0 0 12px 2px rgba(111, 224, 169, 0.5);
   }
   .cst-chip {
     animation: none;

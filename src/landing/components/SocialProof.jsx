@@ -1,12 +1,12 @@
 import Reveal from '../lib/Reveal'
-import { useCountUp } from '../lib/useCountUp'
 
-// Aspirational, clearly-rounded placeholder numbers — not fake precise metrics.
-const STATS = [
-  { value: 10, suffix: 'k+', label: 'players ready to run it back' },
-  { value: 500, suffix: '+', label: 'games organized every week' },
-  { value: 30, suffix: '+', label: 'cities and growing' },
-  { value: 95, suffix: '%', label: 'of players show up on time' },
+// Honest, non-numeric value props — no fabricated metrics while the product is
+// still in its prototype stage.
+const FEATURES = [
+  { title: 'Free to join', label: 'no fees, no catch — just show up and play' },
+  { title: 'Every sport', label: 'football, cricket, tennis, pickleball and more' },
+  { title: 'Real time', label: 'see games happening near you right now' },
+  { title: 'Show-up scores', label: 'reliability ratings so you know who turns up' },
 ]
 
 const TESTIMONIALS = [
@@ -33,30 +33,28 @@ const TESTIMONIALS = [
   },
 ]
 
-function Stat({ value, suffix, label }) {
-  const [ref, current] = useCountUp(value)
+function Feature({ title, label }) {
   return (
-    <div ref={ref} className="px-4 py-4 text-center sm:px-6">
-      <div className="text-4xl font-extrabold tracking-tight text-ink dark:text-white sm:text-5xl">
-        {current}
-        <span className="text-accent-600 dark:text-energy-400">{suffix}</span>
+    <div className="px-4 py-4 text-center sm:px-6">
+      <div className="text-xl font-extrabold tracking-tight text-accent-700 dark:text-accent-300 sm:text-2xl">
+        {title}
       </div>
       <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">{label}</p>
     </div>
   )
 }
 
-// Stat bar (borderless, divider-separated) above a horizontal scroll-snap strip
+// Value bar (borderless, divider-separated) above a horizontal scroll-snap strip
 // of testimonials that bleeds off the right edge to advertise more content.
 export default function SocialProof() {
   return (
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-content px-5 sm:px-8">
-        {/* Stat bar */}
+        {/* Value bar */}
         <Reveal>
           <div className="grid grid-cols-2 divide-x divide-y divide-slate-200 dark:divide-slate-700 md:grid-cols-4 md:divide-y-0">
-            {STATS.map((s) => (
-              <Stat key={s.label} {...s} />
+            {FEATURES.map((f) => (
+              <Feature key={f.title} {...f} />
             ))}
           </div>
         </Reveal>
@@ -111,7 +109,7 @@ export default function SocialProof() {
 
       <div className="mx-auto max-w-content px-5 sm:px-8">
         <p className="mt-6 text-xs text-slate-500 dark:text-slate-400">
-          Illustrative stories and early, growing numbers — shown to give a feel for PlayPin.
+          Illustrative stories — shown to give a feel for PlayPin.
         </p>
       </div>
     </section>

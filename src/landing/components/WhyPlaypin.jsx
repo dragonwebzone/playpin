@@ -31,7 +31,7 @@ export default function WhyPlaypin() {
   const rest = [FEATURES[0], FEATURES[1], FEATURES[2]]
 
   return (
-    <section className="relative overflow-hidden bg-accent-50/50 py-20 dark:bg-accent-950/25 md:py-28">
+    <section className="relative overflow-hidden py-20 md:py-28">
       <div
         aria-hidden="true"
         className="bg-grid pointer-events-none absolute inset-0 opacity-50 [mask-image:radial-gradient(80%_60%_at_50%_50%,#000,transparent)]"
@@ -58,8 +58,8 @@ export default function WhyPlaypin() {
               <span className="absolute inset-8 rounded-full border border-accent-200/60 dark:border-accent-700/40" />
               <span className="absolute inset-16 rounded-full border border-accent-200/50 dark:border-accent-700/30" />
               <span className="absolute left-1/2 top-1/2 flex h-3 w-3 -translate-x-1/2 -translate-y-1/2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-energy-500/70" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-energy-500" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-500/70" />
+                <span className="relative inline-flex h-3 w-3 rounded-full bg-accent-500" />
               </span>
             </div>
 
@@ -67,8 +67,8 @@ export default function WhyPlaypin() {
               <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-accent text-white shadow-soft">
                 <IconRadar className="h-7 w-7" />
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-energy-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-energy-700 dark:bg-energy-500/15 dark:text-energy-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-energy-500" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-accent-700 dark:bg-accent-500/15 dark:text-accent-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-500" />
                 Live
               </span>
             </div>
