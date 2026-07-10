@@ -31,6 +31,20 @@ const TESTIMONIALS = [
     role: 'Tennis · beginner',
     initial: 'M',
   },
+  {
+    quote:
+      'Found a Sunday cricket side the same week I moved. It’s easily the best part of my weekend now.',
+    name: 'Aisha K.',
+    role: 'Cricket · casual',
+    initial: 'A',
+  },
+  {
+    quote:
+      'Booked a badminton doubles game on a random Tuesday and made three new mates. No group-chat wrangling at all.',
+    name: 'Samuel O.',
+    role: 'Badminton · casual',
+    initial: 'S',
+  },
 ]
 
 function Feature({ title, label }) {
