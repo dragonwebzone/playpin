@@ -79,65 +79,75 @@ export function IconRadar({ className = '' }) {
   )
 }
 
-/* --- Sport icons ---------------------------------------------------------- */
+/* --- Sport icons ----------------------------------------------------------
+   Minimal single-stroke glyphs, each the clearest signifier of its sport:
+   ball-primary sports use the ball (distinguished by seam pattern); racket/bat
+   sports use their equipment. Shared by the landing strip and the app's map
+   markers, so they read at small sizes too. */
 export function SportFootball({ className = '' }) {
+  // Soccer ball: central pentagon with seams running inward from the edge.
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <circle {...base} cx="12" cy="12" r="9" />
-      <path {...base} d="M12 7.5l3.2 2.3-1.2 3.8h-4l-1.2-3.8L12 7.5Z" />
-      <path {...base} d="M12 3v2m6.4 2.3-1.7 1.2M21 12l-2 .3M18.4 16.7l-1.5-1.2M12 21v-2m-6.4 1.7 1.5-1.2M3 12l2 .3M5.6 7.3l1.7 1.2" />
+      <path {...base} d="M12 8.7 15.14 10.98 13.94 14.67 10.06 14.67 8.86 10.98Z" />
+      <path {...base} d="M12 8.7V4M15.14 10.98 19.6 9.5M13.94 14.67 16.7 18.5M10.06 14.67 7.3 18.5M8.86 10.98 4.4 9.5" />
     </svg>
   )
 }
 
 export function SportBasketball({ className = '' }) {
+  // Basketball: cross seams plus the two curved side seams.
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <circle {...base} cx="12" cy="12" r="9" />
       <path {...base} d="M12 3v18M3 12h18" />
-      <path {...base} d="M5.6 5.6C8 8 8 16 5.6 18.4M18.4 5.6C16 8 16 16 18.4 18.4" />
+      <path {...base} d="M5.2 6C8.5 9 8.5 15 5.2 18M18.8 6C15.5 9 15.5 15 18.8 18" />
     </svg>
   )
 }
 
 export function SportTennis({ className = '' }) {
+  // Tennis ball: the twin curved seam only (no cross — reads apart from a
+  // basketball).
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
       <circle {...base} cx="12" cy="12" r="9" />
-      <path {...base} d="M4.6 6.2C8 8.5 8.6 15 6 19M19.4 6.2C16 8.5 15.4 15 18 19" />
+      <path {...base} d="M4.8 6.5C8.6 9.4 8.6 14.6 4.8 17.5M19.2 6.5C15.4 9.4 15.4 14.6 19.2 17.5" />
     </svg>
   )
 }
 
 export function SportCricket({ className = '' }) {
+  // Cricket: the wicket — three stumps with the bail, and the ball.
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      <path {...base} d="M14.5 4.5l5 5-8.5 8.5-5-5 8.5-8.5Z" />
-      <path {...base} d="M9.5 9.5l5 5" />
-      <circle {...base} cx="6" cy="18" r="2.4" />
+      <path {...base} d="M7 5.5V17M11 5.5V17M15 5.5V17" />
+      <path {...base} d="M6.2 5.5H15.8" />
+      <circle {...base} cx="19.2" cy="16.2" r="1.9" />
     </svg>
   )
 }
 
 export function SportBadminton({ className = '' }) {
+  // Badminton: the shuttlecock — cork base under a flared feather crown.
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      <path {...base} d="M14 4a3 3 0 0 1 3 3l-2.5 8.5-6-6L14 4Z" />
-      <path {...base} d="M8.5 9.5l6 6" />
-      <circle {...base} cx="6.5" cy="17.5" r="2.6" />
-      <path {...base} d="M11.5 6.5l3 3M13 5l3.5 3.5M10 8l3 3" />
+      <circle {...base} cx="12" cy="16.8" r="2" />
+      <path {...base} d="M10.3 15.6 8.4 8M13.7 15.6 15.6 8M12 15.4V7.4" />
+      <path {...base} d="M8.4 8Q12 6 15.6 8" />
     </svg>
   )
 }
 
 export function SportPickleball({ className = '' }) {
+  // Pickleball: rounded rectangular paddle with a short handle and the
+  // perforated (wiffle) ball.
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
-      <rect {...base} x="3.5" y="3" width="9" height="11" rx="4.2" />
-      <path {...base} d="M8 14v4.5" />
-      <path {...base} d="M6.4 18.6h3.2" />
-      <circle {...base} cx="17.5" cy="10" r="3" />
-      <path {...base} d="M17.5 8.7h0M16.3 10.6h0M18.7 10.6h0" />
+      <rect {...base} x="3.6" y="3.4" width="9" height="9.8" rx="3" />
+      <path {...base} d="M8.1 13.2v4.4M6.3 17.6h3.6" />
+      <circle {...base} cx="18" cy="9.6" r="2.9" />
+      <path {...base} d="M16.8 8.5h0M19.2 8.5h0M18 10.8h0" />
     </svg>
   )
 }
