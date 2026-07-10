@@ -24,6 +24,20 @@ const LINES = [
 export default function MapVisual() {
   return (
     <div className="constellation float-card" aria-hidden="true">
+      {/* Faint static street-map texture, first in DOM so it sits behind the
+          pips/chips/lines/pill. Clipped to the card's rounded corners. */}
+      <div className="cst-map">
+        <span className="cst-street cst-street--h" style={{ top: '14%', transform: 'rotate(-3deg)' }} />
+        <span className="cst-street cst-street--h" style={{ top: '43%', transform: 'rotate(0deg)' }} />
+        <span className="cst-street cst-street--h" style={{ top: '71%', transform: 'rotate(2deg)' }} />
+        <span className="cst-street cst-street--v" style={{ left: '19%', transform: 'rotate(4deg)' }} />
+        <span className="cst-street cst-street--v" style={{ left: '44%', transform: 'rotate(0deg)' }} />
+        <span className="cst-street cst-street--v" style={{ left: '69%', transform: 'rotate(-3deg)' }} />
+        <span className="cst-block" style={{ left: '19%', top: '14%' }} />
+        <span className="cst-block" style={{ left: '44%', top: '43%' }} />
+        <span className="cst-park" style={{ left: '66%', top: '58%' }} />
+      </div>
+
       <span className="cst-blob cst-blob--1" />
       <span className="cst-blob cst-blob--2" />
 

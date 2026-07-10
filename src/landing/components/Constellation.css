@@ -15,6 +15,44 @@
   border: 1px solid #1b2a3f;
 }
 
+/* --- Faint static street-map texture (behind everything, decorative) ---- */
+.cst-map {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cst-street {
+  position: absolute;
+  background: var(--green); /* light pitch green */
+  opacity: 0.11;
+  transform-origin: center;
+}
+.cst-street--h {
+  left: -10%;
+  width: 120%;
+  height: 1px;
+}
+.cst-street--v {
+  top: -10%;
+  height: 120%;
+  width: 1px;
+}
+.cst-block {
+  position: absolute;
+  width: 140px;
+  height: 100px;
+  border: 1px solid var(--green);
+  opacity: 0.11;
+}
+.cst-park {
+  position: absolute;
+  width: 90px;
+  height: 70px;
+  border-radius: 40%;
+  background: var(--pitch); /* deep pitch green */
+  opacity: 0.07;
+}
+
 /* --- Aurora glow blobs, breathing behind everything --------------------- */
 .cst-blob {
   position: absolute;
