@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { sportMeta, skillLabel, distanceKm, distanceLabel, relativeWhen } from '../lib/constants'
+import { MAX_RADIUS_KM } from '../hooks/useGames'
 import { SportIcon } from './icons'
 
 // Collapsible bottom "home feed" of nearby games, sorted by distance then time.
@@ -13,6 +14,9 @@ export default function NearbyGamesSheet({ games, userLocation, selectedGameId, 
         game: g,
         km: userLocation ? distanceKm(userLocation, { lat: g.latitude, lng: g.longitude }) : null,
       }))
+      // "Nearby" means within 50 km — once we know where the user is, drop games
+      // beyond that. Without a location we can't measure, so keep everything.
+      .filter(({ km }) => km == null || km <= MAX_RADIUS_KM)
       .sort((a, b) => {
         if (a.km != null && b.km != null && a.km !== b.km) return a.km - b.km
         return new Date(a.game.date_time) - new Date(b.game.date_time)

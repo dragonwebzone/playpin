@@ -148,8 +148,8 @@ export function useGames({ onActivity } = {}) {
   }
 }
 
-// Games are never surfaced more than this far from the user, regardless of the
-// selected radius — "games near me" is capped at 50 km around the user.
+// The "nearby" sheet only lists games within this distance of the user. The map
+// itself is not capped — games farther away stay visible.
 export const MAX_RADIUS_KM = 50
 
 // Pure helper: filter a games array by sport / skill / time window / friends /
@@ -163,13 +163,12 @@ function filterGames(
     if (sport && sport !== 'all' && g.sport !== sport) return false
     if (skill && skill !== 'all' && g.skill_level !== skill) return false
 
-    // "Near me": once we know where the user is, never show games more than
-    // 50 km away (or a tighter chosen radius). Skipped until geolocation
-    // resolves, since we can't measure distance without the user's location.
-    if (userLocation) {
-      const cap = Math.min(radiusKm ?? MAX_RADIUS_KM, MAX_RADIUS_KM)
+    // "Near me": when the user has picked a distance chip, hide games beyond it.
+    // "Any distance" (radiusKm null) applies no cap, so far-away games stay
+    // visible. Skipped until geolocation resolves — no location, no distance.
+    if (userLocation && radiusKm != null) {
       const d = distanceKm(userLocation, { lat: g.latitude, lng: g.longitude })
-      if (d != null && d > cap) return false
+      if (d != null && d > radiusKm) return false
     }
 
     if (friendsOnly && friendIds) {
