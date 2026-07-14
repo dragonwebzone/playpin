@@ -151,21 +151,26 @@ button {
   position: fixed;
   inset: 0;
   z-index: 29;
+  background: rgba(15, 23, 42, 0.45);
 }
 .drawer {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 12px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   z-index: 30;
-  width: min(240px, calc(100vw - 24px));
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  width: min(280px, 82vw);
+  background: #1e293b;
   box-shadow: var(--shadow);
-  padding: 8px;
+  padding: 64px 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  animation: drawerIn 0.22s ease;
+}
+@keyframes drawerIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
 }
 .drawer-item {
   display: flex;
@@ -173,13 +178,13 @@ button {
   gap: 10px;
   padding: 11px 12px;
   border-radius: 10px;
-  color: var(--ink);
+  color: #e2e8f0;
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 600;
 }
 .drawer-item:hover {
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.08);
 }
 .drawer-item .ic,
 .drawer-item svg {
