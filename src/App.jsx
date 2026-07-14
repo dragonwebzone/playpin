@@ -345,22 +345,34 @@ export default function App() {
       </main>
 
       {/* Sliding bottom sheet / side panel */}
-      {createMode && pin && createType === 'game' && (
+      {createMode && pin && (
         <div className="sheet">
-          <CreateGameForm pin={pin} onCancel={closePanels} onCreate={async (g) => {
-            await createGame(g)
-            handleCreated()
-          }} />
-        </div>
-      )}
-
-      {createMode && pin && createType === 'tournament' && (
-        <div className="sheet">
-          <CreateTournamentForm
-            pin={pin}
-            onCancel={closePanels}
-            onCreate={handleCreateTournament}
-          />
+          <div className="subtabs">
+            <button
+              className={`subtab ${createType === 'game' ? 'is-active' : ''}`}
+              onClick={() => setCreateType('game')}
+            >
+              ⚽ Casual game
+            </button>
+            <button
+              className={`subtab ${createType === 'tournament' ? 'is-active' : ''}`}
+              onClick={() => setCreateType('tournament')}
+            >
+              ⚔️ Tournament
+            </button>
+          </div>
+          {createType === 'tournament' ? (
+            <CreateTournamentForm
+              pin={pin}
+              onCancel={closePanels}
+              onCreate={handleCreateTournament}
+            />
+          ) : (
+            <CreateGameForm pin={pin} onCancel={closePanels} onCreate={async (g) => {
+              await createGame(g)
+              handleCreated()
+            }} />
+          )}
         </div>
       )}
 
