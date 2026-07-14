@@ -5,7 +5,10 @@
       "Bash(npm run *)",
       "Bash(node _check.mjs)",
       "Bash(node shot.cjs \"http://localhost:5175/app\" app-dark.png 1440 900 dark)",
-      "Bash(node shot.cjs \"http://localhost:5175/app\" app-light.png 390 844 light)"
+      "Bash(node shot.cjs \"http://localhost:5175/app\" app-light.png 390 844 light)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Resync games on realtime \\(re\\)connect so dropped sockets don'\\\\''t leave stale markers *)",
+      "Bash(git push *)"
     ]
   }
 }
