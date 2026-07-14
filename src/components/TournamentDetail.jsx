@@ -110,6 +110,18 @@ export default function TournamentDetail({
     useTournamentDetail(tournamentId)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
+  const [copied, setCopied] = useState(false)
+
+  const copyInvite = async () => {
+    const link = `${window.location.origin}/app/tournaments?t=${tournamentId}`
+    try {
+      await navigator.clipboard.writeText(link)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setError('Could not copy — copy this link manually: ' + link)
+    }
+  }
 
   const isHost = user && tournament && tournament.host_id === user.id
   const joined = useMemo(
@@ -206,7 +218,14 @@ export default function TournamentDetail({
         </span>
         <span className="badge">{count}/{tournament.max_players} players</span>
         {tournament.prize && <span className="badge badge-open">🏆 {tournament.prize}</span>}
+        {tournament.visibility === 'invite' && <span className="badge">🔒 Invite only</span>}
       </div>
+
+      {tournament.visibility === 'invite' && (
+        <button className="btn btn-ghost btn-block" onClick={copyInvite}>
+          {copied ? '✓ Link copied' : '🔗 Copy invite link'}
+        </button>
+      )}
 
       {tournament.latitude != null && tournament.longitude != null && (
         <p className="panel-sub">

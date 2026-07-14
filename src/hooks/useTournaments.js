@@ -91,6 +91,7 @@ export async function insertTournament({
   prize,
   skillLevel,
   note,
+  visibility = 'public',
 }) {
   const { data, error: err } = await supabase
     .from('tournaments')
@@ -105,6 +106,7 @@ export async function insertTournament({
       prize,
       skill_level: skillLevel,
       note,
+      visibility,
     })
     .select()
     .single()
@@ -119,9 +121,15 @@ export function useTournaments(sport) {
 
   const load = useCallback(async () => {
     setLoading(true)
+    // Hide tournaments 24h past their start immediately; pg_cron deletes them
+    // server-side on the next hourly tick (see tournaments.sql). Unscheduled
+    // (starts_at null) tournaments always show.
+    const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
     let query = supabase
       .from('tournaments')
       .select('*, tournament_participants(user_id)')
+      .eq('visibility', 'public')
+      .or(`starts_at.is.null,starts_at.gte.${cutoff}`)
       .order('created_at', { ascending: false })
     if (sport && sport !== 'all') query = query.eq('sport', sport)
     const { data, error: err } = await query

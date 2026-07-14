@@ -31,6 +31,11 @@ alter table public.tournaments add column if not exists prize       text;
 alter table public.tournaments add column if not exists skill_level text;
 alter table public.tournaments add column if not exists note        text;
 
+-- Public tournaments show up in the browse list; invite-only ones are hidden
+-- and reachable only via their share link (/app/tournaments?t=<id>).
+alter table public.tournaments add column if not exists visibility text not null default 'public'
+  check (visibility in ('public', 'invite'));
+
 -- Who has joined which tournament. Composite primary key prevents double-joining.
 create table if not exists public.tournament_participants (
   tournament_id uuid not null references public.tournaments (id) on delete cascade,
@@ -192,3 +197,18 @@ begin
     alter publication supabase_realtime add table public.tournament_matches;
   end if;
 end $$;
+
+-- ----------------------------------------------------------------------------
+-- Auto-cleanup: delete tournaments 24h after they were due to start. The
+-- on-delete-cascade FKs above drop their participants and matches too. Runs
+-- server-side (RLS only lets a host delete their own) via pg_cron, hourly.
+-- ----------------------------------------------------------------------------
+create extension if not exists pg_cron;
+
+select cron.schedule(
+  'delete-finished-tournaments',
+  '0 * * * *',
+  $$ delete from public.tournaments
+       where starts_at is not null
+         and starts_at < now() - interval '24 hours' $$
+);

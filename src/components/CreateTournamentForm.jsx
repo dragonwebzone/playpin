@@ -20,6 +20,7 @@ export default function CreateTournamentForm({ pin, onCancel, onCreate }) {
   const [skill, setSkill] = useState('casual')
   const [dateTime, setDateTime] = useState(defaultDateTime())
   const [maxPlayers, setMaxPlayers] = useState(8)
+  const [visibility, setVisibility] = useState('public')
   const [prize, setPrize] = useState('')
   const [note, setNote] = useState('')
   const [error, setError] = useState(null)
@@ -61,6 +62,7 @@ export default function CreateTournamentForm({ pin, onCancel, onCreate }) {
         longitude: pin.lng,
         prize: prize.trim() || null,
         note: note.trim() || null,
+        visibility,
       })
     } catch (err) {
       setError(err.message || 'Could not create the tournament.')
@@ -121,6 +123,14 @@ export default function CreateTournamentForm({ pin, onCancel, onCreate }) {
             onChange={(e) => setDateTime(e.target.value)}
             required
           />
+        </label>
+
+        <label className="field">
+          <span>Visibility</span>
+          <select value={visibility} onChange={(e) => setVisibility(e.target.value)}>
+            <option value="public">Public — anyone can find and join</option>
+            <option value="invite">Invite only — join via share link</option>
+          </select>
         </label>
 
         <label className="field">
