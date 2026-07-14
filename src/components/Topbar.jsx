@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import Brand from './Brand'
@@ -20,6 +20,12 @@ export default function Topbar({ incomingCount = 0, onOpenProfile, onRequireAuth
 
   const close = () => setMenuOpen(false)
 
+  // Push the page (control bar, map) right while the drawer is open.
+  useEffect(() => {
+    document.body.classList.toggle('drawer-open', menuOpen)
+    return () => document.body.classList.remove('drawer-open')
+  }, [menuOpen])
+
   // A drawer row navigates to its page when signed in, or prompts sign-up for
   // guests (keeping them on the map, with the modal over it).
   const navItem = (to, icon, label, badge = 0) =>
@@ -39,6 +45,7 @@ export default function Topbar({ incomingCount = 0, onOpenProfile, onRequireAuth
     )
 
   return (
+    <>
     <header className="topbar">
       <div className="topbar-left">
         <button
@@ -73,17 +80,18 @@ export default function Topbar({ incomingCount = 0, onOpenProfile, onRequireAuth
           </button>
         </div>
       )}
-
-      {menuOpen && (
-        <>
-          <div className="drawer-backdrop" onClick={close} />
-          <nav className="drawer" aria-label="Sections">
-            {navItem('/app/friends', <IconUsers />, 'Friends', incomingCount)}
-            {navItem('/app/leaderboard', <IconTrophy />, 'Leaderboard')}
-            {navItem('/app/tournaments', <IconBracket />, 'Tournaments')}
-          </nav>
-        </>
-      )}
     </header>
+
+    {menuOpen && (
+      <>
+        <div className="drawer-backdrop" onClick={close} />
+        <nav className="drawer" aria-label="Sections">
+          {navItem('/app/friends', <IconUsers />, 'Friends', incomingCount)}
+          {navItem('/app/leaderboard', <IconTrophy />, 'Leaderboard')}
+          {navItem('/app/tournaments', <IconBracket />, 'Tournaments')}
+        </nav>
+      </>
+    )}
+    </>
   )
 }

@@ -265,6 +265,11 @@ button {
   background: var(--white);
   border-bottom: 1px solid var(--line);
   z-index: 15;
+  transition: padding-left 0.22s ease;
+}
+/* While the nav drawer is open, push the control bar clear of it. */
+body.drawer-open .controlbar {
+  padding-left: calc(min(280px, 82vw) + 24px);
 }
 
 /* Filters button + popover — collapses the old stacked pill rows. */
