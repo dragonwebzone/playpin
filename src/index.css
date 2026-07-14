@@ -89,7 +89,8 @@ button {
   backdrop-filter: saturate(1.4) blur(12px);
   -webkit-backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid var(--line);
-  z-index: 20;
+  /* Above the nav drawer (30) so the burger + logo stay visible over it. */
+  z-index: 31;
 }
 
 /* Burger + brand cluster on the left. */
@@ -97,9 +98,6 @@ button {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* Stay above the nav drawer so the burger + logo keep showing over it. */
-  position: relative;
-  z-index: 31;
 }
 .burger {
   display: flex;
