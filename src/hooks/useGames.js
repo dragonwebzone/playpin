@@ -76,7 +76,11 @@ export function useGames({ onActivity } = {}) {
         }
         scheduleRefetch()
       })
-      .subscribe()
+      .subscribe((status) => {
+        // Resync immediately on (re)connect so a dropped socket doesn't leave
+        // this client's markers stale until the next 60s interval refetch.
+        if (status === 'SUBSCRIBED') fetchGames()
+      })
 
     // Also drop games that have passed their start time, once a minute.
     const interval = setInterval(() => fetchGames(), 60 * 1000)
