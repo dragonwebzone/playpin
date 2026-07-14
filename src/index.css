@@ -161,7 +161,8 @@ button {
   bottom: 0;
   z-index: 30;
   width: min(280px, 82vw);
-  background: #1e293b;
+  background: var(--white);
+  border-right: 1px solid var(--line);
   box-shadow: var(--shadow);
   padding: 64px 10px 12px;
   display: flex;
@@ -179,13 +180,13 @@ button {
   gap: 10px;
   padding: 11px 12px;
   border-radius: 10px;
-  color: #e2e8f0;
+  color: var(--ink);
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 600;
 }
 .drawer-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg);
 }
 .drawer-item .ic,
 .drawer-item svg {
@@ -2347,4 +2348,14 @@ body.drawer-open .controlbar {
 :root[data-theme='dark'] .status-completed {
   background: #223049;
   color: var(--slate);
+}
+
+/* Tone down Google Maps attribution/terms (bottom-right). Kept legible and
+   restored on hover — hiding them outright violates the Maps ToS. */
+.gm-style-cc {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+.gm-style-cc:hover {
+  opacity: 1;
 }
