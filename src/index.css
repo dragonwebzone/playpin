@@ -97,6 +97,9 @@ button {
   display: flex;
   align-items: center;
   gap: 10px;
+  /* Stay above the nav drawer so the burger + logo keep showing over it. */
+  position: relative;
+  z-index: 31;
 }
 .burger {
   display: flex;
